@@ -1,0 +1,25 @@
+{
+  "name": "@zoodogood/utils",
+  "type": "module",
+  "version": "0.2.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "https://zoodogood.github.io/utils",
+  "scripts": {
+    "test": "node index",
+    "docs-build": "cd ./docs & retype build  --output ./public"
+  },
+  "exports": {
+    "primitives": "./packages/primitives/mod.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zoodogood/utils"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "retype": "^0.2.0"
+  }
+}

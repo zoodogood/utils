@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zoodogood.github.io/util-primitives/public/sitemap.xml.gz

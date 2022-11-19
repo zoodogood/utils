@@ -10,7 +10,7 @@
     "docs-build": "cd ./docs & retype build  --output ./public"
   },
   "exports": {
-    "primitives": "./packages/primitives/mod.js"
+    "./primitives": "./packages/primitives/mod.js"
   },
   "repository": {
     "type": "git",

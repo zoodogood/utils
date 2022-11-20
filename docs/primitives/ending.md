@@ -33,10 +33,10 @@ const word = {
 }
 
 const output = ending(quantity, word.base, ...word.suffixes);
-output // "Бананов", "Банан" or "Банана"
+// "Бананов", "Банан" or "Банана"
 ```
 
 ### Real example
 ```js
-return `У вас ${ ending(quantity, "клубник", "", "а", "и") }`;
+return `У вас ${ Util.ending(quantity, "клубник", "", "а", "и") }`;
 ```

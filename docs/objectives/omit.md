@@ -2,7 +2,7 @@
 function omit(...params): output as object  
 
 **Description:**  
-Creates copy of object without elements, that filter not pass.
+Creates copy of object without elements, that didn't pass a filter.
 
 ### `pamams`
 ```ts

@@ -11,7 +11,8 @@
   },
   "exports": {
     "./primitives": "./packages/primitives/mod.js",
-    "./objectives": "./packages/objectives/mod.js"
+    "./objectives": "./packages/objectives/mod.js",
+    "./discordjs": "./packages/discordjs/mod.js"
   },
   "repository": {
     "type": "git",

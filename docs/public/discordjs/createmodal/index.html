@@ -10,21 +10,18 @@
     <meta name="generator" content="Retype 2.2">
 
     <!-- Primary Meta Tags -->
-    <title>ending</title>
-    <meta name="title" content="ending">
-    <meta name="description" content="function ending(...params): string" />
+    <title>CreateModal</title>
+    <meta name="title" content="CreateModal">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/primitives/ending/">
-    <meta property="og:title" content="ending">
-    <meta property="og:description" content="function ending(...params): string">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/createmodal/">
+    <meta property="og:title" content="CreateModal">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/primitives/ending/">
-    <meta property="twitter:title" content="ending">
-    <meta property="twitter:description" content="function ending(...params): string">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/createmodal/">
+    <meta property="twitter:title" content="CreateModal">
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -33,7 +30,6 @@
     <script type="text/javascript" src="/utils/public/resources/js/config.js?v=2.2.722449865049" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/utils/public/resources/js/retype.js?v=2.2" defer data-turbo-track="reload"></script>
     <script id="lunr-js" type="text/javascript" src="/utils/public/resources/js/lunr.js?v=2.2.722449865049" defer></script>
-    <script id="prism-js" type="text/javascript" src="/utils/public/resources/js/prism.js?v=2.2.722449865049" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -169,68 +165,12 @@
                                 <div id="docs-sidebar-right-toggle"></div>
                 
                                 <!-- Page content  -->
-<doc-anchor-target id="ending" class="break-words">
+<doc-anchor-target id="createmodal" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#ending">#</doc-anchor-trigger>
-        <span>ending</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#createmodal">#</doc-anchor-trigger>
+        <span>CreateModal</span>
     </h1>
 </doc-anchor-target>
-<p>function ending(...params): string</p>
-<p><strong>Description:</strong><br />
-Sets the suffix depending on the numerator.</p>
-<doc-anchor-target id="params">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#params">#</doc-anchor-trigger>
-        <span><code v-pre>params</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">params = [
-    quantity: number = 0,
-    base: string, // word root
-    multiple: string, // for 5–9 and 0
-    alone: string, // for 1
-    double: string, // for 2, 3 and 4
-    options?: options = {}
-]</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="options">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#options">#</doc-anchor-trigger>
-        <span><code v-pre>options</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface options = {
-    unite?: (quantity, word) =&gt; string // Determines how the final row will look like
-};</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="example">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
-        <span>Example</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const quantity = getRandomValue(0, 1000);
-const word = {
-    full: &quot;Банан&quot;,
-    base: &quot;Банан&quot;,
-    suffixes: [&quot;ов&quot;, &quot;&quot;, &quot;а&quot;]
-}
-
-const output = ending(quantity, word.base, ...word.suffixes);
-// &quot;Бананов&quot;, &quot;Банан&quot; or &quot;Банана&quot;</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="real-example">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example">#</doc-anchor-trigger>
-        <span>Real example</span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">return `У вас ${ Util.ending(quantity, &quot;клубник&quot;, &quot;&quot;, &quot;а&quot;, &quot;и&quot;) }`;</code></pre>
-</doc-codeblock></div>
 
                                 
                                 <!-- Required only on API pages -->
@@ -240,16 +180,23 @@ const output = ending(quantity, word.base, ...word.suffixes);
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/utils/public/objectives/omit/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/utils/public/discordjs/createmessage/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">omit</span>
+                                                <span class="block mt-1">Create​Message</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/utils/public/discordjs/isemptyembed/">
+                                            <span>
+                                                <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
+                                                <span class="block mt-1">is​Empty​Embed</span>
+                                            </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
+                                        </a>
                                     </div>
                                 </nav>
                             </footer>
@@ -290,6 +237,6 @@ const output = ending(quantity, word.base, ...word.suffixes);
 
     <div id="docs-overlay-target"></div>
 
-    <script>window.__DOCS__ = { "title": "ending", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script>window.__DOCS__ = { "title": "CreateModal", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

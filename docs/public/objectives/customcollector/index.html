@@ -10,21 +10,21 @@
     <meta name="generator" content="Retype 2.2">
 
     <!-- Primary Meta Tags -->
-    <title>ending</title>
-    <meta name="title" content="ending">
-    <meta name="description" content="function ending(...params): string" />
+    <title>CustomCollector</title>
+    <meta name="title" content="CustomCollector">
+    <meta name="description" content="class CustomCollector " />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/primitives/ending/">
-    <meta property="og:title" content="ending">
-    <meta property="og:description" content="function ending(...params): string">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/customcollector/">
+    <meta property="og:title" content="CustomCollector">
+    <meta property="og:description" content="class CustomCollector ">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/primitives/ending/">
-    <meta property="twitter:title" content="ending">
-    <meta property="twitter:description" content="function ending(...params): string">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/customcollector/">
+    <meta property="twitter:title" content="CustomCollector">
+    <meta property="twitter:description" content="class CustomCollector ">
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -169,41 +169,34 @@
                                 <div id="docs-sidebar-right-toggle"></div>
                 
                                 <!-- Page content  -->
-<doc-anchor-target id="ending" class="break-words">
+<doc-anchor-target id="customcollector" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#ending">#</doc-anchor-trigger>
-        <span>ending</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#customcollector">#</doc-anchor-trigger>
+        <span>CustomCollector</span>
     </h1>
 </doc-anchor-target>
-<p>function ending(...params): string</p>
+<p>class CustomCollector {}</p>
 <p><strong>Description:</strong><br />
-Sets the suffix depending on the numerator.</p>
-<doc-anchor-target id="params">
+- None</p>
+<doc-anchor-target id="constructorcollectoroptions">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#constructorcollectoroptions">#</doc-anchor-trigger>
+        <span><code v-pre>constructor(CollectorOptions)</code></span>
+    </h2>
+</doc-anchor-target>
+<doc-anchor-target id="collectoroptions">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#params">#</doc-anchor-trigger>
-        <span><code v-pre>params</code></span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#collectoroptions">#</doc-anchor-trigger>
+        <span><code v-pre>CollectorOptions</code></span>
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">params = [
-    quantity: number = 0,
-    base: string, // word root
-    multiple: string, // for 5–9 and 0
-    alone: string, // for 1
-    double: string, // for 2, 3 and 4
-    options?: options = {}
-]</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="options">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#options">#</doc-anchor-trigger>
-        <span><code v-pre>options</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface options = {
-    unite?: (quantity, word) =&gt; string // Determines how the final row will look like
-};</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">interface CollectorOptions = {
+	target: EventEmitter | object,
+	event: string,
+	filter?: (any) =&gt; true | false | any,
+	time?: number = 0
+}</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="example">
     <h2>
@@ -212,15 +205,16 @@ Sets the suffix depending on the numerator.</p>
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const quantity = getRandomValue(0, 1000);
-const word = {
-    full: &quot;Банан&quot;,
-    base: &quot;Банан&quot;,
-    suffixes: [&quot;ов&quot;, &quot;&quot;, &quot;а&quot;]
-}
+<pre class="language-javascript"><code v-pre class="language-javascript">const target = new EventEmitter();
+const eventName = &quot;click&quot;;
+document.addEventListener(&quot;click&quot;, () =&gt; target.emit(eventName));
 
-const output = ending(quantity, word.base, ...word.suffixes);
-// &quot;Бананов&quot;, &quot;Банан&quot; or &quot;Банана&quot;</code></pre>
+const lessThatFive = (value) =&gt; value &lt; 5;
+const context = {
+	clicks: 0
+}
+const collector = new CustomCollector({target, event: eventName, filter: lessThatFive, time: 10_000});
+collector.setCallback(() =&gt; context.clicks++);</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="real-example">
     <h3>
@@ -229,8 +223,33 @@ const output = ending(quantity, word.base, ...word.suffixes);
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">return `У вас ${ Util.ending(quantity, &quot;клубник&quot;, &quot;&quot;, &quot;а&quot;, &quot;и&quot;) }`;</code></pre>
+<pre class="language-javascript"><code v-pre class="language-javascript">const isAuthor = (message) = message.author.id === user.id;
+const collector = new Util.CustomCollector({target: client, event: &quot;message&quot;, filter: isAuthor, time: 500_000});
+collector.setCallback((message) =&gt; {
+    collector.end();
+    getCoinsFromMessage(user, message);
+});</code></pre>
 </doc-codeblock></div>
+<doc-anchor-target id="methods">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#methods">#</doc-anchor-trigger>
+        <span>Methods</span>
+    </h2>
+</doc-anchor-target>
+<doc-anchor-target id="setcallbackany--any-void">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#setcallbackany--any-void">#</doc-anchor-trigger>
+        <span><code v-pre>setCallback((any) =&gt; any): void</code></span>
+    </h3>
+</doc-anchor-target>
+<p>Initializes a callback function. It will be use when the event passed the filter is called.</p>
+<doc-anchor-target id="end-void">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#end-void">#</doc-anchor-trigger>
+        <span><code v-pre>end(): void</code></span>
+    </h3>
+</doc-anchor-target>
+<p>Close event listeners</p>
 
                                 
                                 <!-- Required only on API pages -->
@@ -240,16 +259,23 @@ const output = ending(quantity, word.base, ...word.suffixes);
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/utils/public/objectives/omit/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/utils/public/discordjs/simplifycomponents/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">omit</span>
+                                                <span class="block mt-1">Simplify​Components</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/utils/public/objectives/omit/">
+                                            <span>
+                                                <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
+                                                <span class="block mt-1">omit</span>
+                                            </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
+                                        </a>
                                     </div>
                                 </nav>
                             </footer>
@@ -290,6 +316,6 @@ const output = ending(quantity, word.base, ...word.suffixes);
 
     <div id="docs-overlay-target"></div>
 
-    <script>window.__DOCS__ = { "title": "ending", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script>window.__DOCS__ = { "title": "CustomCollector", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

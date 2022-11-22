@@ -114,7 +114,7 @@ function SimplifyComponents(data){
 
 }
 
-export default {
+export {
   CreateMessage,
   CreateModal,
   SimplifyComponents,

@@ -6,15 +6,15 @@ import { ComponentType } from 'discord-api-types/v10';
 function isEmptyEmbed(embed){
 
   const DEFAULT_PROPERTIES = {
-    title: null,
-    author: null,
-    thumbnail: null,
-    description: null,
-    fields: [],
-    image: null,
-    footer: null,
-    timestamp: Number.NaN,
-    video: null
+    title: undefined,
+    author: undefined,
+    thumbnail: undefined,
+    description: undefined,
+    fields: undefined,
+    image: undefined,
+    footer: undefined,
+    timestamp: undefined,
+    video: undefined
   }
 
 
@@ -48,7 +48,7 @@ function CreateMessage({
 		title, url, author, thumbnail,
 		description, color, fields,
 		image, video, footer, timestamp
-	}).toJSON();
+	});
 
 	if (!isEmptyEmbed(embed)){
 		message.embeds = [embed];

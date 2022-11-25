@@ -48,7 +48,7 @@ function CreateMessage({
 		title, url, author, thumbnail,
 		description, color, fields,
 		image, video, footer, timestamp
-	});
+	}).toJSON();
 
 	if (!isEmptyEmbed(embed)){
 		message.embeds = [embed];

@@ -50,7 +50,7 @@ function CreateMessage({
 		image, video, footer, timestamp
 	});
 
-	if (!isEmptyEmbed(embed)){
+	if (!isEmptyEmbed(embed.data)){
 		message.embeds = [embed];
 	}
 

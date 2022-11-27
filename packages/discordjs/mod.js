@@ -1,4 +1,4 @@
-import { EmbedBuilder, ModalBuilder, resolveColor } from 'discord.js';
+import { EmbedBuilder, ModalBuilder, resolveColor, ActionRow } from 'discord.js';
 import { ComponentType } from 'discord-api-types/v10';
 
 
@@ -81,7 +81,7 @@ function SimplifyComponents(data){
     	return [];
 
   	const isComponent  = (component) => "type" in component;
-  	const isActionRow  = (component) => component instanceof Array && isComponent(component.at(0)) || component instanceof MessageActionRow;
+  	const isActionRow  = (component) => component instanceof Array && isComponent(component.at(0)) || component instanceof ActionRow;
   	const isComponents = (component) => component.length && isActionRow(component.at(0));
 
   	const argumentType = [

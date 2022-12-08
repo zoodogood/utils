@@ -58,6 +58,11 @@ function CreateMessage({
 		message.files = files;
 	}
 
+	if (reference)
+		message.reply = {
+			messageReference: reference
+		}
+
 	message.components = components ? SimplifyComponents(components) : null;
 
 
@@ -65,9 +70,7 @@ function CreateMessage({
 	message.ephemeral  = ephemeral;
 	message.fetchReply = fetchReply;
 
-	message.reply = {
-		messageReference: reference
-	};
+	
 
 	return message;
 }

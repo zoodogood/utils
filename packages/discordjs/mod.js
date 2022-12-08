@@ -32,7 +32,7 @@ function CreateMessage({
   content,
   title, url, author, thumbnail, description, color, fields, image, video, footer, timestamp,
   ephemeral, fetchReply,
-  components, files
+  components, files, reference
 
 }){
 	const message = {};
@@ -64,6 +64,10 @@ function CreateMessage({
 	message.content    = content;
 	message.ephemeral  = ephemeral;
 	message.fetchReply = fetchReply;
+
+	message.reply = {
+		messageReference: reference
+	};
 
 	return message;
 }

@@ -25,7 +25,7 @@ class CustomCollector {
 	  this.handle(handler);
 	}
  
-	handle(){
+	handle(handler){
 	  this.end();
 	  
 	  this.#callback = handler;

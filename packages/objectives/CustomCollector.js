@@ -37,8 +37,13 @@ class CustomCollector {
 	}
  
 	end(){
-	  this.removeTimeout();
-	  this.target.removeListener(this.event, this.#callback);
+	  	if (this.timeoutId){
+			this.removeTimeout();
+		}
+	  	
+		if (this.#callback){
+			this.target.removeListener(this.event, this.#callback);
+		}
 	}
  
 	removeTimeout(){

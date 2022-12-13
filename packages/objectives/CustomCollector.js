@@ -15,7 +15,7 @@ class CustomCollector {
 	setCallback(callback){
 	
 	  const handler = (...params) => {
-		 const passed = this?.filter(params);
+		 const passed = !this.filter || this.filter(params);
  
 		 if (!!passed === true){
 			callback.apply(this, params);

@@ -12,24 +12,28 @@
     <!-- Primary Meta Tags -->
     <title>CreateModal</title>
     <meta name="title" content="CreateModal">
+    <meta name="description" content="function CreateModal({title, customId, components}): {title, customId, components} implements Modal" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/createmodal/">
     <meta property="og:title" content="CreateModal">
+    <meta property="og:description" content="function CreateModal({title, customId, components}): {title, customId, components} implements Modal">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/createmodal/">
     <meta property="twitter:title" content="CreateModal">
+    <meta property="twitter:description" content="function CreateModal({title, customId, components}): {title, customId, components} implements Modal">
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/utils/public/resources/css/retype.css?v=2.2.722451060828" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/utils/public/resources/css/retype.css?v=2.2.727443429810" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/utils/public/resources/js/config.js?v=2.2.722451060828" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/utils/public/resources/js/config.js?v=2.2.727443429810" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/utils/public/resources/js/retype.js?v=2.2" defer data-turbo-track="reload"></script>
-    <script id="lunr-js" type="text/javascript" src="/utils/public/resources/js/lunr.js?v=2.2.722451060828" defer></script>
+    <script id="lunr-js" type="text/javascript" src="/utils/public/resources/js/lunr.js?v=2.2.727443429810" defer></script>
+    <script id="prism-js" type="text/javascript" src="/utils/public/resources/js/prism.js?v=2.2.727443429810" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -171,6 +175,68 @@
         <span>CreateModal</span>
     </h1>
 </doc-anchor-target>
+<p>function CreateModal({title, customId, components}): {title, customId, components} implements Modal</p>
+<p><strong>Description:</strong><br />
+Use <a href="../simplifycomponents/">simplify components</a> and transform through ModalBuilder.</p>
+<doc-anchor-target id="options">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#options">#</doc-anchor-trigger>
+        <span><code v-pre>options</code></span>
+    </h3>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">interface options = {  
+	title: string,
+	customId: string,
+	components: Array&lt;Component&gt; | Array&lt;ActionRow&gt; | Component
+}</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="example">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
+        <span>Example</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-javascript"><code v-pre class="language-javascript">const customId = &quot;@command/.example/create-content&quot;;
+const title = &quot;Укажите текстовое содержимое&quot;;
+const components = {};
+const modal = CreateModal({customId, title, components});
+
+interaction.showModal(modal);</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="real-example">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example">#</doc-anchor-trigger>
+        <span>Real example</span>
+    </h3>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-javascript"><code v-pre class="language-javascript">const askColor = async (user, interaction) =&gt; {
+	
+	const components = {type: ComponentType.TextInput, customId: &quot;color-field&quot;, requied: true, label: &quot;Цвет в формате HEX&quot;, maxLength: 7};
+	const modal = CreateModal({
+		customId: &quot;get-color-modal&quot;,
+		title: &quot;Укажите цвет&quot;,
+		components
+	});
+
+	interaction.showModal(modal);
+
+	const filter = (interaction) =&gt; interaction.user === user;
+	const fields = (await interaction.message.awaitMessageComponent({filter, time: 200_000}))?.fields;
+	if (!fields){
+		return null;
+	}
+
+	const color = fields.getField(&quot;color-field&quot;).value;
+	const isColor = color.match(/#*([0-9a-f]{3}|[0-9a-f]{6})/i);
+	if (isColor){
+		return color;
+	}
+}
+</code></pre>
+</doc-codeblock></div>
 
                                 
                                 <!-- Required only on API pages -->
@@ -208,7 +274,7 @@
                                     <ul class="flex flex-wrap items-center text-sm">
                                     </ul>
                                 </div>
-                                <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p></div>
+                                <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2023. All rights reserved.</p></div>
                             </footer>
                         </div>
                     </div>
@@ -237,6 +303,6 @@
 
     <div id="docs-overlay-target"></div>
 
-    <script>window.__DOCS__ = { "title": "CreateModal", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+    <script>window.__DOCS__ = { "title": "CreateModal", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

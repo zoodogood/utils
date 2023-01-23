@@ -77,7 +77,7 @@ function CreateMessage({
 
 function CreateModal({title, customId, components}){
 	components = SimplifyComponents(components);
-  	return new ModalBuilder({title, customId, components}).data;
+  	return new ModalBuilder({title, customId, components}).toJSON();
 }
 
 

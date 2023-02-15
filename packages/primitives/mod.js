@@ -1,3 +1,17 @@
+/** 
+ * @typedef EndingOptions
+ * @property {(argv1: number, argv2: string) => string} [unite]
+*/
+
+/**
+ * @param {number} quantity 
+ * @param {string} base 
+ * @param {string} multiple 
+ * @param {string} alone 
+ * @param {string} double 
+ * @param {EndingOptions} options 
+ * @returns {string|NaN}
+ */
 function ending(quantity = 0, base, multiple, alone, double, options = {}) {
 	if ( isNaN(quantity) )
 	  return NaN;

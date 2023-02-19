@@ -1,4 +1,5 @@
 export * from "./CustomCollector.js";
+export * from "./GlitchText.js";
 export type GetRandomValueOptions = {
     min?: number;
     max: number;

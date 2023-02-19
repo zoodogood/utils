@@ -9,6 +9,7 @@
     "test": "node index",
     "docs-build": "cd ./docs & retype build  --output ./public"
   },
+  "typings": "types/index",
   "exports": {
     "./primitives": "./packages/primitives/mod.js",
     "./objectives": "./packages/objectives/mod.js",

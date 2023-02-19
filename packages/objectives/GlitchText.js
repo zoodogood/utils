@@ -1,4 +1,4 @@
-import { getRandomValue } from "./mod.js";
+import { getRandomValue } from "./getRandomValue.js";
 
 /**
  * @typedef {Object} GlitchTextOptions

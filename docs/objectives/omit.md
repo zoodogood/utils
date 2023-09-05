@@ -4,7 +4,7 @@ function omit(...params): output as object
 **Description:**  
 Creates copy of object without elements, that didn't pass a filter.
 
-### `pamams`
+### `params`
 ```ts
 params = [
     object: {[key]: any},

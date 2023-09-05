@@ -1,9 +1,10 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "0.8.4",
+  "version": "0.9.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "homepage": "https://zoodogood.github.io/utils",
   "scripts": {
     "test": "node index",
@@ -23,6 +24,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "retype": "^0.2.0"
-  }
+    "@types/node": "^20.5.9",
+    "retype": "^0.2.0",
+    "typescript": "^5.2.2"
+  },
+  "files": ["/lib/**/*"]
 }

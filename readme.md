@@ -6,3 +6,5 @@ https://zoodogood.github.io/utils/public
 ```js
 export { ending } from '@zoodogood/utils/primitives';
 ```
+
+[NPM](https://www.npmjs.com/package/@zoodogood/utils)

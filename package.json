@@ -1,7 +1,6 @@
 {
   "name": "@zoodogood/utils",
-  "type": "module",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -12,9 +11,10 @@
   },
   "typings": "types/index",
   "exports": {
-    "./primitives": "./packages/primitives/mod.js",
-    "./objectives": "./packages/objectives/mod.js",
-    "./discordjs": "./packages/discordjs/mod.js"
+    "./primitives": "./lib/primitives/mod.js",
+    "./objectives": "./lib/objectives/mod.js",
+    "./discordjs": "./lib/discordjs/mod.js",
+    "./nodejs": "./lib/nodejs/mod.js"
   },
   "repository": {
     "type": "git",
@@ -25,8 +25,15 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.5.9",
+    "discord.js": "^14.13.0",
     "retype": "^0.2.0",
     "typescript": "^5.2.2"
   },
-  "files": ["/lib/**/*"]
+  "peerDependencies": {
+    "discord.js": "=>14.x.x"
+  },
+  "files": [
+    "/lib/**/*"
+  ],
+  "dependencies": {}
 }

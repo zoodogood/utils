@@ -1,21 +1,21 @@
 import { getRandomValue } from "./getRandomValue.js";
 
-/**
- * @typedef {Object} GlitchTextOptions
- * @property {number} [step=15]
- * @property {boolean} [random=false]
- * @property {number} [maximum=100]
-*/
+interface IGlitchTextOptions {
+	step?: number;
+	random?: boolean;
+	maximum?: number;
+}
 
 
 class GlitchText {
-	/**
-	 * 
-	 * @param {string} from 
-	 * @param {string} to 
-	 * @param {GlitchTextOptions} param2 
-	 */
-	constructor(from = "", to = "hello, world", {step = 15, random = false, maximum = 100} = {}){
+	declare from: string;
+	declare to: string;
+	declare step: number;
+	declare random: boolean;
+	declare maximum: number;
+	declare [Symbol.iterator]: () => Generator<string>
+
+	constructor(from = "", to = "hello, world", {step = 15, random = false, maximum = 100}: IGlitchTextOptions = {}){
 		this.from = from;
 		this.to   = to;
 	
@@ -26,10 +26,7 @@ class GlitchText {
 		this[Symbol.iterator] = this.iteratorFunction;
 	}
  
-	/**
-	 * @generator
-	 * @yields {string}
-	 */
+	
 	*iteratorFunction(){
 		const word = [...this.from];
 		const target = this.to;

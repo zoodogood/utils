@@ -2,12 +2,8 @@ export * from './CustomCollector.js';
 export * from './GlitchText.js';
 export * from './getRandomValue.js';
 
-/**
- * @param {object} object
- * @param {(argv0: string, argv1: unknown, argv2: number) => void} filter
- * @returns {object}
-*/
-function omit(object, filter){
+
+function omit(object: object, filter: CallableFunction){
 	const entries = Object.entries(object)
 	  .filter(([key, value], i) => filter(key, value, i));
 

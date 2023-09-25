@@ -1,0 +1,87 @@
+{
+  "version": "3.3.0",
+  "created": "2023-09-25T06:33:14Z",
+  "files": [
+    {
+      "path": ".nojekyll"
+    },
+    {
+      "path": "404.html"
+    },
+    {
+      "path": "discordjs/createmessage/index.html"
+    },
+    {
+      "path": "discordjs/createmodal/index.html"
+    },
+    {
+      "path": "discordjs/isemptyembed/index.html"
+    },
+    {
+      "path": "discordjs/simplifycomponents/index.html"
+    },
+    {
+      "path": "index.html"
+    },
+    {
+      "path": "nodejs/getchildprocessutils/index.html"
+    },
+    {
+      "path": "objectives/customcollector/index.html"
+    },
+    {
+      "path": "objectives/omit/index.html"
+    },
+    {
+      "path": "objectives/rangetoarray/index.html"
+    },
+    {
+      "path": "primitives/ending/index.html"
+    },
+    {
+      "path": "resources/css/retype.css"
+    },
+    {
+      "path": "resources/fonts/Inter-italic-latin-var.woff2"
+    },
+    {
+      "path": "resources/fonts/Inter-roman-latin-var.woff2"
+    },
+    {
+      "path": "resources/js/config.js"
+    },
+    {
+      "path": "resources/js/lunr.js"
+    },
+    {
+      "path": "resources/js/prism.js"
+    },
+    {
+      "path": "resources/js/retype.js"
+    },
+    {
+      "path": "resources/js/search.json"
+    },
+    {
+      "path": "resources/lunr.js.LICENSE.txt"
+    },
+    {
+      "path": "resources/mermaid.js.LICENSE.txt"
+    },
+    {
+      "path": "resources/prism.js.LICENSE.txt"
+    },
+    {
+      "path": "resources/retype.js.LICENSE.txt"
+    },
+    {
+      "path": "resources/retype.LICENSE.txt"
+    },
+    {
+      "path": "robots.txt"
+    },
+    {
+      "path": "sitemap.xml.gz"
+    }
+  ]
+}

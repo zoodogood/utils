@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.3.0">
 
     <!-- Primary Meta Tags -->
-    <title>omit</title>
-    <meta name="title" content="omit">
-    <meta name="description" content="function omit(...params): output as object">
+    <title>getRandomNumberInRange</title>
+    <meta name="title" content="getRandomNumberInRange">
+    <meta name="description" content="function getRandomNumberInRange({min?, max, needRound?}: IParams): number;">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/objectives/omit/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/objectives/getrandomnumberinrange/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/omit/">
-    <meta property="og:title" content="omit">
-    <meta property="og:description" content="function omit(...params): output as object">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/getrandomnumberinrange/">
+    <meta property="og:title" content="getRandomNumberInRange">
+    <meta property="og:description" content="function getRandomNumberInRange({min?, max, needRound?}: IParams): number;">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/omit/">
-    <meta property="twitter:title" content="omit">
-    <meta property="twitter:description" content="function omit(...params): output as object">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/getrandomnumberinrange/">
+    <meta property="twitter:title" content="getRandomNumberInRange">
+    <meta property="twitter:description" content="function getRandomNumberInRange({min?, max, needRound?}: IParams): number;">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,26 +171,21 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="omit" class="break-words">
+<doc-anchor-target id="getrandomnumberinrange" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#omit">#</doc-anchor-trigger>
-        <span>omit</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#getrandomnumberinrange">#</doc-anchor-trigger>
+        <span>getRandomNumberInRange</span>
     </h1>
 </doc-anchor-target>
-<p>function omit(...params): output as object</p>
+<p>function getRandomNumberInRange({min?, max, needRound?}: IParams): number;</p>
 <p><strong>Description:</strong><br />
-Creates copy of object without elements, that didn&#x27;t pass a filter.</p>
-<doc-anchor-target id="params">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#params">#</doc-anchor-trigger>
-        <span><code v-pre>params</code></span>
-    </h3>
-</doc-anchor-target>
+Returns the value between min and max (inclusive)</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">params = [
-    object: Object,
-    filter: (key: string, value: any, i: number) =&gt; true | false | any
-]</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">interface IParams {
+    min: number = 0;
+    max: number;
+    needRound?: boolean;
+}</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="example">
     <h2>
@@ -199,29 +194,19 @@ Creates copy of object without elements, that didn&#x27;t pass a filter.</p>
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const object = {
-    _privatedKey: &quot;some value&quot;,
-    coins: undefined,
-    level: 2
-};
-const isPrivate = (key) =&gt; key.startsWith(&quot;_&quot;);
-const isExits = (value) =&gt; value !== undefined &amp;&amp; value !== null;
+<pre class="language-javascript"><code v-pre class="language-javascript">getRandomNumberInRange({max: 1}); // x = 0 | 1
+getRandomNumberInRange({max: 1, needRound: true}); // x є (0...1)
+getRandomNumberInRange({min: 3, max: 10}); // x = 3 | 4 ... 10
 
-const filter = (key, value) =&gt; !isPrivate(key) &amp;&amp; isExits(value);
+getRandomNumberInRange({
+    min: 3,
+    max: 7,
+    needRound: true
+}); // x є (3...7)
 
-const output = omit(object, filter);
-// {level: 2};</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="real-example">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example">#</doc-anchor-trigger>
-        <span>Real example</span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const userData = client.users.cache.get(userId);
-const available = [&quot;coins&quot;, &quot;berry&quot;];
-return Util.omit(userData, (key) =&gt; available.includes(key));</code></pre>
+if (getRandomNumberInRange({max: 2}) === 0){
+    // Will occur with a probability of P = 1 / 3
+}</code></pre>
 </doc-codeblock></div>
 
                                 
@@ -232,20 +217,20 @@ return Util.omit(userData, (key) =&gt; available.includes(key));</code></pre>
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/getrandomnumberinrange/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/getrandomelementfromarray/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">get​Random​Number​In​Range</span>
+                                                <span class="block mt-1">get​Random​Element​From​Array</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/rangetoarray/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/omit/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">range​To​Array</span>
+                                                <span class="block mt-1">omit</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -289,6 +274,6 @@ return Util.omit(userData, (key) =&gt; available.includes(key));</code></pre>
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "omit", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "getRandomNumberInRange", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

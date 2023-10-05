@@ -7,7 +7,7 @@ Creates copy of object without elements, that didn't pass a filter.
 ### `params`
 ```ts
 params = [
-    object: {[key]: any},
+    object: Object,
     filter: (key: string, value: any, i: number) => true | false | any
 ]
 ```

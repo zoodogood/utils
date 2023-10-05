@@ -8,3 +8,6 @@ export { ending } from '@zoodogood/utils/primitives';
 ```
 
 [NPM](https://www.npmjs.com/package/@zoodogood/utils)
+
+#### From developer:
+(Wa) Use only documented functions that are not marked "Unstable". Thanks.

@@ -16,5 +16,5 @@
     "allowJs": true,
     "moduleResolution": "NodeNext"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.js"]
 }

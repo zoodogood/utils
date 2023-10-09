@@ -3,13 +3,15 @@ import * as Util from '../../src/discordjs/mod';
 
 import { expect, test } from "vitest";
 
-test("Create message", () => {
+test('Should return true for an empty embed', () => {
+	const emptyEmbed = Util.CreateMessage({reference: "0000000000000000"})
+	expect(Util.isEmptyEmbed(emptyEmbed)).toBe(true);
+ });
+
+test("Create message.", () => {
 	const message = Util.CreateMessage({
-		
-		components: [[{type: ComponentType.Button, label: "123"}], [{type: ComponentType.Button, label: "123"}]],
 		content: "123"
 	})
 
-	throw new Error(JSON.stringify(message));
-	
+	expect(message.content).toBe("123");
 });

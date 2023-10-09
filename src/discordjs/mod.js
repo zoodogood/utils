@@ -87,9 +87,9 @@ function SimplifyComponents(data){
   	if (data instanceof Array && data.length === 0)
     	return [];
 
-  	const isComponent  = (component) => "type" in component;
+  	const isComponent  = (component) => "type" in component && component.type !== ComponentType.ActionRow;
   	const isActionRow  = (component) => component instanceof Array && isComponent(component.at(0)) || component instanceof ActionRow;
-  	const isComponents = (component) => component.length && isActionRow(component.at(0));
+  	const isComponents = (component) => component instanceof Array && isActionRow(component.at(0));
 
   	const argumentType = [
     	isComponent(data),
@@ -100,21 +100,23 @@ function SimplifyComponents(data){
   	if (argumentType === -1)
     	throw new TypeError("expected component");
 
-  	const inArray = (component) => [component];
+  	const wrapToArray = (component) => [component];
   	const arrayToActionRow = (componentsArray) => {
-    	if (componentsArray.type === ComponentType.ActionRow)
+		const isActionRow = "type" in componentsArray && componentsArray.type === ComponentType.ActionRow;
+
+    	if (isActionRow)
       	return componentsArray;
 
     	return { type: ComponentType.ActionRow, components: componentsArray };
   	}
-  	const actionRowInArray = (actionRow) => [actionRow];
+  	
 
 
   	if (argumentType <= 0)
-    	data = inArray(data);
+    	data = wrapToArray(data);
 
   	if (argumentType <= 1)
-    	data = actionRowInArray(data)
+    	data = wrapToArray(data)
 
   	data = data.map(arrayToActionRow);
   	return data;

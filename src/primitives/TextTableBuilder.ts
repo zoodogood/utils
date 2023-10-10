@@ -392,7 +392,7 @@ class TextTableBuilder {
     return this;
   }
 
-  pushCellToArray<T = ITableCell>(
+  private pushCellToArray<T = ITableCell>(
     array: (T | ITableCell)[],
     cellValue: ITableCell["value"],
     cellOptions: Partial<ICellOptions> = {}

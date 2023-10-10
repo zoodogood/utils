@@ -125,17 +125,14 @@ class TextTableGenerator {
     if (getRowType(row) === SpecialRowTypeEnum.Default) {
       row = row as ITableCell[];
       content += this.options.borderLeft?.(context, context.currentRow) ?? "";
-
-      console.log(row);
+      
 
       for (const cellIndex of Object.keys(row)) {
         const cell = row.at(+cellIndex)!;
-        console.log(cellIndex);
-        console.log(cell);
 
         const expectedWidth = metadata.columns!.at(+cellIndex)!.largestLength;
         content += this.drawCell(cell, expectedWidth);
-        console.log(content);
+        
 
         if (+cellIndex !== row.length - 1) {
           content += !cell.options.removeNextSeparator
@@ -153,7 +150,6 @@ class TextTableGenerator {
       content += this.drawLine(row.display);
     }
 
-    console.log({ content });
 
     return content;
   }
@@ -192,8 +188,6 @@ class TextTableGenerator {
       const symbol = setSymbol!(context, +index);
       content += symbol;
     }
-
-    console.log({ drawLineContent: content });
 
     return content;
   }
@@ -432,6 +426,4 @@ export type {
   TTableRow,
 };
 
-const builder = new TextTableBuilder().addRowWithElements(["1", "2", "3"]);
 
-console.log(builder.generateTextContent());

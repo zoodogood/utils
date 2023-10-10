@@ -420,14 +420,3 @@ export type {
   ITextTableGeneratorContext,
   TTableRow,
 };
-
-const builder = new TextTableBuilder()
-  .setBorderOptions()
-  .addRowWithElements(["1", "212", "3"], { align: CellAlignEnum.Left })
-  .addRowWithElements(["1", "2", "3"], { align: CellAlignEnum.Right })
-  .addRowSeparator()
-  .addRowWithElements(["777", "555", "1999"], { align: CellAlignEnum.Center });
-
-// the example has been simplified
-
-console.log(builder.generateTextContent());

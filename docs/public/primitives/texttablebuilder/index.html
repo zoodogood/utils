@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.3.0">
 
     <!-- Primary Meta Tags -->
-    <title>SimplifyComponents</title>
-    <meta name="title" content="SimplifyComponents">
-    <meta name="description" content="function SimplifyComponents(data: Array| Array | Component): ActionRow">
+    <title>TextTableBuilder</title>
+    <meta name="title" content="TextTableBuilder">
+    <meta name="description" content="class TextTableBuilder {}">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/discordjs/simplifycomponents/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/primitives/texttablebuilder/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/simplifycomponents/">
-    <meta property="og:title" content="SimplifyComponents">
-    <meta property="og:description" content="function SimplifyComponents(data: Array| Array | Component): ActionRow">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/primitives/texttablebuilder/">
+    <meta property="og:title" content="TextTableBuilder">
+    <meta property="og:description" content="class TextTableBuilder {}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/simplifycomponents/">
-    <meta property="twitter:title" content="SimplifyComponents">
-    <meta property="twitter:description" content="function SimplifyComponents(data: Array| Array | Component): ActionRow">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/primitives/texttablebuilder/">
+    <meta property="twitter:title" content="TextTableBuilder">
+    <meta property="twitter:description" content="class TextTableBuilder {}">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,108 +171,257 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="simplifycomponents" class="break-words">
+<doc-anchor-target id="texttablebuilder" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#simplifycomponents">#</doc-anchor-trigger>
-        <span>SimplifyComponents</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#texttablebuilder">#</doc-anchor-trigger>
+        <span>TextTableBuilder</span>
     </h1>
 </doc-anchor-target>
-<p>function SimplifyComponents(data: Array<ActionRow> | Array<Component> | Component): ActionRow<Component></p>
+<p>class TextTableBuilder {}</p>
 <p><strong>Description:</strong><br />
-Replaces interactions with ActionRow with working with arrays. Or even narrows down to one object.</p>
-<doc-anchor-target id="embed">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#embed">#</doc-anchor-trigger>
-        <span><code v-pre>embed</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface embed = {
-	title?: string,
-   author?: {name: string, iconURL?: string},
-   thumbnail?: {url: string},
-   description?: string,
-   fields?: Array&lt;{name: string, value: string, inline?: boolean}&gt;,
-   image?: {url: string},
-   footer?: {text: string, iconURL?: string},
-   timestamp?: Date,
-   video?: {url: string}
-}</code></pre>
-</doc-codeblock></div>
+- Generate a table row by row</p>
 <doc-anchor-target id="example">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
         <span>Example</span>
     </h2>
 </doc-anchor-target>
+<doc-tabs>
+<doc-tab v-cloak id="easy-example">
+<template #title>Easy example</template>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const components1 = {
-	type: ComponentType.Button,
-	label: &quot;Some content&quot;,
-	style: ButtonStyle.Primary,
-	customId: &quot;Some custom id&quot;
-};
+<pre class="language-javascript"><code v-pre class="language-javascript">const builder = new TextTableBuilder()
+  .addRowWithElements([&quot;1&quot;, &quot;212&quot;, &quot;3&quot;], { align: CellAlignEnum.Left })
+  .addRowWithElements([&quot;1&quot;, &quot;2&quot;, &quot;3&quot;], { align: CellAlignEnum.Right })
+  .addRowSeparator()
+  .addRowWithElements([&quot;777&quot;, &quot;555&quot;, &quot;1999&quot;], { align: CellAlignEnum.Center })
 
-const components2 = [
-	{
-		type: ComponentType.Button,
-		label: &quot;Some content&quot;,
-		style: ButtonStyle.Primary,
-		customId: &quot;Some custom id - 1&quot;
-	},
-	{
-		type: ComponentType.Button,
-		label: &quot;Some content&quot;,
-		style: ButtonStyle.Primary,
-		customId: &quot;Some custom id - 2&quot;
-	}
-];
 
-const components3 = [
-	[
-		{
-			type: ComponentType.Button,
-			label: &quot;Some content&quot;,
-			style: ButtonStyle.Primary,
-			customId: &quot;Some custom id - 1&quot;
-		},
-		{
-			type: ComponentType.Button,
-			label: &quot;Some content&quot;,
-			style: ButtonStyle.Primary,
-			customId: &quot;Some custom id - 2&quot;
-		}
-	],
-	[
-		{
-			type: ComponentType.Button,
-			label: &quot;Some content in second row&quot;,
-			style: ButtonStyle.Primary,
-			customId: &quot;Some custom id - 3&quot;
-		},
-	]
-];
 
-SimplifyComponents(components1) // ActionRow&lt;ActionRow&gt;
-SimplifyComponents(components2) // ActionRow&lt;ActionRow&gt;
-SimplifyComponents(components3) // ActionRow&lt;ActionRow&gt;</code></pre>
+builder.generateTextContent();
+/** Result: 
+  1    |  212  |  3     
+    1  |    2  |     3  
+------------------------
+  777  |  555  |  1999  
+**/</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="real-example">
+</doc-tab>
+<doc-tab v-cloak id="big-example">
+<template #title>Big example</template>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">const builder = new TextTableBuilder()
+    .setBorderOptions(
+      ({ metadata }, index) =&gt;
+        metadata.separatorsIndexesInRow!.includes(index) ? &quot;+&quot; : &quot;-&quot;,
+      [BorderDirectionEnum.BorderTop]
+    )
+    .setBorderOptions(
+      (_, index) =&gt; index + &quot;&quot;,
+      [BorderDirectionEnum.BorderLeft, BorderDirectionEnum.BorderRight]
+    )
+    .addRowWithElements([&quot;1.&quot;, &quot;2/&quot;, &quot;3/&quot;], {
+      align: CellAlignEnum.Left,
+      gapLeft: 0,
+    })
+    .addRowSeparator(({ metadata }, index) =&gt;
+      index === 0 || index === metadata.tableWidth! - 1 ? &quot;+&quot; : &quot; &quot;
+    )
+    .addMultilineRowWithElements([&quot;1&quot;, &quot;Пирожки\nс\nмясом&quot;, &quot;3&quot;], {
+      align: CellAlignEnum.Center,
+      removeNextSeparator: true,
+    })
+    .addRowWithElements([&quot;1&quot;, &quot;2&quot;, &quot;3&quot;], { align: CellAlignEnum.Right })
+    .addRowSeparator(({ metadata }, index) =&gt;
+      metadata.separatorsIndexesInRow!.includes(index) ? &quot;+&quot; : &quot;-&quot;
+    )
+    .addRowWithElements([&quot;777&quot;, &quot;555&quot;, &quot;1999&quot;], { align: CellAlignEnum.Center })
+    .addRowSeparator(({ metadata }, index) =&gt;
+      metadata.separatorsIndexesInRow!.includes(index) ? &quot;^&quot; : &quot;-&quot;
+    );
+    
+/** Result:
++-------+-----------+--------+
+01.     |2/         |3/      0
++                            +
+2   1      Пирожки      3    2
+3             с              3
+4           мясом            4
+5    1  |        2  |     3  5
++-------+-----------+--------+
+7  777  |    555    |  1999  7
+^-------^-----------^--------^
+**/</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+<doc-tab v-cloak id="real-example">
+<template #title>Real example</template>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-javascript"><code v-pre class="language-javascript">const builder = new TextTableBuilder()
+    .setBorderOptions()
+    .pushRowToTable([
+        {
+            value: &quot;Слот 1.&quot;,
+            options: {align: CellAlignEnum.Right, removeNextSeparator: true}
+        },
+        {
+            value: &quot;Слот 2.&quot;,
+            options: {align: CellAlignEnum.Left}
+        }
+    ]);
+
+while (list.length)
+builder.addRowWithElements([list.shift(), list.shift() ?? &quot;&quot;]);
+
+builder.generateTextContent();
+
+</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+</doc-tabs>
+<doc-tabs>
+<doc-tab v-cloak id="methods">
+<template #title>Methods</template>
+<doc-anchor-target id="methods">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#methods">#</doc-anchor-trigger>
+        <span>Methods</span>
+    </h2>
+</doc-anchor-target>
+<doc-anchor-target id="setborderoptions">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example">#</doc-anchor-trigger>
-        <span>Real example</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#setborderoptions">#</doc-anchor-trigger>
+        <span><code v-pre>setBorderOptions()</code></span>
     </h3>
 </doc-anchor-target>
+<p>Sets the function to place each border symbol for the specified directions.</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const component = {
-	type: ComponentType.Button,
-	label: &quot;Some content&quot;,
-	style: ButtonStyle.Primary,
-	customId: &quot;Some custom id&quot;
+<pre class="language-typescript"><code v-pre class="language-typescript">type callbackForEverySymbol = (
+  context: ITextTableGeneratorContext,
+  index: number
+) =&gt; string;
+type includeBorderDirections = BorderDirectionEnum[];
+
+&lt;TextTablesBuilder&gt;.setBorderOptions(callbackForEverySymbol?, includeBorderDirections?): ThisType</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="addrowseparator">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#addrowseparator">#</doc-anchor-trigger>
+        <span><code v-pre>addRowSeparator()</code></span>
+    </h3>
+</doc-anchor-target>
+<p>Adds a line, uses a function to draw each character.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">type callbackForEverySymbol = (
+  context: ITextTableGeneratorContext,
+  index: number
+) =&gt; string;
+
+&lt;TextTablesBuilder&gt;.addRowSeparator(callbackForEverySymbol: TCellSetSymbolCallback): ThisType</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="addrowwithelements">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#addrowwithelements">#</doc-anchor-trigger>
+        <span><code v-pre>addRowWithElements()</code></span>
+    </h3>
+</doc-anchor-target>
+<p>Places a row containing the listed values in the table.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">type elements = ITableCell[&quot;value&quot;][];
+type optionsForEveryElement = Partial&lt;ICellOptions&gt;;
+
+&lt;TextTablesBuilder&gt;.addRowWithElements(elements, optionsForEveryElement): ThisType</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="generatetextcontent">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#generatetextcontent">#</doc-anchor-trigger>
+        <span><code v-pre>generateTextContent()</code></span>
+    </h3>
+</doc-anchor-target>
+<p>Uses the TextTableGenerator and returns a text representation of the table.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">&lt;TextTablesBuilder&gt;.generateTextContent(): string</code></pre>
+</doc-codeblock></div>
+<hr>
+<doc-anchor-target id="addmultilinerowwithelements">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#addmultilinerowwithelements">#</doc-anchor-trigger>
+        <span><code v-pre>addMultilineRowWithElements()</code></span>
+    </h3>
+</doc-anchor-target>
+<p>Adds lines based on content that supports the <code v-pre>\n</code> character.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">type elements = ITableCell[&quot;value&quot;][];
+type optionsForEveryElement = Partial&lt;ICellOptions&gt;;
+
+&lt;TextTablesBuilder&gt;.addMultilineRowWithElements(elements, optionsForEveryElement): ThisType</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+<doc-tab v-cloak id="interfaces">
+<template #title>Interfaces</template>
+<doc-anchor-target id="interfaces">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#interfaces">#</doc-anchor-trigger>
+        <span>Interfaces</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">interface ITextTableGeneratorContext {
+  content: string;
+  metadata: IContextMetadata;
+  currentRow: number;
 }
 
-CreateMessage({components: SimplifyComponents(component)})</code></pre>
+interface IContextMetadata {
+  columns?: { largestLength: number }[];
+  tableWidth?: number;
+  separatorsIndexesInRow?: number[];
+}
+
+interface ICellOptions {
+  gapLeft: number;
+  gapRight: number;
+  align: CellAlignEnum;
+  removeNextSeparator?: boolean;
+}
+
+interface ITableCell {
+  value: string;
+  options: ICellOptions;
+}
+
+interface ITableOptions {
+  borderLeft: null | TCellSetSymbolCallback;
+  borderRight: null | TCellSetSymbolCallback;
+  borderTop: null | TCellSetSymbolCallback;
+  borderBottom: null | TCellSetSymbolCallback;
+  separator: string;
+}</code></pre>
 </doc-codeblock></div>
+</doc-tab>
+<doc-tab v-cloak id="enums">
+<template #title>Enums</template>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">enum CellAlignEnum {
+  Left,
+  Right,
+  Center,
+}
+
+enum BorderDirectionEnum {
+  BorderLeft,
+  BorderRight,
+  BorderTop,
+  BorderBottom,
+}
+
+enum SpecialRowTypeEnum {
+  Default,
+  Display,
+}</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+</doc-tabs>
 
                                 
                                 <!-- Required only on API pages -->
@@ -282,23 +431,16 @@ CreateMessage({components: SimplifyComponents(component)})</code></pre>
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/isemptyembed/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../primitives/ending/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">is​Empty​Embed</span>
+                                                <span class="block mt-1">ending</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../nodejs/getchildprocessutils/">
-                                            <span>
-                                                <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">get​Child​Process​Utils</span>
-                                            </span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
-                                        </a>
                                     </div>
                                 </nav>
                             </footer>
@@ -339,6 +481,6 @@ CreateMessage({components: SimplifyComponents(component)})</code></pre>
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "SimplifyComponents", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "TextTableBuilder", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

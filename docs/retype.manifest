@@ -1,6 +1,6 @@
 {
   "version": "3.3.0",
-  "created": "2023-10-05T13:02:15Z",
+  "created": "2023-10-10T14:22:24Z",
   "files": [
     {
       "path": ".nojekyll"
@@ -46,6 +46,9 @@
     },
     {
       "path": "primitives/ending/index.html"
+    },
+    {
+      "path": "primitives/texttablebuilder/index.html"
     },
     {
       "path": "resources/css/retype.css"

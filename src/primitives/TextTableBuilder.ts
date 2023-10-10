@@ -401,8 +401,9 @@ class TextTableBuilder {
     array.push({ value: cellValue, options });
     return this;
   }
+  
 
-  pushRowToTable(row: TTableRow) {
+  private pushRowToTable(row: TTableRow) {
     this.rows.push(row);
     return this;
   }

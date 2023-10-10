@@ -76,16 +76,9 @@ const builder = new TextTableBuilder()
 ```js
 const builder = new TextTableBuilder()
     .setBorderOptions()
-    .pushRowToTable([
-        {
-            value: "Слот 1.",
-            options: {align: CellAlignEnum.Right, removeNextSeparator: true}
-        },
-        {
-            value: "Слот 2.",
-            options: {align: CellAlignEnum.Left}
-        }
-    ]);
+    .addEmptyRow()
+    .addCellAtRow(-1, "Слот 1.", {align: CellAlignEnum.Right, removeNextSeparator: true})
+    .addCellAtRow(-1, "Слот 2.", {align: CellAlignEnum.Left});
 
 while (list.length)
 builder.addRowWithElements([list.shift(), list.shift() ?? ""]);

@@ -1,3 +1,4 @@
+export * from './TextTableBuilder.js';
 
 interface IEndingOptions {
   unite?: (quantity: number, word: string) => string;

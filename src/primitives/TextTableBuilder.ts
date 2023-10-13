@@ -433,11 +433,12 @@ class TextTableBuilder {
   addCellAtRow(
     rowIndex: number,
     cellValue: ITableCell["value"],
-    cellOptions: ICellOptions
+    cellOptions: ICellOptions,
+    useOnAddingOptions: ICellBuilderOptions
   ) {
     const row = this.rows.at(rowIndex);
     if (!row) {
-      throw new RangeError("");
+      throw new RangeError();
     }
 
     if (getRowType(row) !== SpecialRowTypeEnum.Default) {
@@ -447,7 +448,8 @@ class TextTableBuilder {
     this.pushCellToArray<ITableCell>(
       row as ITableCell[],
       cellValue,
-      cellOptions
+      cellOptions,
+      useOnAddingOptions
     );
     return this;
   }

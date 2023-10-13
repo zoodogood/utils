@@ -87,6 +87,35 @@ builder.generateTextContent();
 
 
 ```
+
++++ Min/Max
+Min
+```ts
+ const EXPECTED_CONTENT = `
+|  1       |  2       |  3       |
+----------------------------------`;
+
+  const builder = new TextTableBuilder()
+    .setBorderOptions()
+    .addRowWithElements(["1", "2", "3"], {}, {
+      minWidth: 10
+    })
+    .addRowSeparator();
+```
+
+Max
+```ts
+const EXPECTED_CONTENT = `
+|  Едааааа |  Пирож.. |  ААААА.. |
+----------------------------------`;
+
+  const builder = new TextTableBuilder()
+    .setBorderOptions()
+    .addRowWithElements(["Едааааа", "Пирожок с мясом", "АААААААААААААА"], {}, {
+      maxWidth: 10
+    })
+    .addRowSeparator();
+```
 +++
 
 +++ Methods
@@ -165,6 +194,11 @@ interface ICellOptions {
 interface ITableCell {
   value: string;
   options: ICellOptions;
+}
+
+interface ICellBuilderOptions {
+  minWidth?: number;
+  maxWidth?: number;
 }
 
 interface ITableOptions {

@@ -18,10 +18,13 @@ function getRowType(row: TTableRow): SpecialRowTypeEnum {
 }
 
 function isCell(target: any) {
+  if (!target){
+    return false;
+  }
   return "value" in target && "options" in target;
 }
 
-function emptyCell(value = "") {
+function emptyCell(value = "#") {
   return {
     value,
     options: DEFAULT_CELL_OPTIONS,
@@ -145,7 +148,7 @@ class TextTableGenerator {
     for (let index = 0; index < largestCellsCount; index++) {
       const column = rows.map((row) =>
         getRowType(row) === SpecialRowTypeEnum.Default
-          ? (row as ITableCell[]).at(index) ?? emptyCell()
+          ? (row as ITableCell[]).at(index) ?? null
           : { row }
       );
 
@@ -193,19 +196,22 @@ class TextTableGenerator {
   drawRow(row: TTableRow) {
     let content = "";
     const context = this.context;
-    const metadata = context.metadata;
+    const { columns } = context.metadata;
+    const columnsCount = columns!.length;
 
     if (getRowType(row) === SpecialRowTypeEnum.Default) {
       row = row as ITableCell[];
       content += this.options.borderLeft?.(context, context.currentRow) ?? "";
+      
 
-      for (const cellIndex of Object.keys(row)) {
-        const cell = row.at(+cellIndex)!;
+      for (let cellIndex = 0; cellIndex < columnsCount; cellIndex++)  {
+        const cell = row.at(+cellIndex)! ?? emptyCell();
 
-        const expectedWidth = metadata.columns!.at(+cellIndex)!.largestLength;
+        const expectedWidth = columns!.at(+cellIndex)!.largestLength;
+        
         content += this.drawCell(cell, expectedWidth);
 
-        if (+cellIndex !== row.length - 1) {
+        if (+cellIndex !== columnsCount - 1) {
           content += !cell.options.removeNextSeparator
             ? this.options.separator
             : " ";
@@ -501,3 +507,7 @@ export type {
   ITextTableGeneratorContext,
   TTableRow,
 };
+
+
+
+  

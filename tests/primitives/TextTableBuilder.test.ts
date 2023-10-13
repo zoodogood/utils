@@ -86,3 +86,16 @@ test("minWidth", () => {
 
   expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
 })
+
+test("Different rows length", () => {
+  const EXPECTED_CONTENT = `
+|  1, 2, 3  |  2, 3  |  3  |  #  |
+|  1, 2, 3  |  2, 3  |  3  |  4  |`;
+
+  const builder = new TextTableBuilder()
+    .setBorderOptions()
+    .addRowWithElements(["1, 2, 3", "2, 3", "3"])
+    .addRowWithElements(["1, 2, 3", "2, 3", "3", "4"])
+
+  expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
+})

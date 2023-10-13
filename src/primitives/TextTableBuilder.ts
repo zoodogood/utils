@@ -21,6 +21,74 @@ function isCell(target: any) {
   return "value" in target && "options" in target;
 }
 
+function addPaddingByCellAlign(
+  original: string,
+  totalForAdd: number,
+  align: CellAlignEnum
+) {
+  const addidableGapLeft =
+    align === CellAlignEnum.Right
+      ? totalForAdd
+      : align === CellAlignEnum.Center
+      ? Math.floor(totalForAdd / 2)
+      : 0;
+
+  const addidableGapRight =
+    align === CellAlignEnum.Left
+      ? totalForAdd
+      : align === CellAlignEnum.Center
+      ? Math.ceil(totalForAdd / 2)
+      : 0;
+
+  return `${" ".repeat(addidableGapLeft)}${original}${" ".repeat(
+    addidableGapRight
+  )}`;
+}
+
+function changeContentSetCellMinWidth(cell: ITableCell, minWidth: number) {
+  const currentMin = calculateCellMinWidth(cell);
+  if (minWidth <= currentMin) {
+    return cell;
+  }
+
+  const {
+    value,
+    options: { align },
+  } = cell;
+  const lack = minWidth - currentMin;
+  cell.value = addPaddingByCellAlign(value, lack, align);
+  return cell;
+}
+
+function changeContentSetCellMaxWidth(cell: ITableCell, maxWidth: number) {
+  const current = calculateCellMinWidth(cell);
+  if (maxWidth >= current) {
+    return cell;
+  }
+
+  let overage = current - maxWidth;
+
+  const gapDirection =
+    cell.options.align === CellAlignEnum.Left ? "gapRight" : "gapLeft";
+  if (cell.options[gapDirection] > 1) {
+    cell.options[gapDirection]--;
+    overage--;
+    if (overage === 0) {
+      return;
+    }
+  }
+
+  const suffix = "..";
+  const sliced = cell.value.slice(0, -(overage + suffix.length));
+  cell.value = sliced + suffix;
+  return cell;
+}
+
+function calculateCellMinWidth(cell: ITableCell) {
+  const { gapLeft, gapRight } = cell.options;
+  return cell.value.length + gapLeft + gapRight;
+}
+
 class TextTableGenerator {
   private data: TTableRow[] = [];
   private options: ITableOptions;
@@ -87,9 +155,7 @@ class TextTableGenerator {
     const columnsMetadata = columns.map((column) => ({
       largestLength: Math.max(
         ...column.map((element) =>
-          isCell(element)
-            ? this.calculateCellMinWidth(element as ITableCell)
-            : 0
+          isCell(element) ? calculateCellMinWidth(element as ITableCell) : 0
         )
       ),
     }));
@@ -125,14 +191,12 @@ class TextTableGenerator {
     if (getRowType(row) === SpecialRowTypeEnum.Default) {
       row = row as ITableCell[];
       content += this.options.borderLeft?.(context, context.currentRow) ?? "";
-      
 
       for (const cellIndex of Object.keys(row)) {
         const cell = row.at(+cellIndex)!;
 
         const expectedWidth = metadata.columns!.at(+cellIndex)!.largestLength;
         content += this.drawCell(cell, expectedWidth);
-        
 
         if (+cellIndex !== row.length - 1) {
           content += !cell.options.removeNextSeparator
@@ -150,7 +214,6 @@ class TextTableGenerator {
       content += this.drawLine(row.display);
     }
 
-
     return content;
   }
 
@@ -158,25 +221,12 @@ class TextTableGenerator {
     const { gapLeft, gapRight, align } = cell.options;
     const { value } = cell;
 
-    const minContentLength = this.calculateCellMinWidth(cell);
+    const minContentLength = calculateCellMinWidth(cell);
+    const lack = expectedWidth - minContentLength;
 
-    const addidableGapLeft =
-      align === CellAlignEnum.Right
-        ? expectedWidth - minContentLength
-        : align === CellAlignEnum.Center
-        ? Math.floor((expectedWidth - minContentLength) / 2)
-        : 0;
+    const contentWithPadding = addPaddingByCellAlign(value, lack, align);
 
-    const addidableGapRight =
-      align === CellAlignEnum.Left
-        ? expectedWidth - minContentLength
-        : align === CellAlignEnum.Center
-        ? Math.ceil((expectedWidth - minContentLength) / 2)
-        : 0;
-
-    return `${" ".repeat(gapLeft + addidableGapLeft)}${value}${" ".repeat(
-      gapRight + addidableGapRight
-    )}`;
+    return `${" ".repeat(gapLeft)}${contentWithPadding}${" ".repeat(gapRight)}`;
   }
 
   drawLine(setSymbol: TCellSetSymbolCallback) {
@@ -222,10 +272,6 @@ class TextTableGenerator {
     const borders = +!!this.options.borderLeft + +!!this.options.borderRight;
     return cells + separators + borders;
   }
-
-  calculateCellMinWidth(cell: ITableCell) {
-    return cell.value.length + cell.options.gapLeft + cell.options.gapRight;
-  }
 }
 
 enum CellAlignEnum {
@@ -256,6 +302,11 @@ type TCellSetSymbolCallback = (
   context: ITextTableGeneratorContext,
   index: number
 ) => string;
+
+interface ICellBuilderOptions {
+  minWidth?: number;
+  maxWidth?: number;
+}
 
 interface ITableOptions {
   borderLeft: null | TCellSetSymbolCallback;
@@ -295,7 +346,7 @@ type TTableRow = ITableCell[] | ITableSpecialDisplayRow;
 class TextTableBuilder {
   public rows: TTableRow[] = [];
 
-  protected options: ITableOptions = DEFAULT_TABLE_OPTIONS;
+  protected options: ITableOptions = {...DEFAULT_TABLE_OPTIONS};
 
   setBorderOptions(
     callback: TCellSetSymbolCallback = () => "|",
@@ -304,6 +355,7 @@ class TextTableBuilder {
       BorderDirectionEnum.BorderRight,
     ]
   ) {
+    
     for (const direction of directions) {
       switch (direction) {
         case BorderDirectionEnum.BorderLeft:
@@ -326,11 +378,17 @@ class TextTableBuilder {
 
   addRowWithElements(
     elements: ITableCell["value"][],
-    optionsForEveryElement?: Partial<ICellOptions>
+    optionsForEveryElement?: Partial<ICellOptions>,
+    useOnAddingOptions?: ICellBuilderOptions
   ) {
     const row: ITableCell[] = [];
     for (const value of elements) {
-      this.pushCellToArray(row, value, optionsForEveryElement);
+      this.pushCellToArray(
+        row,
+        value,
+        optionsForEveryElement,
+        useOnAddingOptions
+      );
     }
 
     this.pushRowToTable(row);
@@ -339,7 +397,8 @@ class TextTableBuilder {
 
   addMultilineRowWithElements(
     elements: ITableCell["value"][],
-    optionsForEveryElement?: Partial<ICellOptions>
+    optionsForEveryElement?: Partial<ICellOptions>,
+    useOnAddingOptions?: ICellBuilderOptions
   ) {
     const separatedElements: string[][] = elements.map((value) =>
       value.split("\n")
@@ -350,7 +409,8 @@ class TextTableBuilder {
     for (let index = 0; index < largestHeight; index++) {
       this.addRowWithElements(
         separatedElements.map((sub) => sub.at(index) ?? ""),
-        optionsForEveryElement
+        optionsForEveryElement,
+        useOnAddingOptions
       );
     }
     return this;
@@ -395,13 +455,20 @@ class TextTableBuilder {
   private pushCellToArray<T = ITableCell>(
     array: (T | ITableCell)[],
     cellValue: ITableCell["value"],
-    cellOptions: Partial<ICellOptions> = {}
+    cellOptions: Partial<ICellOptions> = {},
+    pushOptions?: ICellBuilderOptions
   ) {
     const options = Object.assign({}, DEFAULT_CELL_OPTIONS, cellOptions);
-    array.push({ value: cellValue, options });
+    const cell = { value: cellValue, options };
+
+    const { minWidth, maxWidth } = pushOptions ?? {};
+
+    minWidth && changeContentSetCellMinWidth(cell, minWidth);
+    maxWidth && changeContentSetCellMaxWidth(cell, maxWidth);
+
+    array.push(cell);
     return this;
   }
-  
 
   private pushRowToTable(row: TTableRow) {
     this.rows.push(row);
@@ -426,5 +493,3 @@ export type {
   ITextTableGeneratorContext,
   TTableRow,
 };
-
-

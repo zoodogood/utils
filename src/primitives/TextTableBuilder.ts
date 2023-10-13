@@ -21,6 +21,13 @@ function isCell(target: any) {
   return "value" in target && "options" in target;
 }
 
+function emptyCell(value = "") {
+  return {
+    value,
+    options: DEFAULT_CELL_OPTIONS,
+  } as ITableCell;
+}
+
 function addPaddingByCellAlign(
   original: string,
   totalForAdd: number,
@@ -138,7 +145,7 @@ class TextTableGenerator {
     for (let index = 0; index < largestCellsCount; index++) {
       const column = rows.map((row) =>
         getRowType(row) === SpecialRowTypeEnum.Default
-          ? (row as ITableCell[]).at(index)
+          ? (row as ITableCell[]).at(index) ?? emptyCell()
           : { row }
       );
 
@@ -346,7 +353,7 @@ type TTableRow = ITableCell[] | ITableSpecialDisplayRow;
 class TextTableBuilder {
   public rows: TTableRow[] = [];
 
-  protected options: ITableOptions = {...DEFAULT_TABLE_OPTIONS};
+  protected options: ITableOptions = { ...DEFAULT_TABLE_OPTIONS };
 
   setBorderOptions(
     callback: TCellSetSymbolCallback = () => "|",
@@ -355,7 +362,6 @@ class TextTableBuilder {
       BorderDirectionEnum.BorderRight,
     ]
   ) {
-    
     for (const direction of directions) {
       switch (direction) {
         case BorderDirectionEnum.BorderLeft:

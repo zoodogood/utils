@@ -5,7 +5,10 @@ import {
 } from "../../src/primitives/TextTableBuilder.js";
 import { expect, test } from "vitest";
 
-const EXPECTED_CONTENT = `
+
+
+test("Some ascii", () => {
+  const EXPECTED_CONTENT = `
 +-------+-----------+--------+
 01.     |2/         |3/      0
 +                            +
@@ -18,7 +21,6 @@ const EXPECTED_CONTENT = `
 ^-------^-----------^--------^
 `;
 
-test("Some ascii", () => {
   const builder = new TextTableBuilder()
     .setBorderOptions(
       ({ metadata }, index) =>
@@ -53,3 +55,34 @@ test("Some ascii", () => {
 	 
 	 expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
 });
+
+
+test("maxWidth", () => {
+  const EXPECTED_CONTENT = `
+|  Едааааа |  Пирож.. |  ААААА.. |
+----------------------------------`;
+
+  const builder = new TextTableBuilder()
+    .setBorderOptions()
+    .addRowWithElements(["Едааааа", "Пирожок с мясом", "АААААААААААААА"], {}, {
+      maxWidth: 10
+    })
+    .addRowSeparator();
+
+  expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
+})
+
+test("minWidth", () => {
+  const EXPECTED_CONTENT = `
+|  1       |  2       |  3       |
+----------------------------------`;
+
+  const builder = new TextTableBuilder()
+    .setBorderOptions()
+    .addRowWithElements(["1", "2", "3"], {}, {
+      minWidth: 10
+    })
+    .addRowSeparator();
+
+  expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
+})

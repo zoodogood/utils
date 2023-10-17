@@ -24,9 +24,9 @@ function isCell(target: any) {
   return "value" in target && "options" in target;
 }
 
-function emptyCell(value = "#") {
+function emptyCell() {
   return {
-    value,
+    value: "",
     options: DEFAULT_CELL_OPTIONS,
   } as ITableCell;
 }
@@ -494,6 +494,15 @@ class TextTableBuilder {
       this.rows,
       this.options
     ).generateTextContent();
+  }
+  
+  addRowWithUnwrappedCells(cells: ITableCell[], useOnAddingOptions?: ICellBuilderOptions){
+    const row: ITableCell[] = [];
+    for (const cell of cells) {
+      this.pushCellToArray(row, cell.value, cell.options, useOnAddingOptions);
+    }
+    this.pushRowToTable(row);
+    return this;
   }
 }
 

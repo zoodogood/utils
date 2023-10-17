@@ -149,8 +149,9 @@ Places a row containing the listed values in the table.
 ```ts
 type elements = ITableCell["value"][];
 type optionsForEveryElement = Partial<ICellOptions>;
+type useOnAddingOptions = ICellBuilderOptions[];
 
-<TextTablesBuilder>.addRowWithElements(elements, optionsForEveryElement): ThisType
+<TextTablesBuilder>.addRowWithElements(elements, optionsForEveryElement?, useOnAddingOptions?): ThisType
 ```
 
 ### `generateTextContent()`
@@ -166,9 +167,20 @@ Adds lines based on content that supports the `\n` character.
 ```ts
 type elements = ITableCell["value"][];
 type optionsForEveryElement = Partial<ICellOptions>;
+type useOnAddingOptions = ICellBuilderOptions[];
 
-<TextTablesBuilder>.addMultilineRowWithElements(elements, optionsForEveryElement): ThisType
+<TextTablesBuilder>.addMultilineRowWithElements(elements, optionsForEveryElement?, useOnAddingOptions?): ThisType
 ```
+
+### `addRowWithUnwrappedCells()`
+Allows you to create row and assign some cells with their own parameters to row.
+```ts
+type cells = ITableCell[];
+type relatedOnAddingOptions = ICellBuilderOptions[];
+
+<TextTablesBuilder>.addRowWithUnwrappedCells(cells, relatedOnAddingOptions?): ThisType
+```
+
 +++ Interfaces
 ## Interfaces
 ```ts

@@ -89,7 +89,7 @@ test("minWidth", () => {
 
 test("Different rows length", () => {
   const EXPECTED_CONTENT = `
-|  1, 2, 3  |  2, 3  |  3  |  #  |
+|  1, 2, 3  |  2, 3  |  3  |     |
 |  1, 2, 3  |  2, 3  |  3  |  4  |`;
 
   const builder = new TextTableBuilder()

@@ -13,10 +13,10 @@ function ending(
 ) {
   if (isNaN(quantity)) return NaN;
 
-  const numbers = quantity % 100 > 20 ? quantity % 20 : quantity % 10;
+  const target = quantity % 100 < 20 ? quantity % 20 : quantity % 10;
 
   const end =
-    numbers >= 5 || numbers === 0 ? multiple : numbers > 1 ? double : alone;
+    target >= 5 || target === 0 ? multiple : target > 1 ? double : alone;
 
   const word = base + end;
 

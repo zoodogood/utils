@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "1.0.7-change.903",
+  "version": "1.0.7-change.905",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -36,7 +36,7 @@
     "vitest": "^0.34.5"
   },
   "peerDependencies": {
-    "discord.js": "=>14.x.x"
+    "discord.js": ">=14.x.x"
   },
   "files": [
     "/lib/**/*"

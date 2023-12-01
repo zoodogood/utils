@@ -1,5 +1,5 @@
 # SimplifyComponents
-function SimplifyComponents(data: Array<ActionRow> | Array<Component> | Component): ActionRow<Component>  
+`function SimplifyComponents(data: Array<ActionRow> | Array<Component> | Component): ActionRow<Component>`
 
 **Description:**  
 Replaces interactions with ActionRow with working with arrays. Or even narrows down to one object.

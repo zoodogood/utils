@@ -1,5 +1,5 @@
 import { BaseInteraction, ButtonStyle, ComponentType } from "discord.js";
-import { SimplifyComponents, CreateMessage } from "./simplify.js";
+import { CreateMessage } from "./simplify.js";
 const DEFAULTS_FOR_BUTTON = {
   type: ComponentType.Button,
   style: ButtonStyle.Secondary,
@@ -10,7 +10,7 @@ const DEFAULTS_FOR_BUTTON = {
 
 /**
  *
- * @param {APIBaseButton} resolable
+ * @param {APIBaseButton[]} resolable
  */
 function justButtonComponents(resolable) {
   const buttons = resolable.map((data, i) => ({
@@ -19,7 +19,7 @@ function justButtonComponents(resolable) {
     ...data,
   }));
 
-  return SimplifyComponents(buttons);
+  return buttons;
 }
 
 async function justSendMessage(target, options) {

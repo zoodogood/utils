@@ -10,7 +10,7 @@ const DEFAULTS_FOR_BUTTON = {
 
 /**
  *
- * @param {APIBaseButton[]} resolable
+ * @param {Partial<APIBaseButton>[]} resolable
  */
 function justButtonComponents(resolable) {
   const buttons = resolable.map((data, i) => ({

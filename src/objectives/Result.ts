@@ -1,27 +1,32 @@
 const existsSymbol = Symbol("isExist");
 
 function deepEqual(target: unknown, compare: unknown): boolean {
-  if (target === compare){
+  if (target === compare) {
     return true;
   }
 
-  if (typeof target !== typeof compare){
+  if (typeof target !== typeof compare) {
     return false;
   }
 
-  if (Object.keys(target as object).length !== Object.keys(compare as object).length){
+  if (
+    Object.keys(target as object).length !==
+    Object.keys(compare as object).length
+  ) {
     return false;
   }
 
-  return Object.entries(target as object)
-    .every(([key, value]) => 
-           deepEqual(value, (compare as {[key: string]: unknown})[key])
-          );
+  return Object.entries(target as object).every(([key, value]) =>
+    deepEqual(value, (compare as { [key: string]: unknown })[key]),
+  );
 }
 
-function checkProperiesExistsOrEqual(match: object, target: {[key: string]: unknown}){
+function checkProperiesExistsOrEqual(
+  match: object,
+  target: { [key: string]: unknown },
+) {
   return Object.entries(match).every(([key, value]: [string, unknown]) => {
-    if (value === existsSymbol){
+    if (value === existsSymbol) {
       return key in target;
     }
 
@@ -39,8 +44,11 @@ class BaseExtendedEnumPartial<T> {
   }
 
   includes(props: T) {
-    return props !== null && typeof props === "object" 
-      ? checkProperiesExistsOrEqual(props, this.props as {[key: string]: unknown}) 
+    return props !== null && typeof props === "object"
+      ? checkProperiesExistsOrEqual(
+          props,
+          this.props as { [key: string]: unknown },
+        )
       : this.props === props;
   }
 
@@ -48,13 +56,13 @@ class BaseExtendedEnumPartial<T> {
     return deepEqual(this.props, props);
   }
 
-  is(constructor: typeof BaseExtendedEnumPartial){
-   return this instanceof constructor;
+  is(constructor: typeof BaseExtendedEnumPartial) {
+    return this instanceof constructor;
   }
 }
 
 class BaseExtendedEnum {
-  static is(instance: TRwsult, constructor: typeof BaseExtendedEnumPartial){
+  static is(instance: TRwsult, constructor: typeof BaseExtendedEnumPartial) {
     return instance instanceof constructor;
   }
 }
@@ -79,6 +87,6 @@ class Result extends BaseExtendedEnum {
   static StatusReady = 2;
   static StatusInProcess = 3;
 }
-type TRwsult<T = unknown, E = unknown> = Ok<T> | Err<E>
+type TRwsult<T = unknown, E = unknown> = Ok<T> | Err<E>;
 
 export { Result };

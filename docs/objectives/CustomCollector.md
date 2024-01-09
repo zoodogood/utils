@@ -1,6 +1,9 @@
 # CustomCollector
 class CustomCollector \{}
 
+> [!Warning]
+> Unstable
+
 **Description:**  
 \- None
 

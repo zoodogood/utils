@@ -5,8 +5,6 @@ import {
 } from "../../src/primitives/TextTableBuilder.js";
 import { expect, test } from "vitest";
 
-
-
 test("Some ascii", () => {
   const EXPECTED_CONTENT = `
 +-------+-----------+--------+
@@ -25,18 +23,18 @@ test("Some ascii", () => {
     .setBorderOptions(
       ({ metadata }, index) =>
         metadata.separatorsIndexesInRow!.includes(index) ? "+" : "-",
-      [BorderDirectionEnum.BorderTop]
+      [BorderDirectionEnum.BorderTop],
     )
     .setBorderOptions(
       (_, index) => index + "",
-      [BorderDirectionEnum.BorderLeft, BorderDirectionEnum.BorderRight]
+      [BorderDirectionEnum.BorderLeft, BorderDirectionEnum.BorderRight],
     )
     .addRowWithElements(["1.", "2/", "3/"], {
       align: CellAlignEnum.Left,
       gapLeft: 0,
     })
     .addRowSeparator(({ metadata }, index) =>
-      index === 0 || index === metadata.tableWidth! - 1 ? "+" : " "
+      index === 0 || index === metadata.tableWidth! - 1 ? "+" : " ",
     )
     .addMultilineRowWithElements(["1", "Пирожки\nс\nмясом", "3"], {
       align: CellAlignEnum.Center,
@@ -44,18 +42,15 @@ test("Some ascii", () => {
     })
     .addRowWithElements(["1", "2", "3"], { align: CellAlignEnum.Right })
     .addRowSeparator(({ metadata }, index) =>
-      metadata.separatorsIndexesInRow!.includes(index) ? "+" : "-"
+      metadata.separatorsIndexesInRow!.includes(index) ? "+" : "-",
     )
     .addRowWithElements(["777", "555", "1999"], { align: CellAlignEnum.Center })
     .addRowSeparator(({ metadata }, index) =>
-      metadata.separatorsIndexesInRow!.includes(index) ? "^" : "-"
+      metadata.separatorsIndexesInRow!.includes(index) ? "^" : "-",
     );
-	 
-	 
-	 
-	 expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
-});
 
+  expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
+});
 
 test("maxWidth", () => {
   const EXPECTED_CONTENT = `
@@ -64,13 +59,17 @@ test("maxWidth", () => {
 
   const builder = new TextTableBuilder()
     .setBorderOptions()
-    .addRowWithElements(["Едааааа", "Пирожок с мясом", "АААААААААААААА"], {}, {
-      maxWidth: 10
-    })
+    .addRowWithElements(
+      ["Едааааа", "Пирожок с мясом", "АААААААААААААА"],
+      {},
+      {
+        maxWidth: 10,
+      },
+    )
     .addRowSeparator();
 
   expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
-})
+});
 
 test("minWidth", () => {
   const EXPECTED_CONTENT = `
@@ -79,13 +78,17 @@ test("minWidth", () => {
 
   const builder = new TextTableBuilder()
     .setBorderOptions()
-    .addRowWithElements(["1", "2", "3"], {}, {
-      minWidth: 10
-    })
+    .addRowWithElements(
+      ["1", "2", "3"],
+      {},
+      {
+        minWidth: 10,
+      },
+    )
     .addRowSeparator();
 
   expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
-})
+});
 
 test("Different rows length", () => {
   const EXPECTED_CONTENT = `
@@ -95,7 +98,7 @@ test("Different rows length", () => {
   const builder = new TextTableBuilder()
     .setBorderOptions()
     .addRowWithElements(["1, 2, 3", "2, 3", "3"])
-    .addRowWithElements(["1, 2, 3", "2, 3", "3", "4"])
+    .addRowWithElements(["1, 2, 3", "2, 3", "3", "4"]);
 
   expect(builder.generateTextContent().trim()).toBe(EXPECTED_CONTENT.trim());
-})
+});

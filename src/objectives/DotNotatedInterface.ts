@@ -3,8 +3,6 @@ interface IMethodsOptions {
   allowSetFunctions?: boolean; // for set value: if true just set function,
 }
 
-
-
 export class DotNotatedInterface {
   declare target: Record<string, unknown>;
 
@@ -15,10 +13,9 @@ export class DotNotatedInterface {
   getItem<T>(key: string, options: IMethodsOptions = {}): T | null {
     const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
       key,
-      { needFillIfParentNotExists: false }
+      { needFillIfParentNotExists: false },
     );
 
-    
     if (!parent || lastSegment in parent === false) {
       return options.defaultValue ?? null;
     }
@@ -27,7 +24,11 @@ export class DotNotatedInterface {
     return parent[lastSegment] as T;
   }
 
-  setItem<T>(key: string, value: CallableFunction, options?: IMethodsOptions): T;
+  setItem<T>(
+    key: string,
+    value: CallableFunction,
+    options?: IMethodsOptions,
+  ): T;
   setItem<T>(key: string, value: any, options: IMethodsOptions = {}): T {
     if (typeof value === "function" && !options.allowSetFunctions) {
       value = value(this.getItem(key, options));
@@ -35,7 +36,7 @@ export class DotNotatedInterface {
 
     const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
       key,
-      { needFillIfParentNotExists: true }
+      { needFillIfParentNotExists: true },
     );
 
     // @ts-ignore
@@ -45,7 +46,7 @@ export class DotNotatedInterface {
   hasItem(key: string, options: IMethodsOptions = {}): boolean {
     const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
       key,
-      { needFillIfParentNotExists: false }
+      { needFillIfParentNotExists: false },
     );
 
     if (parent === null) {
@@ -57,7 +58,7 @@ export class DotNotatedInterface {
   removeItem(key: string, options: IMethodsOptions = {}): boolean {
     const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
       key,
-      { needFillIfParentNotExists: false }
+      { needFillIfParentNotExists: false },
     );
 
     if (!parent) {
@@ -70,7 +71,7 @@ export class DotNotatedInterface {
 
   getParentAndlastSegmentByNotatedKey(
     key: string,
-    { needFillIfParentNotExists = false }
+    { needFillIfParentNotExists = false },
   ): { parent: object | null; lastSegment: string } {
     const pathSegments = key.split(".");
     if (!pathSegments.length) {

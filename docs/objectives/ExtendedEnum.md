@@ -3,7 +3,7 @@
 Expanded enumerations, in this case, are full of data while retaining their strengths: obviousness, manageability. This concept is taken from the Rust language, of which enumerations are an important part
 
 ## Syntax
-For example: enum Result, using Result.Ok with props: custom data and static message.
+In example: enum Result, using Result.Ok with `props`: custom data and static status message.
 ```ts
 const { Ok, Err, StatusSuccess } = Result;
 const result = new Ok<{ status: number; data: { x: number; y: number } }>({
@@ -40,7 +40,7 @@ expect(
 	}),
 ).false;
 ```
-## You own Enum
+## Create you own Enum
 ```ts
 import { BaseExtendedEnum, BaseExtendedEnumPartial } from "@zoodogood/utils/objectives/ExtendedEnum";
 
@@ -68,10 +68,10 @@ export type TResult<T = unknown, E = unknown> = Ok<T> | Err<E>;
 ```
 ## Import
 ```ts
-import { Result, Option, BooleanWithMessage } from "@zoodogood/utils/objectives/ExtendedEnum";
+import { Result, Option, BooleanWithMessage } from "@zoodogood/utils/objectives";
 ```
 ```ts
-import { existsSymbol } from "@zoodogood/utils/objectives/equal.js";
+import { existsSymbol } from "@zoodogood/utils/objectives";
 ```
 === Examples
 ```ts

@@ -13,4 +13,4 @@ export class BooleanWithMessage extends BaseExtendedEnum {
 
   static False = False;
 }
-export type TResult<T = unknown, E = unknown> = True<T> | False<E>;
+export type TBooleanWithMessage<T = unknown, E = unknown> = True<T> | False<E>;

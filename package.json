@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "1.1.4-change.1060",
+  "version": "1.1.4-change.1111",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,7 @@
     "test": "vitest run",
     "docs-build": "cd ./docs && retype build  --output ./public",
     "docs-watch": "cd ./docs && retype watch",
-    "prepack": "yarn build && yarn test",
+    "prepack": "yarn build && yarn test && yarn docs-build",
     "build": "tsc"
   },
   "typings": "lib/index",
@@ -32,6 +32,7 @@
     "@types/node": "^20.5.9",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
+    "@vitest/ui": "^1.2.1",
     "discord-api-types": "^0.37.65",
     "discord.js": "^14.13.0",
     "eslint": "^8.54.0",

@@ -1,4 +1,5 @@
-export * from './TextTableBuilder.js';
+export * from "./TextTableBuilder.js";
+export * from "./BracketsParser.js";
 
 interface IEndingOptions {
   unite?: (quantity: number, word: string) => string;
@@ -9,7 +10,7 @@ function ending(
   multiple: string,
   alone: string,
   double: string,
-  options: IEndingOptions = {}
+  options: IEndingOptions = {},
 ) {
   if (isNaN(quantity)) return NaN;
 

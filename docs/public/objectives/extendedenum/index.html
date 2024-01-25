@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-root" content="/utils/public">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.3.0.758105064118">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.3.0.759524554051">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 3.3.0">
@@ -31,12 +31,12 @@
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../resources/css/retype.css?v=3.3.0.758105064118" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=3.3.0.759524554051" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=3.3.0.758105064118" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=3.3.0.759524554051" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../resources/js/retype.js?v=3.3.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.3.0.758105064118" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.3.0.758105064118" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.3.0.759524554051" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.3.0.759524554051" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -190,7 +190,7 @@
         <span>Syntax</span>
     </h2>
 </doc-anchor-target>
-<p>For example: enum Result, using Result.Ok with props: custom data and static message.</p>
+<p>In example: enum Result, using Result.Ok with <code v-pre>props</code>: custom data and static status message.</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-typescript"><code v-pre class="language-typescript">const { Ok, Err, StatusSuccess } = Result;
 const result = new Ok&lt;{ status: number; data: { x: number; y: number } }&gt;({
@@ -227,10 +227,10 @@ expect(
 	}),
 ).false;</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="you-own-enum">
+<doc-anchor-target id="create-you-own-enum">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#you-own-enum">#</doc-anchor-trigger>
-        <span>You own Enum</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#create-you-own-enum">#</doc-anchor-trigger>
+        <span>Create you own Enum</span>
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
@@ -265,10 +265,10 @@ export type TResult&lt;T = unknown, E = unknown&gt; = Ok&lt;T&gt; | Err&lt;E&gt;
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">import { Result, Option, BooleanWithMessage } from &quot;@zoodogood/utils/objectives/ExtendedEnum&quot;;</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">import { Result, Option, BooleanWithMessage } from &quot;@zoodogood/utils/objectives&quot;;</code></pre>
 </doc-codeblock></div>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">import { existsSymbol } from &quot;@zoodogood/utils/objectives/equal.js&quot;;</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">import { existsSymbol } from &quot;@zoodogood/utils/objectives&quot;;</code></pre>
 </doc-codeblock></div>
 <doc-panel id="examples">
     <template #title>Examples</template>

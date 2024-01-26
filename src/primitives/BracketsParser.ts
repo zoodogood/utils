@@ -79,8 +79,8 @@ export class BracketsParser {
   }
 
   processBracket(symbol: string, context: ParseContext) {
-    this.processBracketClose(symbol, context);
-    this.processBracketOpen(symbol, context);
+    this.processBracketClose(symbol, context) ||
+      this.processBracketOpen(symbol, context);
   }
 
   processBracketClose(symbol: string, context: ParseContext) {
@@ -113,6 +113,7 @@ export class BracketsParser {
     }
 
     context.appendGroup(group);
+    return end;
   }
 
   processBracketOpen(symbol: string, context: ParseContext) {
@@ -135,6 +136,7 @@ export class BracketsParser {
     const { match, variant } = result;
     const start = StackElement.from({ ...match, key: variant.key, variant });
     context.stack.push(start);
+    return start;
   }
 
   /**
@@ -185,7 +187,7 @@ export class BracketsParser {
       const index = context.indexInText;
       const symbol = text[index] || "";
       this.processSymbol(symbol, context);
-      if (!symbol) {
+      if (symbol === "") {
         break;
       }
       context.indexInText++;

@@ -16,7 +16,7 @@ const result = parser
 	.addBracketVariant(...BracketsParser.defaultBracketVariants)
 	.parse(text);
 
-expect(result.groups).toHaveLength(4);
+expect(result.groups).toHaveLength(5);
 ```
 +++ Custom brackets
 ```ts

@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "1.1.4-change.1111",
+  "version": "1.2.0-change.1444",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -11,7 +11,9 @@
     "docs-build": "cd ./docs && retype build  --output ./public",
     "docs-watch": "cd ./docs && retype watch",
     "prepack": "yarn build && yarn test && yarn docs-build",
-    "build": "tsc"
+    "build": "tsc",
+    "tsc": "tsc",
+    "vitest": "vitest"
   },
   "typings": "lib/index",
   "exports": {

@@ -30,9 +30,26 @@ class GroupElement {
   end?: StackElement;
   content?: string;
   subgroups: GroupElement[] = [];
+  depth = 0;
 
   get key() {
     return this.start?.key;
+  }
+
+  get indexInText() {
+    return this.start?.indexInText;
+  }
+
+  get length(): number {
+    return (
+      // @ts-expect-error May be undefined
+      this.end?.indexInText - this.start?.indexInText + this.end?.full?.length
+    );
+  }
+
+  get full(): string | null {
+    // @ts-expect-error May be undefined
+    return this.start?.full + this.content + this.end?.full || null;
   }
 
   isParentFor(group: GroupElement) {
@@ -73,6 +90,12 @@ export class BracketsParser {
     return this;
   }
 
+  setBracketVariant(...variants: IBracketVariant[]) {
+    [...this.variants.keys()].forEach((key) => this.variants.delete(key));
+    this.addBracketVariant(...variants);
+    return this;
+  }
+
   processSymbol(symbol: string, context: ParseContext) {
     this.processSlash(symbol, context);
     this.processBracket(symbol, context);
@@ -101,6 +124,12 @@ export class BracketsParser {
 
     const start = context.stack.pop()!;
     const end = StackElement.from({ ...match, key: variant!.key, variant });
+    const group = this._createGroup(start, end, context);
+    context.appendGroup(group);
+    return end;
+  }
+
+  _createGroup(start: StackElement, end: StackElement, context: ParseContext) {
     const content = context.text!.slice(
       start.indexInText! + start.length!,
       end.indexInText,
@@ -112,8 +141,8 @@ export class BracketsParser {
       group.subgroups.push(potentialChild);
     }
 
-    context.appendGroup(group);
-    return end;
+    group.depth = context.stack.length;
+    return group;
   }
 
   processBracketOpen(symbol: string, context: ParseContext) {

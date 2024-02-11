@@ -1,5 +1,6 @@
 export * from "./TextTableBuilder.js";
 export * from "./BracketsParser.js";
+export * from "./CliParser.js";
 
 interface IEndingOptions {
   unite?: (quantity: number, word: string) => string;

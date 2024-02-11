@@ -39,7 +39,22 @@ parser.addBracketVariant([
 ```
 
 +++ Real example
-```js
-// In future
+```ts
+const context = this.BracketsManager.parse(this.text);
+const groups = context.groups.filter((group) => group.depth === 0);
+let offset = 0;
+for (const index in groups) {
+	const group = groups[index];
+	const replacement = `[Group*${index}]`;
+	const length = group.length;
+	this.replaceTextByIndexes(
+		group.indexInText! - offset,
+		length,
+		() => replacement,
+	);
+
+	offset += length - replacement.length;
+}
+return this;
 ```
 +++

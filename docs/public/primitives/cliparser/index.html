@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.3.0">
 
     <!-- Primary Meta Tags -->
-    <title>CreateMessage</title>
-    <meta name="title" content="CreateMessage">
-    <meta name="description" content="function CreateMessage(MessagePayload): MessagePayload">
+    <title>CliParser</title>
+    <meta name="title" content="CliParser">
+    <meta name="description" content="class CliParser {}">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/discordjs/createmessage/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/primitives/cliparser/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/createmessage/">
-    <meta property="og:title" content="CreateMessage">
-    <meta property="og:description" content="function CreateMessage(MessagePayload): MessagePayload">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/primitives/cliparser/">
+    <meta property="og:title" content="CliParser">
+    <meta property="og:description" content="class CliParser {}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/createmessage/">
-    <meta property="twitter:title" content="CreateMessage">
-    <meta property="twitter:description" content="function CreateMessage(MessagePayload): MessagePayload">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/primitives/cliparser/">
+    <meta property="twitter:title" content="CliParser">
+    <meta property="twitter:description" content="class CliParser {}">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,75 +171,203 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="createmessage" class="break-words">
+<doc-anchor-target id="cliparser" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#createmessage">#</doc-anchor-trigger>
-        <span>CreateMessage</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#cliparser">#</doc-anchor-trigger>
+        <span>CliParser</span>
     </h1>
 </doc-anchor-target>
-<p>function CreateMessage(MessagePayload): MessagePayload</p>
+<p>class CliParser {}</p>
 <p><strong>Description:</strong><br />
-Takes and transform MessagePayload</p>
-<doc-anchor-target id="options">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#options">#</doc-anchor-trigger>
-        <span><code v-pre>options</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface MessagePayload = {  
-	content,
-  	...embed,
-  	ephemeral, fetchReply,
-  	components, files, reference
-}</code></pre>
-</doc-codeblock></div>
+- Capture groups and flags with values</p>
 <doc-anchor-target id="example">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
         <span>Example</span>
     </h2>
 </doc-anchor-target>
+<doc-tabs>
+<doc-tab v-cloak id="mini">
+<template #title>Mini</template>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const customId = &quot;@command/.example/create-content&quot;;
-const title = &quot;Укажите текстовое содержимое&quot;;
-const components = {};
-const modal = CreateModal({customId, title, components});
-
-interaction.showModal(modal);</code></pre>
+<pre class="language-javascript"><code v-pre class="language-javascript">const parsed = new CliParser()
+	.setText(&quot;hello -h&quot;)
+	.captureFlags([{
+		name: &quot;--help&quot;,
+		capture: [&quot;--help&quot;, &quot;-h&quot;],
+		expectValue: false,
+	}])
+	.collect();
+	
+expect(parsed.captures.get(&quot;--help&quot;)?.toString())
+	.toBe(&quot;-h&quot;);</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="real-example">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example">#</doc-anchor-trigger>
-        <span>Real example</span>
-    </h3>
+</doc-tab>
+<doc-tab v-cloak id="with-groups">
+<template #title>With groups</template>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-javascript"><code v-pre class="language-javascript">const parser = new CliParser();
+
+const result = parser
+	.setText(&quot;pay 200 --resourcegroup (coins {he-he}) Hello, World!&quot;)
+	.processBrackets()
+	.captureByMatch({ name: &quot;command&quot;, regex: /^[a-zа-яёъ]+/i })
+	.captureFlags([
+		{
+			name: &quot;--help&quot;,
+			capture: [&quot;--help&quot;, &quot;-h&quot;],
+		},
+		{
+			capture: [&quot;--resourceGroup&quot;],
+			expectValue: true,
+		},
+	])
+	.captureByMatch({ regex: /\d+/, name: &quot;value&quot; })
+	.captureResidue({ name: &quot;message&quot; })
+	.collect();
+
+const resolver = (
+	capture: InstanceType&lt;typeof CliParser.CapturedContent&gt; | null,
+) =&gt;
+	(capture &amp;&amp;
+	(capture.isBracketGroupStamp()
+		? capture.toGroupElement()
+		: capture.toString())) ||
+	null;
+const values = result.resolveValues(resolver);
+
+expect(values.get(&quot;--help&quot;)).equal(null);
+expect(values.get(&quot;command&quot;)).equal(&quot;pay&quot;);
+expect(values.get(&quot;--resourceGroup&quot;)!.full).equal(&quot;(coins {he-he})&quot;);
+
+const group = values.get(&quot;--resourceGroup&quot;);
+if (group instanceof BracketsParser.GroupElement) {
+	expect(group.content).equal(&quot;coins {he-he}&quot;);
+	expect(group.subgroups.length).toBe(1);
+}</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+<doc-tab v-cloak id="real-example">
+<template #title>Real example</template>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">// &gt; run()
+const parsed = new CliParser()
+	.setText(context.params)
+	.captureFlags(this.options.cliParser.flags)
+	.collect();
+	
+const values = parser.resolveValues(capture =&gt; capture?.toString());
+context.setCliParsed(parsed, values);
+
+// &gt; processHelp()
+const hasHelpFlag = context.getCliParsed()
+	.at(1)
+	.get(&quot;--help&quot;);
+
+if (!hasHelpFlag){
+	return;
+}</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+</doc-tabs>
+<doc-anchor-target id="methods">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#methods">#</doc-anchor-trigger>
+        <span>Methods</span>
+    </h2>
+</doc-anchor-target>
+<doc-tabs>
+<doc-tab v-cloak id="processbrackets">
+<template #title>processBrackets()</template>
+<doc-anchor-target id="description">
+    <h5>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#description">#</doc-anchor-trigger>
+        <span>Description:</span>
+    </h5>
+</doc-anchor-target>
+<p>Replace patterns like <code v-pre>&lt;reg&gt;Hello [world]&lt;/reg&gt;</code> to <code v-pre>[Group*n]</code> and save group metadata to parsed.groups .
+You don&#x27;t have to think about reading them. The <code v-pre>&lt;capture&gt;.isBracketGroupStamp()</code> and <code v-pre>&lt;capture&gt;.toGroupElement()</code> methods will do it for you.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">// Will replace parser.input
+parser.processBrackets();</code></pre>
+</doc-codeblock></div>
+<p>See <a href="../bracketsparser/">BracketsParser</a> for understand how parse own patterns.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">const parser = new CliParser();
+parser.brackets.setBracketVariant(IBracketVariant[]);
+
+interface IBracketVariant {
+  key: string;
+  start: TCompareSequence;
+  end: TCompareSequence;
+  isRegex?: boolean;
+  isSequence?: boolean;
+}</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+<doc-tab v-cloak id="captureflags-flags">
+<template #title>captureFlags(flags)</template>
+<doc-anchor-target id="description-1">
+    <h5>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#description-1">#</doc-anchor-trigger>
+        <span>Description</span>
+    </h5>
+</doc-anchor-target>
+<p>Insensitive registry util for capture simple text like <code v-pre>--at=1</code>, <code v-pre>--at 1</code> or <code v-pre>-t 1</code>, (if some alias exists). In this example, <code v-pre>&lt;capture&gt;.toString()</code> will equal the value <code v-pre>1</code> because the expectValue parameter.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">.captureFlags([{
+	name: &quot;--at&quot;,
+	capture: [&quot;--at&quot;, &quot;-t&quot;],
+	expectValue: true
+}])</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="params">
+    <h5>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#params">#</doc-anchor-trigger>
+        <span>Params</span>
+    </h5>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const askColor = async (user, interaction) =&gt; {
-	
-	const components = {type: ComponentType.TextInput, customId: &quot;color-field&quot;, requied: true, label: &quot;Цвет в формате HEX&quot;, maxLength: 7};
-	const modal = CreateModal({
-		customId: &quot;get-color-modal&quot;,
-		title: &quot;Укажите цвет&quot;,
-		components
-	});
-
-	interaction.showModal(modal);
-
-	const filter = (interaction) =&gt; interaction.user === user;
-	const fields = (await interaction.message.awaitMessageComponent({filter, time: 200_000}))?.fields;
-	if (!fields){
-		return null;
-	}
-
-	const color = fields.getField(&quot;color-field&quot;).value;
-	const isColor = color.match(/#*([0-9a-f]{3}|[0-9a-f]{6})/i);
-	if (isColor){
-		return color;
-	}
-}
-</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">// flags: IFlagCapture[]
+interface IFlagCapture {
+  name?: string;
+  capture: string[];
+  expectValue?: boolean;
+}</code></pre>
 </doc-codeblock></div>
+</doc-tab>
+<doc-tab v-cloak id="capturebymatch-params">
+<template #title>captureByMatch(params)</template>
+<doc-anchor-target id="description-2">
+    <h5>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#description-2">#</doc-anchor-trigger>
+        <span>Description</span>
+    </h5>
+</doc-anchor-target>
+<p>Used for capturing specific patterns from text.<br />
+Syntactic sugar for <code v-pre>text = text.replace(regex, (full) =&gt; (match = full))</code> and more</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">.captureByMatch({
+    name: &quot;time&quot;,
+    regex: /\d{2}:\d{2}/
+})
+	.collect()
+	.captures.get(&quot;time&quot;);</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="params-1">
+    <h5>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#params-1">#</doc-anchor-trigger>
+        <span>Params</span>
+    </h5>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">interface ITextMatch {
+  regex: RegExp;
+  name: string;
+}</code></pre>
+</doc-codeblock></div>
+</doc-tab>
+</doc-tabs>
 
                                 
                                 <!-- Required only on API pages -->
@@ -249,20 +377,20 @@ interaction.showModal(modal);</code></pre>
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../primitives/bracketsparser/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Welcome</span>
+                                                <span class="block mt-1">Brackets​Parser</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/createmodal/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../primitives/ending/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Create​Modal</span>
+                                                <span class="block mt-1">ending</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -306,6 +434,6 @@ interaction.showModal(modal);</code></pre>
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "CreateMessage", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "CliParser", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

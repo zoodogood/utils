@@ -3,9 +3,7 @@ import { CliParser } from "../../src/primitives/CliParser.js";
 import { BracketsParser } from "../../src/primitives/BracketsParser.js";
 
 test("Slice command, parse groups and flags", () => {
-  const parser = new CliParser();
-
-  const result = parser
+  const result = new CliParser()
     .setText("pay 200 --resourcegroup (coins {he-he}) Hello, World!")
     .processBrackets()
     .captureByMatch({ name: "command", regex: /^[a-zа-яёъ]+/i })
@@ -43,4 +41,29 @@ test("Slice command, parse groups and flags", () => {
     expect(group.content).equal("coins {he-he}");
     expect(group.subgroups.length).toBe(1);
   }
+});
+
+test("Only flag", () => {
+  const parser = new CliParser();
+  const result = parser
+    .setText("--help")
+    .processBrackets()
+    .captureFlags([
+      {
+        name: "--help",
+        capture: ["-h", "--help"],
+      },
+      {
+        name: "--list",
+        capture: ["-l", "--list"],
+      },
+      {
+        name: "--at",
+        capture: ["--at"],
+        expectValue: true,
+      },
+    ])
+    .collect();
+  const values = result.resolveValues((capture) => capture?.toString());
+  console.log(values);
 });

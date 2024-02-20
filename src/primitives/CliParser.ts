@@ -260,7 +260,7 @@ export class CliParser {
     );
     const groups = context.brackets.findPrimaryGroups(bracketsContext);
     let offset = 0;
-    for (const index in groups) {
+    for (let index = 0; index < groups.length; index++) {
       const group = groups[index];
       const replacement = context.brackets.toStringGroup(indexes[index]);
       const length = group.length;

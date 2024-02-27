@@ -96,7 +96,8 @@ class FlagsManager {
 
         const match = parser.replaceByMatch(RegExp(regex, "i"));
         if (!match) {
-          context.captures.set(`${captureName}`, null);
+          !context.captures.has(`${captureName}`) &&
+            context.captures.set(`${captureName}`, null);
           continue;
         }
 

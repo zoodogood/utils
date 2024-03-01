@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "1.2.2-change.1452",
+  "version": "1.2.3-change.1466",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

@@ -88,7 +88,7 @@ class FlagsManager {
     for (const { name, capture, expectValue } of flags) {
       for (const flag of capture) {
         const regex = `(?<=^|\\s)${flag}${
-          expectValue ? "(?:(?:\\s+|=)(?<value>[^\\s]+))" : ""
+          expectValue ? "(?:(?:\\s+(?!-)|=)(?<value>[^\\s]+))" : ""
         }`;
 
         const { parser } = context;
@@ -103,7 +103,7 @@ class FlagsManager {
 
         context.captures.set(
           `${captureName}`,
-          new CapturedContent(match).setContextInstance(context),
+          new CapturedContentFlagMatchArray(match).setContextInstance(context),
         );
       }
     }
@@ -118,6 +118,10 @@ class CapturedContent {
 
   constructor(content: TCaptureValue) {
     this.content = content;
+  }
+
+  isFlagMatchArray() {
+    return this instanceof CapturedContentFlagMatchArray;
   }
 
   setContextInstance(context: CapturedContent["context"]) {
@@ -212,7 +216,7 @@ class CapturedContent {
         content = this.regexArrayOrStringToString(content);
       }
       if (context && this.contentIsBracketGroupStamp(content, context)) {
-        return this.contentToGroupElement(content, context)?.full || content;
+        return this.contentToGroupElement(content, context)?.content || content;
       }
       return content;
     })(content) as string | undefined;
@@ -221,6 +225,13 @@ class CapturedContent {
     }
 
     return value;
+  }
+}
+
+class CapturedContentFlagMatchArray extends CapturedContent {
+  declare content: RegExpMatchArray;
+  valueOfFlag() {
+    return this.content.groups?.value || null;
   }
 }
 

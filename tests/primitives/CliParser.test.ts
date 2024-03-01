@@ -65,5 +65,5 @@ test("Only flag", () => {
     ])
     .collect();
   const values = result.resolveValues((capture) => capture?.toString());
-  console.log(values);
+  expect(values.get("--help")).equal("--help");
 });

@@ -49,8 +49,9 @@ class BracketsManager extends BracketsParser {
     return context.groups.filter((group) => group.depth === 0);
   }
 
+  groupStampRegex = /\[Group\*(?<index>\d+)\]/;
   findBracketStamp(text: string) {
-    return text.trim().match(/^\[Group\*(?<index>\d+)\]$/);
+    return text.trim().match(RegExp(`^${this.groupStampRegex.source}$`));
   }
 
   processBracketGroupFromStringStamp(
@@ -63,6 +64,16 @@ class BracketsManager extends BracketsParser {
 
     const { index } = match.groups!;
     return this.primary.at(+index)!;
+  }
+
+  replaceBracketsStamps(
+    text: string,
+    replacer = (group: BracketsNamespace.GroupElement) =>
+      String(group?.content),
+  ) {
+    return text.replaceAll(RegExp(this.groupStampRegex, "g"), (full) =>
+      replacer(this.processBracketGroupFromStringStamp(full)!),
+    );
   }
 }
 

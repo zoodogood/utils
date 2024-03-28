@@ -67,3 +67,19 @@ test("Only flag", () => {
   const values = result.resolveValues((capture) => capture?.toString());
   expect(values.get("--help")).equal("--help");
 });
+
+test("Fix residue", () => {
+  const result = new CliParser()
+    .setText("Hello, World! (Mamma-mia)")
+    .processBrackets()
+    .captureResidue({ name: "phrase" })
+    .collect();
+
+  const capture = result.captures.get("phrase")!;
+  capture.content = result.brackets.replaceBracketsStamps(
+    capture.content as string,
+    (group) => String(group.full),
+  );
+
+  expect(capture.toString()).equal("Hello, World! (Mamma-mia)");
+});

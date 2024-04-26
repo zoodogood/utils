@@ -41,7 +41,13 @@ async function justSendMessage(target, options) {
   }
 
   if (options.reactions) {
-    options.reactions.filter(Boolean).forEach((react) => message.react(react));
+    options.reactions
+      .filter(Boolean)
+      .filter(
+        (react) =>
+          !message.reactions.cache.some((compared) => compared.code === react),
+      )
+      .forEach((react) => message.react(react));
   }
 
   return message;

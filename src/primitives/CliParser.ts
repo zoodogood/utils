@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { BracketsParser } from "./BracketsParser.js";
 
-interface ITextMatch {
+export interface ITextMatch {
   regex: RegExp;
   name: string;
 }
 
-namespace BracketsNamespace {
+export namespace BracketsNamespace {
   export type Context = InstanceType<typeof BracketsParser.ParseContext>;
   export type GroupElement = InstanceType<typeof BracketsManager.GroupElement>;
 }
-class BracketsManager extends BracketsParser {
+export class BracketsManager extends BracketsParser {
   primary: BracketsNamespace.GroupElement[] = [];
   constructor() {
     super();
@@ -77,12 +77,12 @@ class BracketsManager extends BracketsParser {
   }
 }
 
-interface IFlagCapture {
+export interface IFlagCapture {
   name?: string;
   capture: string[];
   expectValue?: boolean;
 }
-class FlagsManager {
+export class FlagsManager {
   unhandledFlags?: Array<RegExpMatchArray>;
 
   captureResidueFlags(context: CliParserRunContext) {
@@ -122,8 +122,8 @@ class FlagsManager {
   }
 }
 
-type TCaptureValue = string | RegExpMatchArray;
-class CapturedContent {
+export type TCaptureValue = string | RegExpMatchArray;
+export class CapturedContent {
   content: TCaptureValue;
   context?: CliParserRunContext;
 
@@ -239,14 +239,14 @@ class CapturedContent {
   }
 }
 
-class CapturedContentFlagMatchArray extends CapturedContent {
+export class CapturedContentFlagMatchArray extends CapturedContent {
   declare content: RegExpMatchArray;
   valueOfFlag() {
     return this.content.groups?.value || null;
   }
 }
 
-class CliParserRunContext {
+export class CliParserRunContext {
   parser: CliParser;
   input = "";
   captures: Map<string, CapturedContent | null> = new Map();

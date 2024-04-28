@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "1.2.4-change.1476",
+  "version": "1.2.5-change.1483",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -21,7 +21,8 @@
     "./primitives": "./lib/primitives/mod.js",
     "./objectives": "./lib/objectives/mod.js",
     "./discordjs": "./lib/discordjs/mod.js",
-    "./nodejs": "./lib/nodejs/mod.js"
+    "./nodejs": "./lib/nodejs/mod.js",
+    "./CliParser": "./lib/primitives/CliParser.js"
   },
   "repository": {
     "type": "git",

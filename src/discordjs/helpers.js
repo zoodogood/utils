@@ -45,7 +45,7 @@ async function justSendMessage(target, options) {
       .filter(Boolean)
       .filter(
         (react) =>
-          !message.reactions.cache.some(
+          !message.reactions?.cache.some(
             (compared) => compared.emoji.code === react,
           ),
       )

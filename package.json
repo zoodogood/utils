@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "1.2.5-change.1483",
+  "version": "1.2.6-change.1486",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -54,7 +54,7 @@
   ],
   "typesVersions": {
     ">=4.2": {
-      "*": [
+      ".": [
         "lib/index.d.ts"
       ],
       "primitives": [
@@ -68,6 +68,9 @@
       ],
       "nodejs": [
         "lib/nodejs/mod.d.ts"
+      ],
+      "CliParser": [
+        "lib/primitives/CliParser.d.ts"
       ]
     }
   }

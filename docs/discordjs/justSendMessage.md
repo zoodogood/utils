@@ -1,9 +1,9 @@
-# CreateMessage
+# justSendMessage
 function justSendMessage(target, MessagePayload): Message
 
 **Description:**  
 Provide reactions and delete options for more control. Uses [CreateMessage](./CreateMessage.md).
-Cam reply for modal or edit target message
+Can reply for modal or edit target message
 
 ### `options`
 ```ts
@@ -45,7 +45,8 @@ export async function pushMessage(options) {
     try {
       return await justSendMessage(target, options);
     } catch (error) {
-      if (!error.message.includes("Invalid Form Body")) {
+      const BODY_ERROR = "Invalid Form Body";
+      if (!error.message.includes(BODY_ERROR)) {
         console.error(options);
         throw error;
       }

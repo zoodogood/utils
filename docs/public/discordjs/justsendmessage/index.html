@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.3.0">
 
     <!-- Primary Meta Tags -->
-    <title>isEmptyEmbed</title>
-    <meta name="title" content="isEmptyEmbed">
-    <meta name="description" content="function isEmptyEmbed(embed): boolean">
+    <title>CreateMessage</title>
+    <meta name="title" content="CreateMessage">
+    <meta name="description" content="function justSendMessage(target, MessagePayload): Message">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/discordjs/isemptyembed/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/discordjs/justsendmessage/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/isemptyembed/">
-    <meta property="og:title" content="isEmptyEmbed">
-    <meta property="og:description" content="function isEmptyEmbed(embed): boolean">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/justsendmessage/">
+    <meta property="og:title" content="CreateMessage">
+    <meta property="og:description" content="function justSendMessage(target, MessagePayload): Message">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/isemptyembed/">
-    <meta property="twitter:title" content="isEmptyEmbed">
-    <meta property="twitter:description" content="function isEmptyEmbed(embed): boolean">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/justsendmessage/">
+    <meta property="twitter:title" content="CreateMessage">
+    <meta property="twitter:description" content="function justSendMessage(target, MessagePayload): Message">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,32 +171,29 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="isemptyembed" class="break-words">
+<doc-anchor-target id="createmessage" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#isemptyembed">#</doc-anchor-trigger>
-        <span>isEmptyEmbed</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#createmessage">#</doc-anchor-trigger>
+        <span>CreateMessage</span>
     </h1>
 </doc-anchor-target>
-<p>function isEmptyEmbed(embed): boolean</p>
+<p>function justSendMessage(target, MessagePayload): Message</p>
 <p><strong>Description:</strong><br />
-Returns true if all embed parameters that specify content are equal to the default value.</p>
-<doc-anchor-target id="embed">
+Provide reactions and delete options for more control. Uses <a href="../createmessage/">CreateMessage</a>.
+Cam reply for modal or edit target message</p>
+<doc-anchor-target id="options">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#embed">#</doc-anchor-trigger>
-        <span><code v-pre>embed</code></span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#options">#</doc-anchor-trigger>
+        <span><code v-pre>options</code></span>
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface embed = {  
-	title?: string,
-	author?: {name: string, iconURL?: string},
-	thumbnail?: {url: string},
-	description?: string,
-	fields?: Array&lt;{name: string, value: string, inline?: boolean}&gt;,
-	image?: {url: string},
-	footer?: {text: string, iconURL?: string},
-	timestamp?: Date,
-	video?: {url: string}
+<pre class="language-typescript"><code v-pre class="language-typescript">interface MessagePayload = {  
+	...CreateMessageOptions,
+	// ms, timeout for () =&gt; message.delete()
+	delete: number,
+	edit: boolean,
+	reactions: Resolable[]
 }</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="example">
@@ -206,17 +203,13 @@ Returns true if all embed parameters that specify content are equal to the defau
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">embed = {};
-output = isEmptyEmbed(embed);
-// true
-
-embed = {color: &quot;#00ff00&quot;};
-output = isEmptyEmbed(embed);
-// true
-
-embed = {title: &quot;Some content&quot;};
-output = isEmptyEmbed(embed);
-// false</code></pre>
+<pre class="language-javascript"><code v-pre class="language-javascript">justSendMessage(channel, {
+	title: &quot;Ciao!&quot;,
+	description: &quot;Tu sei simpatico&quot;,
+	components: justButtonComponents({label: &quot;Si! Grazie&quot;}),
+	delete: SECOND * 15,
+})
+</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="real-example">
     <h3>
@@ -225,15 +218,39 @@ output = isEmptyEmbed(embed);
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const embed = new EmbedBuilder({
-    title, url, author, thumbnail,
-    description, color, fields,
-    image, video, footer, timestamp
-});
+<pre class="language-javascript"><code v-pre class="language-javascript">export async function pushMessage(options) {
 
-if (!isEmptyEmbed(embed)){
-	message.embeds = [embed];
-}</code></pre>
+  options.color ||= config.development ? &quot;#000100&quot; : &quot;#23ee23&quot;;
+
+  const target =
+    this instanceof InteractionResponse
+      ? this.interaction
+      : this instanceof Message &amp;&amp; !options.edit
+        ? this.channel
+        : this;
+
+  const message = (async () =&gt; {
+    try {
+      return await justSendMessage(target, options);
+    } catch (error) {
+      if (!error.message.includes(&quot;Invalid Form Body&quot;)) {
+        console.error(options);
+        throw error;
+      }
+      await sendErrorInfo({
+        description: &quot;Оригинальное сообщение не было доставлено&quot;,
+        channel: target,
+        error,
+      });
+      throw new Error(error.message, { cause: error });
+    }
+  })();
+
+  return message;
+}
+
+}
+</code></pre>
 </doc-codeblock></div>
 
                                 
@@ -244,20 +261,20 @@ if (!isEmptyEmbed(embed)){
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/createmodal/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/createmessage/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Create​Modal</span>
+                                                <span class="block mt-1">Create​Message</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/simplifycomponents/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/createmodal/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Simplify​Components</span>
+                                                <span class="block mt-1">Create​Modal</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -301,6 +318,6 @@ if (!isEmptyEmbed(embed)){
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "isEmptyEmbed", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "CreateMessage", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

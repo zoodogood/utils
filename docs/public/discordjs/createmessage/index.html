@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-root" content="/utils/public">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.3.0.767601659478">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.3.0.767899747351">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 3.3.0">
@@ -31,12 +31,12 @@
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../resources/css/retype.css?v=3.3.0.767601659478" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=3.3.0.767899747351" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=3.3.0.767601659478" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=3.3.0.767899747351" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../resources/js/retype.js?v=3.3.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.3.0.767601659478" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.3.0.767601659478" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.3.0.767899747351" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.3.0.767899747351" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -201,12 +201,10 @@ Takes and transform MessagePayload</p>
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const customId = &quot;@command/.example/create-content&quot;;
-const title = &quot;Укажите текстовое содержимое&quot;;
-const components = {};
-const modal = CreateModal({customId, title, components});
-
-interaction.showModal(modal);</code></pre>
+<pre class="language-javascript"><code v-pre class="language-javascript">const payload = CreateMessage({
+	content: &quot;Message content&quot;,
+	title: &quot;Message embed title&quot;
+});</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="real-example">
     <h3>
@@ -215,29 +213,39 @@ interaction.showModal(modal);</code></pre>
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const askColor = async (user, interaction) =&gt; {
-	
-	const components = {type: ComponentType.TextInput, customId: &quot;color-field&quot;, requied: true, label: &quot;Цвет в формате HEX&quot;, maxLength: 7};
-	const modal = CreateModal({
-		customId: &quot;get-color-modal&quot;,
-		title: &quot;Укажите цвет&quot;,
-		components
-	});
+<pre class="language-javascript"><code v-pre class="language-javascript">async function justSendMessage(target, options) {
+  const messagePayload = CreateMessage(options);
 
-	interaction.showModal(modal);
+  const message =
+    target instanceof BaseInteraction
+      ? await (options.edit
+          ? target.replied
+            ? target.editReply(messagePayload)
+            : target.update(messagePayload)
+          : target.reply(messagePayload))
+      : await (options.edit
+          ? target.edit(messagePayload)
+          : target.send(messagePayload));
 
-	const filter = (interaction) =&gt; interaction.user === user;
-	const fields = (await interaction.message.awaitMessageComponent({filter, time: 200_000}))?.fields;
-	if (!fields){
-		return null;
-	}
+  if (options.delete) {
+    setTimeout(() =&gt; message.delete(), options.delete);
+  }
 
-	const color = fields.getField(&quot;color-field&quot;).value;
-	const isColor = color.match(/#*([0-9a-f]{3}|[0-9a-f]{6})/i);
-	if (isColor){
-		return color;
-	}
+  if (options.reactions) {
+    options.reactions
+      .filter(Boolean)
+      .filter(
+        (react) =&gt;
+          !message.reactions?.cache.some(
+            (compared) =&gt; compared.emoji.code === react,
+          ),
+      )
+      .forEach((react) =&gt; message.react(react));
+  }
+
+  return message;
 }
+
 </code></pre>
 </doc-codeblock></div>
 
@@ -259,10 +267,10 @@ interaction.showModal(modal);</code></pre>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/createmodal/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/justsendmessage/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Create​Modal</span>
+                                                <span class="block mt-1">Create​Message</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>

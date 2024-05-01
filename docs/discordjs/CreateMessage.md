@@ -17,39 +17,47 @@ interface MessagePayload = {
 
 ## Example
 ```js
-const customId = "@command/.example/create-content";
-const title = "Укажите текстовое содержимое";
-const components = {};
-const modal = CreateModal({customId, title, components});
-
-interaction.showModal(modal);
+const payload = CreateMessage({
+	content: "Message content",
+	title: "Message embed title"
+});
 ```
 
 ### Real example
 ```js
-const askColor = async (user, interaction) => {
-	
-	const components = {type: ComponentType.TextInput, customId: "color-field", requied: true, label: "Цвет в формате HEX", maxLength: 7};
-	const modal = CreateModal({
-		customId: "get-color-modal",
-		title: "Укажите цвет",
-		components
-	});
+async function justSendMessage(target, options) {
+  const messagePayload = CreateMessage(options);
 
-	interaction.showModal(modal);
+  const message =
+    target instanceof BaseInteraction
+      ? await (options.edit
+          ? target.replied
+            ? target.editReply(messagePayload)
+            : target.update(messagePayload)
+          : target.reply(messagePayload))
+      : await (options.edit
+          ? target.edit(messagePayload)
+          : target.send(messagePayload));
 
-	const filter = (interaction) => interaction.user === user;
-	const fields = (await interaction.message.awaitMessageComponent({filter, time: 200_000}))?.fields;
-	if (!fields){
-		return null;
-	}
+  if (options.delete) {
+    setTimeout(() => message.delete(), options.delete);
+  }
 
-	const color = fields.getField("color-field").value;
-	const isColor = color.match(/#*([0-9a-f]{3}|[0-9a-f]{6})/i);
-	if (isColor){
-		return color;
-	}
+  if (options.reactions) {
+    options.reactions
+      .filter(Boolean)
+      .filter(
+        (react) =>
+          !message.reactions?.cache.some(
+            (compared) => compared.emoji.code === react,
+          ),
+      )
+      .forEach((react) => message.react(react));
+  }
+
+  return message;
 }
+
 
 ```
 

@@ -6,7 +6,7 @@ interface IParams {
 }
 
 export function getRandomElementIndexInWeights(
-  weights: NonNullable<IParams["associatedWeights"]>
+  weights: NonNullable<IParams["associatedWeights"]>,
 ): number | never {
   if (weights.length < 1) {
     new Error("Invalid array length");
@@ -14,7 +14,7 @@ export function getRandomElementIndexInWeights(
 
   let previousLimit = 0;
   const thresholds = weights.map(
-    (weight) => (previousLimit += weight)
+    (weight) => (previousLimit += weight),
   ) as number[];
 
   const lotterySecretNumber = Math.random() * thresholds.at(-1)!;
@@ -23,16 +23,16 @@ export function getRandomElementIndexInWeights(
 
 export function getRandomElementFromArray<T>(
   array: T[],
-  { needPop, associatedWeights }: IParams = {}
+  { needPop, associatedWeights }: IParams = {},
 ) {
   if (associatedWeights && associatedWeights.length !== array.length) {
     throw new Error(
-      "Incorrectly passed argument associatedWeights: The length of the associatedWeights must exactly match the length of the weights array"
+      "Incorrectly passed argument associatedWeights: The length of the associatedWeights must exactly match the length of the weights array",
     );
   }
   const index = associatedWeights
     ? getRandomElementIndexInWeights(associatedWeights)
-    : getRandomNumberInRange({ max: array.length });
+    : getRandomNumberInRange({ max: array.length - 1 });
 
   const input = array[index];
   if (needPop) {

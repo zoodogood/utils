@@ -99,13 +99,14 @@ export class FlagsManager {
     for (const { name, capture, expectValue } of flags) {
       for (const flag of capture) {
         const regex = `(?<=^|\\s)${flag}${
-          expectValue ? "(?:(?:\\s+(?!-)|=)(?<value>[^\\s]+))" : ""
+          expectValue ? "(?:(?:\\s+(?!-)|=)(?<value>[^\\s]+))?" : ""
         }`;
 
         const { parser } = context;
         const captureName = name || flag;
 
         const match = parser.replaceByMatch(RegExp(regex, "i"));
+
         if (!match) {
           !context.captures.has(`${captureName}`) &&
             context.captures.set(`${captureName}`, null);

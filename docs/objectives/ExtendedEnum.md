@@ -24,19 +24,19 @@ expect(result.some({ status: StatusSuccess, data: { x: 5, y: 2, z: 3 } }))
 // if props - object, check contains the specified properties
 expect(
 	result.includes({
-	status: StatusSuccess,
-	data: { x: existsSymbol, y: 2 },
+        status: StatusSuccess,
+        data: { x: existsSymbol, y: 2 },
 	}),
 ).true;
 expect(
 	result.includes({
-	data: { x: existsSymbol },
+	    data: { x: existsSymbol },
 	}),
 ).true;
 expect(
 	result.includes({
-	status: StatusSuccess,
-	data: { x: existsSymbol, y: 2, z: existsSymbol },
+        status: StatusSuccess,
+        data: { x: existsSymbol, y: 2, z: existsSymbol },
 	}),
 ).false;
 ```

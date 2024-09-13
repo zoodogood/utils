@@ -13,6 +13,8 @@ class TextTableBuilder \{}
 const builder = new TextTableBuilder()
   .addRowWithElements(["1", "212", "3"], { align: CellAlignEnum.Left })
   .addRowWithElements(["1", "2", "3"], { align: CellAlignEnum.Right })
+  .addRowWithElements(["1", "212", "3"], { align: CellAlignEnum.Left })
+  
   .addRowSeparator()
   .addRowWithElements(["777", "555", "1999"], { align: CellAlignEnum.Center })
 
@@ -20,8 +22,9 @@ const builder = new TextTableBuilder()
 
 builder.generateTextContent();
 /** Result: 
-  1    |  212  |  3     
+  1    |  212  |  3  
     1  |    2  |     3  
+  1    |  212  |  3     
 ------------------------
   777  |  555  |  1999  
 **/

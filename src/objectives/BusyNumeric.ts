@@ -15,6 +15,8 @@
   Повторяем
   */
 
+import { binary_search } from "../primitives/binary_search.js";
+
 /**
  * MARK: Представьте отель
  * Часть его номеров свободны, а часть — заняты
@@ -49,13 +51,16 @@ export class BusyNumeric {
     if (this.#peak_end_busy) {
       return true;
     }
-    if (this.busy_areas.at(-1)?.[1] !== this.range - 1) {
+    if (this.busy_areas.at(-1)?.[1] !== this.range) {
       return false;
     }
     this.#peak_end_busy = true;
     return true;
   }
   constructor(range: number) {
+    if (range <= 0) {
+      throw new Error("Assertion: range must be positive");
+    }
     this.range = range;
   }
 
@@ -99,16 +104,42 @@ export class BusyNumeric {
     const right = this.busy_areas[at];
 
     // formula: busy_area_point +- 1 (jump to segment)
-    const start = (left?.[1] ?? 0) + 1;
-    const end = (right?.[0] ?? this.range) - 1;
+    const start = left?.[1] + 1 || 0;
+    const end = right ? right[0] - 1 : this.range;
 
     const size = end - start + 1;
     return { size, left, right };
   }
 
   insert_area(start: number, end: number) {
+    if (!Number.isInteger(start) || !Number.isInteger(end)) {
+      throw new Error(
+        `Assertion error: start or end not integer ${start} ${end}, maybe float?`,
+      );
+    }
+    if (start > end) {
+      [start, end] = [end, start];
+    }
+    if (start < 0) {
+      throw new Error("Assertion error: start < 0");
+    }
+    if (end > this.range) {
+      throw new Error("Assertion error: end > this.range");
+    }
+
     const place_index =
-      this.busy_areas.findLastIndex((area) => end > area[1]) + 1;
+      binary_search(this.busy_areas.length - 1, (index: number) => {
+        const value = this.busy_areas[index]?.[1];
+        const biggest = end < value;
+        if (biggest) {
+          return 1;
+        }
+        return (
+          +(
+            (this.busy_areas[index + 1]?.[1] ?? Number.MAX_SAFE_INTEGER) > end
+          ) - 1
+        );
+      }) + 1;
 
     const left = this.busy_areas[place_index - 1];
     const right = this.busy_areas[place_index];
@@ -131,7 +162,7 @@ export class BusyNumeric {
           : [place_index, [start, target[1]]];
 
       if (target[0] <= start && target[1] >= end) {
-        return;
+        throw new Error("Assertion error: [start, end] in range");
       }
 
       this.busy_areas.splice(index, 1, points);

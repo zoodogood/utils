@@ -103,7 +103,7 @@ export class BusyNumeric {
     const left = this.busy_areas[at - 1];
     const right = this.busy_areas[at];
 
-    // formula: busy_area_point +- 1 (jump to segment)
+    // formula: busy_area_point ± 1 (jump to segment)
     const start = left?.[1] + 1 || 0;
     const end = right ? right[0] - 1 : this.range;
 

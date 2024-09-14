@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.5.0">
 
     <!-- Primary Meta Tags -->
-    <title>SimplifyComponents</title>
-    <meta name="title" content="SimplifyComponents">
-    <meta name="description" content="function SimplifyComponents(data: ArrayActionRow | ArrayComponent | Component): ActionRowComponent">
+    <title>binary_search</title>
+    <meta name="title" content="binary_search">
+    <meta name="description" content="function binary_search(number, (number) = 0 | 0 | 0): number">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/discordjs/simplifycomponents/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/primitives/binary_search/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/discordjs/simplifycomponents/">
-    <meta property="og:title" content="SimplifyComponents">
-    <meta property="og:description" content="function SimplifyComponents(data: ArrayActionRow | ArrayComponent | Component): ActionRowComponent">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/primitives/binary_search/">
+    <meta property="og:title" content="binary_search">
+    <meta property="og:description" content="function binary_search(number, (number) = 0 | 0 | 0): number">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/discordjs/simplifycomponents/">
-    <meta property="twitter:title" content="SimplifyComponents">
-    <meta property="twitter:description" content="function SimplifyComponents(data: ArrayActionRow | ArrayComponent | Component): ActionRowComponent">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/primitives/binary_search/">
+    <meta property="twitter:title" content="binary_search">
+    <meta property="twitter:description" content="function binary_search(number, (number) = 0 | 0 | 0): number">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,34 +171,15 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="simplifycomponents" class="break-words">
+<doc-anchor-target id="binary_search" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#simplifycomponents">#</doc-anchor-trigger>
-        <span>SimplifyComponents</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#binary_search">#</doc-anchor-trigger>
+        <span>binary_search</span>
     </h1>
 </doc-anchor-target>
-<p><code v-pre>function SimplifyComponents(data: Array&lt;ActionRow&gt; | Array&lt;Component&gt; | Component): ActionRow&lt;Component&gt;</code></p>
+<p><code v-pre>function binary_search(number, (number) =&gt; &lt;0 | 0 | &gt;0): number</code></p>
 <p><strong>Description:</strong><br />
-Replaces interactions with ActionRow with working with arrays. Or even narrows down to one object.</p>
-<doc-anchor-target id="embed">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#embed">#</doc-anchor-trigger>
-        <span><code v-pre>embed</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface embed = {
-	title?: string,
-   author?: {name: string, iconURL?: string},
-   thumbnail?: {url: string},
-   description?: string,
-   fields?: Array&lt;{name: string, value: string, inline?: boolean}&gt;,
-   image?: {url: string},
-   footer?: {text: string, iconURL?: string},
-   timestamp?: Date,
-   video?: {url: string}
-}</code></pre>
-</doc-codeblock></div>
+Helps you find a number that satisfies the search.</p>
 <doc-anchor-target id="example">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
@@ -206,56 +187,10 @@ Replaces interactions with ActionRow with working with arrays. Or even narrows d
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const components1 = {
-	type: ComponentType.Button,
-	label: &quot;Some content&quot;,
-	style: ButtonStyle.Primary,
-	customId: &quot;Some custom id&quot;
-};
-
-const components2 = [
-	{
-		type: ComponentType.Button,
-		label: &quot;Some content&quot;,
-		style: ButtonStyle.Primary,
-		customId: &quot;Some custom id - 1&quot;
-	},
-	{
-		type: ComponentType.Button,
-		label: &quot;Some content&quot;,
-		style: ButtonStyle.Primary,
-		customId: &quot;Some custom id - 2&quot;
-	}
-];
-
-const components3 = [
-	[
-		{
-			type: ComponentType.Button,
-			label: &quot;Some content&quot;,
-			style: ButtonStyle.Primary,
-			customId: &quot;Some custom id - 1&quot;
-		},
-		{
-			type: ComponentType.Button,
-			label: &quot;Some content&quot;,
-			style: ButtonStyle.Primary,
-			customId: &quot;Some custom id - 2&quot;
-		}
-	],
-	[
-		{
-			type: ComponentType.Button,
-			label: &quot;Some content in second row&quot;,
-			style: ButtonStyle.Primary,
-			customId: &quot;Some custom id - 3&quot;
-		},
-	]
-];
-
-SimplifyComponents(components1) // ActionRow&lt;ActionRow&gt;
-SimplifyComponents(components2) // ActionRow&lt;ActionRow&gt;
-SimplifyComponents(components3) // ActionRow&lt;ActionRow&gt;</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">// Check index biggest than target? Minify index in next step...
+const target = 3;
+const index = binary_search(20, (index) =&gt; index - target);
+expect(index).toBe(target);</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="real-example">
     <h3>
@@ -264,14 +199,20 @@ SimplifyComponents(components3) // ActionRow&lt;ActionRow&gt;</code></pre>
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const component = {
-	type: ComponentType.Button,
-	label: &quot;Some content&quot;,
-	style: ButtonStyle.Primary,
-	customId: &quot;Some custom id&quot;
-}
+<pre class="language-diff"><code v-pre class="language-diff">- this.busy_areas.findLastIndex((area) =&gt; end &gt; area[1]) + 1;
 
-CreateMessage({components: SimplifyComponents(component)})</code></pre>
++ binary_search(this.busy_areas.length - 1, (index: number) =&gt; {
++	 const value = this.busy_areas[index]?.[1];
++	 const biggest = end &lt; value;
++	 if (biggest) {
++	 	return 1;
++	 }
++	 return (
++	 	+(
++	 		(this.busy_areas[index + 1]?.[1] ?? Number.MAX_SAFE_INTEGER) &gt; end
++	 	) - 1
++	 );
++ }) + 1;</code></pre>
 </doc-codeblock></div>
 
                                 
@@ -282,20 +223,20 @@ CreateMessage({components: SimplifyComponents(component)})</code></pre>
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/justsendmessage/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/rangetoarray/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">just​Send​Message</span>
+                                                <span class="block mt-1">range​To​Array</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../discordjs/justbuttoncomponents/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../primitives/bracketsparser/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Simplify​Components</span>
+                                                <span class="block mt-1">Brackets​Parser</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -339,6 +280,6 @@ CreateMessage({components: SimplifyComponents(component)})</code></pre>
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "SimplifyComponents", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "binary_search", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
 </body>
 </html>

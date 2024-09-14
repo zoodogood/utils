@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-root" content="/utils/public">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.3.0.767900944861">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.5.0.779592456669">
 
     <!-- See retype.com -->
-    <meta name="generator" content="Retype 3.3.0">
+    <meta name="generator" content="Retype 3.5.0">
 
     <!-- Primary Meta Tags -->
     <title>getRandomElementFromArray</title>
     <meta name="title" content="getRandomElementFromArray">
-    <meta name="description" content="function getRandomElementFromArray(array: TArray, {needPop?, associatedWeights?}: IParams)T: T;">
+    <meta name="description" content="function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)T: T;">
 
     <!-- Canonical -->
     <link rel="canonical" href="https://zoodogood.github.io/utils/public/objectives/getrandomelementfromarray/">
@@ -21,22 +21,22 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/getrandomelementfromarray/">
     <meta property="og:title" content="getRandomElementFromArray">
-    <meta property="og:description" content="function getRandomElementFromArray(array: TArray, {needPop?, associatedWeights?}: IParams)T: T;">
+    <meta property="og:description" content="function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)T: T;">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/getrandomelementfromarray/">
     <meta property="twitter:title" content="getRandomElementFromArray">
-    <meta property="twitter:description" content="function getRandomElementFromArray(array: TArray, {needPop?, associatedWeights?}: IParams)T: T;">
+    <meta property="twitter:description" content="function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)T: T;">
 
-    <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("/utils/public/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
+    <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../resources/css/retype.css?v=3.3.0.767900944861" rel="stylesheet">
+    <link href="../../resources/css/retype.css?v=3.5.0.779592456669" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=3.3.0.767900944861" data-turbo-eval="false" defer></script>
-    <script data-cfasync="false" src="../../resources/js/retype.js?v=3.3.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.3.0.767900944861" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.3.0.767900944861" defer></script>
+    <script data-cfasync="false" src="../../resources/js/config.js?v=3.5.0.779592456669" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../resources/js/retype.js?v=3.5.0" data-turbo-eval="false" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.5.0.779592456669" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.5.0.779592456669" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -177,13 +177,13 @@
         <span>getRandomElementFromArray</span>
     </h1>
 </doc-anchor-target>
-<p><code v-pre>function getRandomElementFromArray(array: TArray, {needPop?, associatedWeights?}: IParams)&lt;T&gt;: T;</code></p>
+<p><code v-pre>function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)&lt;T&gt;: T;</code></p>
 <p><strong>Description:</strong><br />
 Returns a random element of the array with the ability to determine the probability of each element relative to the others</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-typescript"><code v-pre class="language-typescript">type TArray = T[];
 interface IParams {
-   needPop: boolean; // Use .splice an element from an array and associatedWeights
+   filter: (item: T) =&gt; boolean;
    associatedWeights: number[]; // There must be a weight for each element of the array
 }</code></pre>
 </doc-codeblock></div>
@@ -195,9 +195,9 @@ interface IParams {
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-typescript"><code v-pre class="language-typescript">const array = [artifact1, artifact2];
-const associatedWeights = [30_000, Infinity];
+const associatedWeights = [30_000, Number.MAX_SAFE_INTEGER];
 
-const artifact = getRandomElementFromArray(array, {associatedWeights, needPop: true});
+const artifact = getRandomElementFromArray(array, {associatedWeights});
 artifact // Is always artifact2
 array // [artifact1] — artifact2 is sliced</code></pre>
 </doc-codeblock></div>
@@ -366,6 +366,6 @@ const index = associatedWeights
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "getRandomElementFromArray", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "getRandomElementFromArray", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 # getRandomElementFromArray
-`function getRandomElementFromArray(array: TArray, {needPop?, associatedWeights?}: IParams)<T>: T;`
+`function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)<T>: T;`
 
 **Description:**  
 Returns a random element of the array with the ability to determine the probability of each element relative to the others
@@ -7,7 +7,7 @@ Returns a random element of the array with the ability to determine the probabil
 ```ts
 type TArray = T[];
 interface IParams {
-   needPop: boolean; // Use .splice an element from an array and associatedWeights
+   filter: (item: T) => boolean;
    associatedWeights: number[]; // There must be a weight for each element of the array
 }
 ```
@@ -18,9 +18,9 @@ interface IParams {
 ## Example
 ```ts
 const array = [artifact1, artifact2];
-const associatedWeights = [30_000, Infinity];
+const associatedWeights = [30_000, Number.MAX_SAFE_INTEGER];
 
-const artifact = getRandomElementFromArray(array, {associatedWeights, needPop: true});
+const artifact = getRandomElementFromArray(array, {associatedWeights});
 artifact // Is always artifact2
 array // [artifact1] — artifact2 is sliced
 ```

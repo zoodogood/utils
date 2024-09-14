@@ -1,7 +1,7 @@
 {
   "name": "@zoodogood/utils",
   "type": "module",
-  "version": "3.0.0-change.2566",
+  "version": "3.0.0-change.2568",
   "description": "",
   "main": "lib/index.js",
   "homepage": "https://zoodogood.github.io/utils",
@@ -45,7 +45,6 @@
     "prettier": "^3.3.3",
     "retypeapp-linux-x64": "^3.5.0",
     "typescript": "^5.5.4",
-    "ui@latest": "link:vitest/ui@latest",
     "vitest": "^2.0.5"
   },
   "peerDependencies": {

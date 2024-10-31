@@ -88,7 +88,11 @@ export class FlagsManager {
   captureResidueFlags(context: CliParserRunContext) {
     let match;
     const { parser } = context;
-    while ((match = parser.replaceByMatch(/-{1,2}\w/))) {
+    while (
+      (match = parser.replaceByMatch(
+        /(?<flag>-{1,2}\w+)(?:(?<separator>\s+(?!-)|=)(?<value>\S+))?/,
+      ))
+    ) {
       this.unhandledFlags ||= [];
       this.unhandledFlags.push(match);
     }
@@ -98,8 +102,8 @@ export class FlagsManager {
   captureFlags(flags: IFlagCapture[], context: CliParserRunContext) {
     for (const { name, capture, expectValue } of flags) {
       for (const flag of capture) {
-        const regex = `(?<=^|\\s)${flag}${
-          expectValue ? "(?:(?:\\s+(?!-)|=)(?<value>[^\\s]+))?" : ""
+        const regex = `(?<=^|\\s)(?<flag>${flag})${
+          expectValue ? "(?:(?<separator>\\s+(?!-)|=)(?<value>[^\\s]+))?" : ""
         }`;
 
         const { parser } = context;

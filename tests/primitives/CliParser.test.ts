@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { CliParser } from "../../src/primitives/CliParser.js";
 import { BracketsParser } from "../../src/primitives/BracketsParser.js";
+import { CliParser } from "../../src/primitives/CliParser.js";
 
 test("Slice command, parse groups and flags", () => {
   const result = new CliParser()
@@ -82,4 +82,41 @@ test("Fix residue", () => {
   );
 
   expect(capture.toString()).equal("Hello, World! (Mamma-mia)");
+});
+
+test("New residue flag semantic behavior", () => {
+  const texts = {
+    oops: "--unknown Hello, World",
+    stop_hyphen: "--unknown - Hello, World",
+    use_group: "--unknown 'Hello, World'",
+    perfect: "--unknown - 'Hello, World'",
+  };
+  const results = Object.fromEntries(
+    Object.entries(texts).map(([name, text]) => {
+      const result = new CliParser()
+        .setText(text)
+        .processBrackets()
+        .captureResidueFlags()
+        .captureResidue({ name: "rest" })
+        .collect();
+      const { captures, flags } = result;
+      return [
+        name,
+        {
+          captures: captures
+            .values()
+            .map((capture) => capture?.toString())
+            .toArray(),
+          flags: flags.unhandledFlags?.map((match) => match[0]) || [],
+        },
+      ];
+    }),
+  );
+
+  expect(results).toStrictEqual({
+    oops: { captures: ["World"], flags: ["--unknown Hello,"] },
+    stop_hyphen: { captures: ["Hello, World"], flags: ["--unknown"] },
+    use_group: { captures: [""], flags: ["--unknown [Group*0]"] },
+    perfect: { captures: ["Hello, World"], flags: ["--unknown"] },
+  });
 });

@@ -292,11 +292,7 @@ export class CliParser {
       const group = groups[index];
       const replacement = context.brackets.toStringGroup(indexes[index]);
       const length = group.length;
-      this.replaceSlice(
-        group.indexInText! - offset,
-        length,
-        () => replacement,
-      );
+      this.replaceSlice(group.indexInText! - offset, length, () => replacement);
 
       offset += length - replacement.length;
     }
@@ -323,11 +319,17 @@ export class CliParser {
 
   captureResidue({ name }: { name: string }) {
     const { context } = this;
-    const text = context.input;
-    this.replaceSlice(0, text.length, () => "");
+    const raw = context.input;
+    const value = (() => {
+      const stop_hyphen = /^\s+-\s+/;
+      const clean = raw.replace(stop_hyphen, "").trim();
+      return clean;
+    })();
+
+    this.replaceSlice(0, raw.length, () => "");
     context.captures.set(
       name,
-      new CapturedContent(text).setContextInstance(context),
+      new CapturedContent(value).setContextInstance(context),
     );
     return this;
   }

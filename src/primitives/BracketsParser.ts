@@ -249,6 +249,11 @@ export class BracketsParser {
         start: '"',
         end: '"',
       },
+      {
+        key: "''",
+        start: "'",
+        end: "'",
+      },
     ];
   }
 }

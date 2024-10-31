@@ -292,7 +292,7 @@ export class CliParser {
       const group = groups[index];
       const replacement = context.brackets.toStringGroup(indexes[index]);
       const length = group.length;
-      this.replaceTextByIndexes(
+      this.replaceSlice(
         group.indexInText! - offset,
         length,
         () => replacement,
@@ -324,7 +324,7 @@ export class CliParser {
   captureResidue({ name }: { name: string }) {
     const { context } = this;
     const text = context.input;
-    this.replaceTextByIndexes(0, text.length, () => "");
+    this.replaceSlice(0, text.length, () => "");
     context.captures.set(
       name,
       new CapturedContent(text).setContextInstance(context),
@@ -344,7 +344,7 @@ export class CliParser {
     if (indexInText === undefined) {
       throw new Error("Match without index");
     }
-    this.replaceTextByIndexes(indexInText, full.length, () => "");
+    this.replaceSlice(indexInText, full.length, () => "");
     return matched;
   }
 
@@ -358,7 +358,7 @@ export class CliParser {
     return this;
   }
 
-  replaceTextByIndexes(
+  replaceSlice(
     start: number,
     length: number,
     replacer: (string: string) => string,

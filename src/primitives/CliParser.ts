@@ -181,8 +181,8 @@ export class CapturedContent {
   static contentIsRegExpMatchArray(content: TCaptureValue): boolean {
     return (
       content instanceof Array &&
-      Object.prototype.hasOwnProperty.call(content, "index") &&
-      Object.prototype.hasOwnProperty.call(content, "input")
+      content.hasOwnProperty("index") &&
+      content.hasOwnProperty("input")
     );
   }
   static contentIsString(content: TCaptureValue): boolean {

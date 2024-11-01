@@ -84,7 +84,7 @@ test("Fix residue", () => {
   expect(capture.toString()).equal("Hello, World! (Mamma-mia)");
 });
 
-test("New residue flag semantic behavior", () => {
+test("Equal sign semantic behavior", () => {
   const texts = {
     oops: "--unknown Hello, World",
     stop_hyphen: "--unknown - Hello, World",

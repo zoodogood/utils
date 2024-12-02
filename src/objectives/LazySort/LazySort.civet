@@ -1,0 +1,188 @@
+// Декларации:
+// Утверждаю: Атомик всегда отсортирован
+
+assert from node:assert
+
+GOOD_CHUNKS_COUNT := 11
+
+type Predicate<T> = (T: T, index: number, array: T[]) => boolean
+
+export const enum ArrayEmulateStrategy
+  Partial
+  Proxied
+
+interface Configuration
+  chunks_count?: number
+  revert?: boolean
+  emulate?: ArrayEmulateStrategy
+  
+type Chunk<T> = LazySort<T>
+  
+type LazySortInner<T> = Configuration & {chunks: Chunk<T>[], min: number, max: number, calculated: boolean}
+  
+type WithValue<T> = [T, number]
+
+
+export class LazySort<T>
+  emulate: ArrayEmulateStrategy
+  revert: boolean
+  chunks_count: number
+
+  iterable: WithValue<T>[]
+  length: number
+  calculated = false
+  
+  is_atomic?: boolean
+  max?: number
+  min?: number
+  chunk_range?: number
+  chunks?: Chunk<T>[]
+  chunk_thresholds?: number[]
+
+  @ofNumbers(numbers: number[])
+    new @ numbers.map [&, &]
+  @ofArrayMapValue<T>(array: T[], valueOf: (T: T, index: number, arr: T[]) => T)
+    new @ array.map ($, i, arr) => [$, valueOf($, i, arr)] as WithValue<T>
+  
+  
+  @(@iterable: WithValue<T>[], {@revert = false, @chunks_count = GOOD_CHUNKS_COUNT, @emulate = ArrayEmulateStrategy.Partial}: Configuration = {})
+    assert @chunks_count >= 2
+    @length = @iterable.#
+
+  #to_proxied_array_emulator()
+    instance := #to_partial_array_emulator()
+    new Proxy instance, !todo
+
+  #to_partial_array_emulator()
+    new LazySortEntry @
+  
+  get atomic_chunk_arr()
+    @chunks![0].iterable
+    
+  chunks_update_thresholds_after(chunk_index: number, diff: number)
+    for index of [chunk_index..<@chunk_thresholds!#]
+      @chunk_thresholds![index] += diff
+  entry()
+    unless @calculated
+      @max := Math.max(...@iterable.map &.1)
+      @min := Math.min(...@iterable.map &.1)
+      @chunk_range := Math.ceil (@max! - @min!) / (@chunks_count - 1)
+      @is_atomic = (||)
+        @chunks_count >= @#
+        @max - @min is 0
+      @chunks := 
+        unless (@is_atomic) 
+          chunks := [...new Array @chunks_count]
+            |> .map => [] as WithValue<T>[]
+          @iterable.forEach (x: WithValue<T>) => 
+            chunks[Math.floor (x.1 - @min!) / @chunk_range!].push(x)
+          chunks.map new LazySort<T> ., {@revert, @chunks_count, @emulate}
+        else
+          . new LazySort<T> 
+              @iterable.toSorted((a, b) => (-1) ** +@revert * (a.1 - b.1))
+              {@revert, @chunks_count, @emulate}
+      
+      @revert and @chunks?.reverse()
+      @chunk_thresholds := @chunks?.reduce (acc: number[], next) => acc ++ [(acc.-1 || 0) + next#], []
+
+    @calculated = true
+    switch @emulate
+      when ArrayEmulateStrategy.Partial
+        then #to_partial_array_emulator()
+      when ArrayEmulateStrategy.Proxied
+        then #to_proxied_array_emulator()
+    
+
+
+export class LazySortEntry<T> extends Array
+  @(#source: LazySort<T>)
+    super()
+  entry()
+    @
+  get length()
+   #source.#
+  set length(value)
+   @.toArray()
+    ||> .length = value
+  :iterator(): Generator<WithValue<T>>
+    for (index of [0..<#source#])
+      yield @positive_at(index)!
+  toArray(): WithValue<T>[]
+    return #source.atomic_chunk_arr if #source.is_atomic
+    #source.chunks!.map(.entry().toArray()).flat()
+  positive_at(at: number): WithValue<T>?
+    return #source.atomic_chunk_arr[at] if #source.is_atomic!
+    chunk_index := #source.chunk_thresholds!.findIndex (> at)
+    return undefined if chunk_index is -1
+    chunk := #source.chunks![chunk_index]
+    chunk.entry().positive_at(at - (#source.chunk_thresholds![chunk_index - 1] || 0))
+  find(predicate: Predicate<WithValue<T>>)
+    @positive_at @findIndex predicate
+  findIndex(predicate: Predicate<WithValue<T>>)
+    for (index of [0..<@#])
+      return index if predicate @positive_at(index)!, index, @ as! WithValue<T>[]
+    -1
+  findLast(predicate: Predicate<WithValue<T>>)
+    @positive_at @findIndexLast predicate 
+  findIndexLast(predicate: Predicate<WithValue<T>>)
+    for (index of [@#>..0])
+      return index if predicate @positive_at(index)!, index, @ as! WithValue<T>[]
+    -1
+  indexOf(item: WithValue<T>): number
+    return #source.atomic_chunk_arr.indexOf(item) if #source.is_atomic!
+    const [index, chunk_index] = for chunk_index, chunk in #source.chunks! 
+      if (index := chunk.entry().indexOf(item))
+        break with [index, +chunk_index]
+    return -1 if chunk_index is undefined
+    (#source.chunk_thresholds![chunk_index - 1] || 0) + index!
+  some(predicate: Predicate<WithValue<T>>)
+    (@findIndex predicate) is not -1
+  
+  // @ts-expect-error
+  every(predicate: Predicate<WithValue<T>>)
+    !@some predicate
+  splice(start: number, deleteCount: number, ...items: WithValue<T>[]): WithValue<T>[]
+    start < 0 && start = #source# + start
+    (start + deleteCount > #source#) && deleteCount = #source# - start
+    (deleteCount - items# !== 0) && #source# -= (deleteCount - items#)
+    return #source.atomic_chunk_arr.splice(start, deleteCount, ...items) if #source.is_atomic!
+    end := start + deleteCount
+    removed := [] as WithValue<T>[]
+    return := removed
+
+    #source.chunks!
+     .map (chunk, chunk_index) => 
+      {}
+        chunk_start: #source.chunk_thresholds![chunk_index - 1] || 0
+        chunk_end: #source.chunk_thresholds![chunk_index]
+        chunk
+        chunk_index
+      
+     .filter ({chunk_start, chunk_end, chunk}) =>
+      return false unless chunk#
+      start < chunk_end && chunk_start <= end
+     .forEach ({chunk_start, chunk_end, chunk_index, chunk}, changed_index, changes_array) => 
+        replace_start := changed_index is 0
+          ? start - chunk_start
+          : 0
+
+        replace_end := changed_index is changes_array# - 1 
+          ? end - chunk_start
+          : chunk#
+
+        _removed_count := replace_end - replace_start
+        _added_items := items.slice replace_start + chunk_start - start, changed_index is changes_array# - 1 ? undefined : replace_end + chunk_start - start
+        #source.chunks_update_thresholds_after chunk_index, _added_items# - _removed_count
+        removed ++= chunk.entry().splice 
+          replace_start, 
+          _removed_count, 
+          ..._added_items
+     
+      
+  // slice()
+  // push()
+  // pop()
+  // unshift()
+  // shift()
+  
+

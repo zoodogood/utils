@@ -51,7 +51,7 @@ export class LazySort<T>
 
   #to_proxied_array_emulator()
     instance := #to_partial_array_emulator()
-    new Proxy instance, !todo
+    // TODO: new Proxy instance, !todo
 
   #to_partial_array_emulator()
     new LazySortEntry @

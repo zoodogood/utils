@@ -60,9 +60,9 @@ export class LazySort<T> {
   }
 
   #to_proxied_array_emulator() {
-    const instance = this.#to_partial_array_emulator()
-    return new Proxy(instance, !todo)
+    const instance = this.#to_partial_array_emulator();return instance
   }
+    // TODO: new Proxy instance, !todo
 
   #to_partial_array_emulator() {
     return new LazySortEntry(this)

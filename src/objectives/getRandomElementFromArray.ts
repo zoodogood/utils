@@ -133,7 +133,7 @@ export function getRandomElementFromArray<T>(
     );
   }
 
-  RandomizerContext.from<T>({
+  return RandomizerContext.from<T>({
     array,
     associatedWeights,
   }).pickRandom(({ item }) => filter(item));

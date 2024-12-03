@@ -36,9 +36,13 @@ import {
 
 // В BusyNumeric можно добавить ещё метод separate
 
+function size_of_area(area: readonly [number, number]) {
+  return area[1] - area[0] + 1
+}
 export class BusyNumeric {
   readonly range: number;
   readonly busy_areas: (readonly [number, number])[] = [];
+  free: number;
   #peak_start_busy = false;
   get peak_start_busy() {
     if (this.#peak_start_busy) {
@@ -66,6 +70,7 @@ export class BusyNumeric {
       throw new Error("Assertion: range must be positive");
     }
     this.range = range;
+    this.free = this.range;
   }
 
   bifurcate(point: number) {
@@ -148,7 +153,9 @@ export class BusyNumeric {
 
     // Merge strategy 3
     if (is_left_included && is_right_included) {
-      this.busy_areas.splice(place_index - 1, 2, [left[0], right[1]]);
+      const points = [left[0], right[1]] as readonly [number, number];
+      this.free -= size_of_area(points) - size_of_area(left) - size_of_area(right);
+      this.busy_areas.splice(place_index - 1, 2, points);
       return;
     }
 
@@ -164,11 +171,15 @@ export class BusyNumeric {
         !(target[0] <= start && target[1] >= end),
         "Assertion error: [start, end] in range",
       );
+      
+      
+      this.free -= size_of_area(points) - size_of_area(target);
       this.busy_areas.splice(index, 1, points);
       return;
     }
 
     // Merge strategy 1
+    this.free -= size_of_area([start, end]);
     this.busy_areas.splice(place_index, 0, [start, end]);
   }
 

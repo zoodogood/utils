@@ -45,6 +45,15 @@ test("Without weights", () => {
   expect(every).toBe(true);
 });
 
+test("Use normalize to max coefficient", () => {
+  const array = [1, 1, 1, 1];
+  const associatedWeights = normalize_to_integer([1, 25, 30, 1]);
+  const result = getRandomElementFromArray(array, {
+    associatedWeights,
+  });
+  expect(result).toBe(1);
+});
+
 test("Float weights", () => {
   const array = [0, 1, 2, 3];
   const associatedWeights = normalize_to_integer([0.25, 25, 30, 1]);

@@ -131,8 +131,10 @@ export class BusyNumeric {
     assert(start >= 0);
     assert(end <= this.range);
 
-    const place_index =
-      binary_search(this.busy_areas.length - 1, (index: number) => {
+
+    
+    const place_index = this.busy_areas.length
+      ? binary_search(this.busy_areas.length - 1, (index: number) => {
         const value = this.busy_areas[index]?.[1];
         const biggest = end < value;
         if (biggest) {
@@ -143,7 +145,8 @@ export class BusyNumeric {
             (this.busy_areas[index + 1]?.[1] ?? Number.MAX_SAFE_INTEGER) > end
           ) - 1
         );
-      }) + 1;
+      }) + 1
+    : 0;
 
     const left = this.busy_areas[place_index - 1];
     const right = this.busy_areas[place_index];

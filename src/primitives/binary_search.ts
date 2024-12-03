@@ -1,5 +1,8 @@
+import assert from "node:assert";
 // Если большее, то идёт к меньшим
 export function binary_search(max: number, compare: (index: number) => number) {
+  assert(max >= 0);
+  assert(Number.isInteger(max));
   let min = 0;
   while (true) {
     const index = Math.floor((min + max) / 2);

@@ -33,16 +33,14 @@ export class RandomizerContext<T> {
     array: T[];
     associatedWeights?: IParams<T>["associatedWeights"];
   }) {
-    const thresholds =
-      associatedWeights &&
-      _getRandomElementIndexInWeight_thresholds(associatedWeights);
+    const thresholds = associatedWeights && thresholdsOf(associatedWeights);
     return new RandomizerContext<T>(array, thresholds);
   }
   pickRandom(pick: IPickContext<T>["pick"] = () => true) {
     const { hotel, thresholds, array } = this;
-
     while (true) {
       const segments_count = hotel.segments_count();
+
       if (!segments_count) {
         break;
       }
@@ -52,9 +50,7 @@ export class RandomizerContext<T> {
       const point =
         (left?.[1] ?? -1) + getRandomNumberInRange({ min: 1, max: size });
 
-      const index = thresholds
-        ? _getRandomElementIndexInWeight_of_thresholds(thresholds, point)!
-        : point;
+      const index = thresholds ? pickInThresholds(thresholds, point)! : point;
       const element = array[index];
       const pickContext = {
         busy_preventable: create_default_preventable(),
@@ -76,10 +72,7 @@ export class RandomizerContext<T> {
   }
 }
 
-function _getRandomElementIndexInWeight_of_thresholds(
-  thresholds: number[],
-  value: number,
-): number {
+function pickInThresholds(thresholds: number[], value: number): number {
   if (!thresholds.length) {
     return -1;
   }
@@ -95,7 +88,7 @@ function _getRandomElementIndexInWeight_of_thresholds(
   });
 }
 
-function _getRandomElementIndexInWeight_thresholds(
+function thresholdsOf(
   weights: NonNullable<IParams<unknown>["associatedWeights"]>,
 ) {
   if (weights.length < 1) {
@@ -108,13 +101,10 @@ function _getRandomElementIndexInWeight_thresholds(
 export function getRandomElementIndexInWeights(
   weights: NonNullable<IParams<unknown>["associatedWeights"]>,
 ): number | never {
-  const thresholds = _getRandomElementIndexInWeight_thresholds(weights);
+  const thresholds = thresholdsOf(weights);
 
-  const lotterySecretNumber = Math.random() * thresholds.at(-1)!;
-  return _getRandomElementIndexInWeight_of_thresholds(
-    thresholds,
-    lotterySecretNumber,
-  )!;
+  const lotteryPick = Math.random() * thresholds.at(-1)!;
+  return pickInThresholds(thresholds, lotteryPick)!;
 }
 
 // task: честный алгоритм , для которого каждый из элеметов списка имеет равный шанс на реализацию своей вероятности.

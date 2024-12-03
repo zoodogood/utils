@@ -15,7 +15,11 @@
   Повторяем
   */
 
-import { binary_search } from "../primitives/binary_search.js";
+import assert from "node:assert";
+import {
+  binary_search,
+  BinarySearchResultEnum,
+} from "../primitives/binary_search.js";
 
 /**
  * MARK: Представьте отель
@@ -112,27 +116,22 @@ export class BusyNumeric {
   }
 
   insert_area(start: number, end: number) {
-    if (!Number.isInteger(start) || !Number.isInteger(end)) {
-      throw new Error(
-        `Assertion error: start or end not integer ${start} ${end}, maybe float?`,
-      );
-    }
+    assert(
+      Number.isInteger(start) && Number.isInteger(end),
+      `Assertion error: start or end not integer ${start} ${end}, maybe float?`,
+    );
     if (start > end) {
       [start, end] = [end, start];
     }
-    if (start < 0) {
-      throw new Error("Assertion error: start < 0");
-    }
-    if (end > this.range) {
-      throw new Error("Assertion error: end > this.range");
-    }
+    assert(start >= 0);
+    assert(end <= this.range);
 
     const place_index =
       binary_search(this.busy_areas.length - 1, (index: number) => {
         const value = this.busy_areas[index]?.[1];
         const biggest = end < value;
         if (biggest) {
-          return 1;
+          return BinarySearchResultEnum.Biggest;
         }
         return (
           +(
@@ -161,10 +160,10 @@ export class BusyNumeric {
           ? [place_index - 1, [target[0], end]]
           : [place_index, [start, target[1]]];
 
-      if (target[0] <= start && target[1] >= end) {
-        throw new Error("Assertion error: [start, end] in range");
-      }
-
+      assert(
+        !(target[0] <= start && target[1] >= end),
+        "Assertion error: [start, end] in range",
+      );
       this.busy_areas.splice(index, 1, points);
       return;
     }

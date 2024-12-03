@@ -17,3 +17,13 @@ export function binary_search(max: number, compare: (index: number) => number) {
     min = index + 1;
   }
 }
+
+export const enum BinarySearchResultEnum {
+  NotFound = -1,
+}
+
+export const enum BinarySearchCompareSpec {
+  Biggest = 1,
+  Equal = 0,
+  Smallest = -1
+}

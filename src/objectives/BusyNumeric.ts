@@ -18,7 +18,7 @@
 import assert from "node:assert";
 import {
   binary_search,
-  BinarySearchResultEnum,
+  BinarySearchCompareSpec
 } from "../primitives/binary_search.js";
 
 /**
@@ -136,7 +136,7 @@ export class BusyNumeric {
         const value = this.busy_areas[index]?.[1];
         const biggest = end < value;
         if (biggest) {
-          return BinarySearchResultEnum.Biggest;
+          return BinarySearchCompareSpec.Biggest;
         }
         return (
           +(

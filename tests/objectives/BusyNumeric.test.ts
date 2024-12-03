@@ -185,14 +185,14 @@ test("Dangerous 3: float values", () => {
   expect(() => hotel.bifurcate(0.5)).toThrow();
 });
 
-test("Compare perfomance vs .filter", () => {
+test.skip("Compare perfomance vs .filter", () => {
   // O(2n) or O(2n * n)?
   // Худший случай состоит в том, что
   // мы не найдем нужного нам элемента и пройдемся по всем элементам.
   // Также проверим тоже самое с использованием классического варианта той же задачи через.filter
   // Этот пример близок к реальному примеру для которого создавался
 
-  // Set to false to check
+  // Set to false to check and remove test.skip
   const DISABLED = true;
   const LIST_SIZE = 10_000;
   const HARD_OPERATION_MULTIPLIER = 1_000;

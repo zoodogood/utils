@@ -1,3 +1,4 @@
+import assert from "node:assert";
 import { binary_search } from "../primitives/binary_search.js";
 import { create_default_preventable } from "../primitives/createDefaultPreventable.js";
 import { BusyNumeric } from "./BusyNumeric.js";
@@ -127,11 +128,10 @@ export function getRandomElementFromArray<T>(
   array: T[],
   { associatedWeights, filter = () => true }: IParams<T> = {},
 ) {
-  if (associatedWeights && associatedWeights.length !== array.length) {
-    throw new Error(
-      "Incorrectly passed argument associatedWeights: The length of the associatedWeights must exactly match the length of the weights array",
-    );
-  }
+  assert(
+    !associatedWeights || associatedWeights.length === array.length,
+    "Incorrectly passed argument associatedWeights: The length of the associatedWeights must exactly match the length of the weights array",
+  );
 
   return RandomizerContext.from<T>({
     array,

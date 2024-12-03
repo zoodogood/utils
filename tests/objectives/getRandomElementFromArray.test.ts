@@ -3,12 +3,12 @@ import {
   getRandomElementFromArray,
   RandomizerContext,
 } from "../../src/objectives/getRandomElementFromArray";
-import { normalize_to_integer } from "../../src/primitives/normalize";
+import { normalize_to_max_coefficient } from "../../src/primitives/normalize";
 test("getRandomElementFromArray", () => {
   const array = [0, 1];
   const associatedWeights = [1, 1];
 
-  const { output } = getRandomElementFromArray(array, {
+  const output = getRandomElementFromArray(array, {
     associatedWeights,
     filter: (item: number) => item === 1,
   });
@@ -47,7 +47,7 @@ test("Without weights", () => {
 
 test("Use normalize to max coefficient", () => {
   const array = [1, 1, 1, 1];
-  const associatedWeights = normalize_to_integer([1, 25, 30, 1]);
+  const associatedWeights = normalize_to_max_coefficient([1, 25, 30, 1]);
   const result = getRandomElementFromArray(array, {
     associatedWeights,
   });
@@ -56,7 +56,7 @@ test("Use normalize to max coefficient", () => {
 
 test("Float weights", () => {
   const array = [0, 1, 2, 3];
-  const associatedWeights = normalize_to_integer([0.25, 25, 30, 1]);
+  const associatedWeights = normalize_to_max_coefficient([0.25, 25, 30, 1]);
   const pull = [] as number[];
   getRandomElementFromArray(array, {
     associatedWeights,
@@ -72,7 +72,7 @@ test("Float weights", () => {
 
 test("Null weight", () => {
   const array = [0, 1, 2, 3, 4];
-  const associatedWeights = normalize_to_integer([0.25, 25, 30, 1, 0]);
+  const associatedWeights = normalize_to_max_coefficient([0.25, 25, 30, 1, 0]);
   const pull = [] as number[];
   getRandomElementFromArray(array, {
     associatedWeights,
@@ -89,7 +89,7 @@ test("Null weight", () => {
 
 test("Max safe integer weight", () => {
   const array = [0, 1, 2, 3, 4];
-  const associatedWeights = normalize_to_integer([
+  const associatedWeights = normalize_to_max_coefficient([
     0.05,
     0.5,
     0.5,
@@ -109,8 +109,8 @@ test("Max safe integer weight", () => {
 });
 
 test("Empty", () => {
-  const array = [];
-  const associatedWeights = normalize_to_integer([]);
+  const array: number[] = [];
+  const associatedWeights = normalize_to_max_coefficient([]);
 
   expect(() =>
     getRandomElementFromArray(array, {
@@ -121,7 +121,7 @@ test("Empty", () => {
 
 test("v2", () => {
   const pull = resolve_attack_events_pull(context);
-  const associatedWeights = normalize_to_integer(
+  const associatedWeights = normalize_to_max_coefficient(
     pull.map((base) => base._weight),
   );
 

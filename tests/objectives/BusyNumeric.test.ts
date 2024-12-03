@@ -297,3 +297,12 @@ test.skip("Compare perfomance vs .filter", () => {
       average.busy_numeric.reduce((acc, value) => acc + value),
   ).toBe(true);
 });
+
+
+test("Calculate free area", () => {
+  const hotel = default_fabric();
+  expect(hotel.free).toBe(7);
+  hotel.bifurcate(9);
+  hotel.bifurcate(8);
+  expect(hotel.free).toBe(5);
+})

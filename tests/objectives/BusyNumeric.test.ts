@@ -119,6 +119,7 @@ test("Full merge", () => {
   // All segments are filled. Remained only bussy areas
   expect(hotel.segments_count()).toBe(0);
   expect(hotel.busy_areas).toStrictEqual([[0, 12]]);
+  expect(hotel.free_area).toBe(0);
 });
 
 test("Merge strategy 1", () => {
@@ -301,8 +302,9 @@ test.skip("Compare perfomance vs .filter", () => {
 
 test("Calculate free area", () => {
   const hotel = default_fabric();
-  expect(hotel.free).toBe(7);
+  expect(hotel.free_area).toBe(8);
   hotel.bifurcate(9);
   hotel.bifurcate(8);
-  expect(hotel.free).toBe(5);
+  hotel.bifurcate(5);
+  expect(hotel.free_area).toBe(5);
 })

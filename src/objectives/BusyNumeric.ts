@@ -36,13 +36,13 @@ import {
 
 // В BusyNumeric можно добавить ещё метод separate
 
-function size_of_area(area: readonly [number, number]) {
+export function size_of_area(area: readonly [number, number]) {
   return area[1] - area[0] + 1
 }
 export class BusyNumeric {
   readonly range: number;
   readonly busy_areas: (readonly [number, number])[] = [];
-  free: number;
+  free_area: number;
   #peak_start_busy = false;
   get peak_start_busy() {
     if (this.#peak_start_busy) {
@@ -66,11 +66,9 @@ export class BusyNumeric {
     return true;
   }
   constructor(range: number) {
-    if (range <= 0) {
-      throw new Error("Assertion: range must be positive");
-    }
+    assert(range > 0, "Range must be positive");
     this.range = range;
-    this.free = this.range;
+    this.free_area = this.range + /* includes position 0 */ 1;
   }
 
   bifurcate(point: number) {
@@ -157,7 +155,7 @@ export class BusyNumeric {
     // Merge strategy 3
     if (is_left_included && is_right_included) {
       const points = [left[0], right[1]] as readonly [number, number];
-      this.free -= size_of_area(points) - size_of_area(left) - size_of_area(right);
+      this.free_area -= size_of_area(points) - size_of_area(left) - size_of_area(right);
       this.busy_areas.splice(place_index - 1, 2, points);
       return;
     }
@@ -176,13 +174,13 @@ export class BusyNumeric {
       );
       
       
-      this.free -= size_of_area(points) - size_of_area(target);
+      this.free_area -= size_of_area(points) - size_of_area(target);
       this.busy_areas.splice(index, 1, points);
       return;
     }
 
     // Merge strategy 1
-    this.free -= size_of_area([start, end]);
+    this.free_area -= size_of_area([start, end]);
     this.busy_areas.splice(place_index, 0, [start, end]);
   }
 

@@ -1,5 +1,5 @@
-# normalize_to_integer
-`function normalize_to_integer(number[]): number[]`
+# normalize_to_max_coefficient
+`function normalize_to_max_coefficient(number[]): number[]`
 
 **Description:**  
 Makes fractions integer, preserving the ratio between them as much as possible. However, converts the set to Number.MAX_SAFE_INTEGER.
@@ -8,12 +8,12 @@ Makes fractions integer, preserving the ratio between them as much as possible. 
 
 ## Example
 ```ts
-const array = [1, 1 / 3];
-const normalized = normalize_to_integer(array);
-
+const array = [0.1, 0.2, 0.3];
+normalize_to_max_coefficient(array);
 expect(normalized).toStrictEqual([
-    10_000_000_000_000_000,
-    3_333_333_333_333_333
+  1501199875790165,
+  3002399751580330,
+  4503599627370495,
 ]);
 ```
 
@@ -22,7 +22,7 @@ expect(normalized).toStrictEqual([
 const pull = resolve_attack_events_pull(context);
 - // float digits is not allowed
 - const associatedWeights = pull.map(base => base._weight);
-+ const associatedWeights = normalize_to_integer(
++ const associatedWeights = normalize_to_max_coefficient(
 +   pull.map((base) => base._weight),
 + );
 
@@ -35,8 +35,8 @@ for (let i = 0; i < attackContext.eventsCount; i++) {
     if (!passed) {
       return false;
     }
-    if (item.repeats) {
-      pickContext.busy_preventable.preventDefault();
+    if (!item.repeats) {
+      pickContext.busy_preventable.require_insert();
     }
     return true;
   });

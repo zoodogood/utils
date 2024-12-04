@@ -10,7 +10,7 @@ interface IParams<T> {
 }
 
 interface IPickContext<T> {
-  busy_preventable: ReturnType<typeof create_default_preventable>;
+  busy_preventable: ReturnType<typeof create_default_preventable> & {require_insert(): void};
   item: T;
   pick: (context: IPickContext<T>) => boolean;
   threshold: number;
@@ -62,29 +62,36 @@ export class RandomizerContext<T> {
         }
       })()
 
+      let _require_insert = false;
       const index = thresholds ? pickInThresholds(thresholds, position)! : position;
       const element = array[index];
       const pickContext = {
-        busy_preventable: create_default_preventable(),
+        busy_preventable: {
+          ...create_default_preventable(), 
+          require_insert(){
+            _require_insert = true;
+          }
+        },
         item: element,
         pick,
         threshold: index,
         point: position,
       } as IPickContext<T>;
-      if (pick!(pickContext)) {
-        return element;
-      }
-      if (!pickContext.busy_preventable.default_prevented()) {
+      const picked = pick!(pickContext);
+      if (_require_insert || !picked && !pickContext.busy_preventable.default_prevented()) {
         thresholds
-          ? hotel.insert_area(thresholds[index - 1] + 1 || 0, thresholds[index])
-          : hotel.bifurcate(index);
+        ? hotel.insert_area(thresholds[index - 1] + 1 || 0, thresholds[index])
+        : hotel.bifurcate(index);
+      }
+      if (picked) {
+        return element;
       }
     }
     return undefined;
   }
 }
 
-function pickInThresholds(thresholds: number[], value: number): number {
+export function pickInThresholds(thresholds: number[], value: number): number {
   assert(thresholds.length > 0);
   return binary_search(thresholds.length - 1, (index: number) => {
     const hold = thresholds[index];
@@ -98,7 +105,7 @@ function pickInThresholds(thresholds: number[], value: number): number {
   });
 }
 
-function thresholdsOf(
+export function thresholdsOf(
   weights: NonNullable<IParams<unknown>["associatedWeights"]>,
 ) {
   assert(weights.length > 0, "Invalid array length");

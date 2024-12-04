@@ -16,5 +16,6 @@
     "allowJs": true,
     "moduleResolution": "NodeNext"
   },
+  "exclude": ["**/*.test.ts"],
   "include": ["src/**/*.ts", "src/**/*.js"]
 }

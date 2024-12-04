@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { binary_search } from "../primitives/binary_search.js";
 import { create_default_preventable } from "../primitives/createDefaultPreventable.js";
-import { BusyNumeric } from "./BusyNumeric.js";
+import { BusyNumeric, size_of_area } from "./BusyNumeric.js";
 import { getRandomNumberInRange } from "./getRandomNumberInRange.js";
 
 interface IParams<T> {
@@ -24,7 +24,7 @@ export class RandomizerContext<T> {
   constructor(array: T[], thresholds?: number[]) {
     this.array = array;
     this.thresholds = thresholds;
-    const range = thresholds?.at(-1) ?? array.length;
+    const range = thresholds?.at(-1) ?? array.length - 1;
     this.hotel = new BusyNumeric(range);
   }
   static from<T>({
@@ -45,20 +45,31 @@ export class RandomizerContext<T> {
       if (!segments_count) {
         break;
       }
-      const { left, size } = hotel.segment(
-        getRandomNumberInRange({ max: segments_count - 1 }),
-      )!;
-      const point =
-        (left?.[1] ?? -1) + getRandomNumberInRange({ min: 1, max: size });
+      const target_of_free = getRandomNumberInRange({ max: hotel.free_area - 1});
+      const position = (() => {
+        let segment = 0;
+        let distance = target_of_free;
+        let position = 0;
+        while (true){
+          const free_area = (hotel.busy_areas[segment]?.[0] ?? hotel.range + 1) - (hotel.busy_areas[segment - 1]?.[1] ?? -1) - 1
+          distance -= free_area;
+          position += free_area;
+          if (distance < 0){
+            return position + distance;
+          }
+          position += size_of_area( hotel.busy_areas[segment] || [0, hotel.range + 1]);
+          segment++;
+        }
+      })()
 
-      const index = thresholds ? pickInThresholds(thresholds, point)! : point;
+      const index = thresholds ? pickInThresholds(thresholds, position)! : position;
       const element = array[index];
       const pickContext = {
         busy_preventable: create_default_preventable(),
         item: element,
         pick,
         threshold: index,
-        point,
+        point: position,
       } as IPickContext<T>;
       if (pick!(pickContext)) {
         return element;

@@ -85,9 +85,7 @@ export class RandomizerContext<T> {
 }
 
 function pickInThresholds(thresholds: number[], value: number): number {
-  if (!thresholds.length) {
-    return -1;
-  }
+  assert(thresholds.length > 0);
   return binary_search(thresholds.length - 1, (index: number) => {
     const hold = thresholds[index];
     if (hold >= value && (thresholds[index - 1] ?? -1) < value) {
@@ -103,9 +101,7 @@ function pickInThresholds(thresholds: number[], value: number): number {
 function thresholdsOf(
   weights: NonNullable<IParams<unknown>["associatedWeights"]>,
 ) {
-  if (weights.length < 1) {
-    new Error("Invalid array length");
-  }
+  assert(weights.length > 0, "Invalid array length");
   let previousLimit = 0;
   return weights.map((weight) => (previousLimit += weight)) as number[];
 }

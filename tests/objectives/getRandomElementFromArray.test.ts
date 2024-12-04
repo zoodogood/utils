@@ -2,6 +2,7 @@ import { expect, test } from "vitest";
 import {
   getRandomElementFromArray,
   RandomizerContext,
+  thresholdsOf,
 } from "../../src/objectives/getRandomElementFromArray";
 import { normalize_to_max_coefficient } from "../../src/primitives/normalize";
 test("getRandomElementFromArray", () => {
@@ -47,7 +48,7 @@ test("Without weights", () => {
 
 test("Use normalize to max coefficient", () => {
   const array = [1, 1, 1, 1];
-  const associatedWeights = normalize_to_max_coefficient([1, 25, 30, 1]);
+  const associatedWeights = normalize_to_max_coefficient([0.5, 25, 30, 1]);
   const result = getRandomElementFromArray(array, {
     associatedWeights,
   });
@@ -116,28 +117,30 @@ test("Empty", () => {
     getRandomElementFromArray(array, {
       associatedWeights,
     }),
-  ).toThrow("Assertion: range must be positive");
+  ).toThrow("Invalid array length");
 });
 
-test("v2", () => {
-  const pull = resolve_attack_events_pull(context);
-  const associatedWeights = normalize_to_max_coefficient(
-    pull.map((base) => base._weight),
-  );
+test("Repeats system", () => {
+  const ONCE_VALUE = Number.MAX_SAFE_INTEGER;
+  const REPEATED_VALUE = 2;
 
-  const randomizer = new RandomizerContext(pull, associatedWeights);
-  for (let i = 0; i < attackContext.eventsCount; i++) {
-    randomizer.pickRandom((pickContext) => {
-      const { item } = pickContext;
-      item.beforeCheck(item, pickContext);
-      const passed = item.filter(item, pickContext);
-      if (!passed) {
-        return false;
-      }
-      if (item.repeats) {
-        pickContext.busy_preventable.preventDefault();
-      }
-      return true;
-    });
+  const items = [ONCE_VALUE, REPEATED_VALUE];
+  const associatedWeights = thresholdsOf(normalize_to_max_coefficient(items));
+  const _returned = [] as number[];
+  const randomizer = new RandomizerContext(items, associatedWeights);
+  for (let i = 0; i < 10; i++) {
+    _returned.push(
+      randomizer.pickRandom((pickContext) => {
+        const { item } = pickContext;
+        const repeats = item === REPEATED_VALUE;
+        if (!repeats) {
+          pickContext.busy_preventable.require_insert();
+        }
+
+        return true;
+      })!,
+    );
   }
+  expect(_returned.filter((item) => item === ONCE_VALUE).length).toBe(1);
+  expect(_returned.filter((item) => item === REPEATED_VALUE).length).toBe(9);
 });

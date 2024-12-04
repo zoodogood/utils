@@ -1,6 +1,6 @@
 {
   "version": "3.6.0",
-  "created": "2024-12-02T16:21:49Z",
+  "created": "2024-12-04T07:47:41Z",
   "files": [
     {
       "path": ".nojekyll"
@@ -69,7 +69,11 @@
       "path": "primitives/ending/index.html"
     },
     {
-      "path": "primitives/normalize_to_integer/index.html"
+      "path": "primitives/normalize_to_integer/index.html",
+      "old": true
+    },
+    {
+      "path": "primitives/normalize_to_max_coefficient/index.html"
     },
     {
       "path": "primitives/texttablebuilder/index.html"

@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.6.0">
 
     <!-- Primary Meta Tags -->
-    <title>CustomCollector</title>
-    <meta name="title" content="CustomCollector">
-    <meta name="description" content="class CustomCollector {}">
+    <title>normalize_to_max_coefficient</title>
+    <meta name="title" content="normalize_to_max_coefficient">
+    <meta name="description" content="function normalize_to_max_coefficient(number[]): number[]">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/objectives/customcollector/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/primitives/normalize_to_max_coefficient/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/customcollector/">
-    <meta property="og:title" content="CustomCollector">
-    <meta property="og:description" content="class CustomCollector {}">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/primitives/normalize_to_max_coefficient/">
+    <meta property="og:title" content="normalize_to_max_coefficient">
+    <meta property="og:description" content="function normalize_to_max_coefficient(number[]): number[]">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/customcollector/">
-    <meta property="twitter:title" content="CustomCollector">
-    <meta property="twitter:description" content="class CustomCollector {}">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/primitives/normalize_to_max_coefficient/">
+    <meta property="twitter:title" content="normalize_to_max_coefficient">
+    <meta property="twitter:description" content="function normalize_to_max_coefficient(number[]): number[]">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,52 +171,15 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="customcollector" class="break-words">
+<doc-anchor-target id="normalize_to_max_coefficient" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#customcollector">#</doc-anchor-trigger>
-        <span>CustomCollector</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#normalize_to_max_coefficient">#</doc-anchor-trigger>
+        <span>normalize_to_max_coefficient</span>
     </h1>
 </doc-anchor-target>
-<p>class CustomCollector {}</p>
-<div class="flex mb-6">
-    <div class="shrink-0 w-1 rounded-tl rounded-bl bg-yellow-500"></div>
-    <div class="flex w-full py-4 border border-l-0 border-gray-300 rounded-tr rounded-br doc-alert bg-white dark:bg-dark-700 dark:border-dark-700" role="alert">
-        <div class="flex items-center ml-4 h-7">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mb-px text-yellow-500" width="22" height="22" viewBox="0 0 24 24" role="presentation">
-                <g fill="currentColor"><g>
-                    <path d="M22.48 15.59L14.01 1.45A2.968 2.968 0 0012.16.09c-.78-.19-1.58-.07-2.27.35-.41.25-.76.6-1.01 1.01v.01L.4 15.6c-.83 1.43-.33 3.27 1.1 4.1.45.26.95.4 1.48.4h16.95c.8-.01 1.55-.33 2.11-.9.56-.57.87-1.33.86-2.13a3.04 3.04 0 00-.42-1.48zm-1.87 2.21c-.19.19-.44.3-.69.3H2.99c-.17 0-.34-.05-.49-.13a.992.992 0 01-.37-1.35L10.6 2.48c.08-.14.2-.25.34-.33a.992.992 0 011.37.33l8.46 14.13c.09.15.13.32.13.49 0 .26-.1.51-.29.7z"></path>
-                    <path d="M11.45 12.1c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .56.45 1 1 1zM11.46 14.1c-.56 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"></path>
-                </g></g>
-            </svg>
-        </div>
-        <div class="pr-5 ml-3 w-full">
-            <h5>Warning</h5>
-<p>Unstable</p>
-        </div>
-    </div>
-</div>
+<p><code v-pre>function normalize_to_max_coefficient(number[]): number[]</code></p>
 <p><strong>Description:</strong><br />
-- None</p>
-<doc-anchor-target id="constructorcollectoroptions">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#constructorcollectoroptions">#</doc-anchor-trigger>
-        <span><code v-pre>constructor(CollectorOptions)</code></span>
-    </h2>
-</doc-anchor-target>
-<doc-anchor-target id="collectoroptions">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#collectoroptions">#</doc-anchor-trigger>
-        <span><code v-pre>CollectorOptions</code></span>
-    </h3>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface CollectorOptions = {
-	target: EventEmitter | object,
-	event: string,
-	filter?: (any) =&gt; true | false | any,
-	time?: number = 0
-}</code></pre>
-</doc-codeblock></div>
+Makes fractions integer, preserving the ratio between them as much as possible. However, converts the set to Number.MAX_SAFE_INTEGER.</p>
 <doc-anchor-target id="example">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
@@ -224,16 +187,13 @@
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const target = new EventEmitter();
-const eventName = &quot;click&quot;;
-document.addEventListener(&quot;click&quot;, () =&gt; target.emit(eventName));
-
-const lessThatFive = (value) =&gt; value &lt; 5;
-const context = {
-	clicks: 0
-}
-const collector = new CustomCollector({target, event: eventName, filter: lessThatFive, time: 10_000});
-collector.setCallback(() =&gt; context.clicks++);</code></pre>
+<pre class="language-typescript"><code v-pre class="language-typescript">const array = [0.1, 0.2, 0.3];
+normalize_to_max_coefficient(array);
+expect(normalized).toStrictEqual([
+  1501199875790165,
+  3002399751580330,
+  4503599627370495,
+]);</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="real-example">
     <h3>
@@ -242,33 +202,34 @@ collector.setCallback(() =&gt; context.clicks++);</code></pre>
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const isAuthor = (message) = message.author.id === user.id;
-const collector = new Util.CustomCollector({target: client, event: &quot;message&quot;, filter: isAuthor, time: 500_000});
-collector.setCallback((message) =&gt; {
-    collector.end();
-    getCoinsFromMessage(user, message);
-});</code></pre>
+<pre class="language-diff"><code v-pre class="language-diff">const pull = resolve_attack_events_pull(context);
+- // float digits is not allowed
+- const associatedWeights = pull.map(base =&gt; base._weight);
++ const associatedWeights = normalize_to_max_coefficient(
++   pull.map((base) =&gt; base._weight),
++ );
+
+const randomizer = RandomizerContext.from({ array: pull, associatedWeights });
+for (let i = 0; i &lt; attackContext.eventsCount; i++) {
+  const base = randomizer.pickRandom((pickContext) =&gt; {
+    const { item } = pickContext;
+    item.beforeCheck(item, pickContext);
+    const passed = item.filter(item, pickContext);
+    if (!passed) {
+      return false;
+    }
+    if (!item.repeats) {
+      pickContext.busy_preventable.require_insert();
+    }
+    return true;
+  });
+  if (!base) {
+    break;
+  }
+  attack_event_callback(base, context);
+  attackContext.listOfEvents.push(base);
+}</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="methods">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#methods">#</doc-anchor-trigger>
-        <span>Methods</span>
-    </h2>
-</doc-anchor-target>
-<doc-anchor-target id="setcallbackany--any-void">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#setcallbackany--any-void">#</doc-anchor-trigger>
-        <span><code v-pre>setCallback((any) =&gt; any): void</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Initializes a callback function. It will be use when the event passed the filter is called.</p>
-<doc-anchor-target id="end-void">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#end-void">#</doc-anchor-trigger>
-        <span><code v-pre>end(): void</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Close event listeners</p>
 
                                 
                                 <!-- Required only on API pages -->
@@ -278,20 +239,20 @@ collector.setCallback((message) =&gt; {
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/busynumeric/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../primitives/ending/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Busy​Numeric</span>
+                                                <span class="block mt-1">ending</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/dotnotationinterface/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../primitives/texttablebuilder/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Dot​Notated​Interface</span>
+                                                <span class="block mt-1">Text​Table​Builder</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -335,6 +296,6 @@ collector.setCallback((message) =&gt; {
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "CustomCollector", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "normalize_to_max_coefficient", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
 </body>
 </html>

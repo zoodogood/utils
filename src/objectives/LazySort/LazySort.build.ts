@@ -138,6 +138,9 @@ export class LazySortEntry<T> extends Array {
     if (this.#source.is_atomic) { return this.#source.atomic_chunk_arr }
     return this.#source.chunks!.map($5 => $5.entry().toArray()).flat()
   }
+  at(at: number) {
+    return at < 0 ? this.positive_at(this.#source.length - at) : this.positive_at(at)
+  }
   positive_at(at: number): (WithValue<T> | undefined) {
     if (this.#source.is_atomic!) { return this.#source.atomic_chunk_arr[at] }
     const chunk_index = this.#source.chunk_thresholds!.findIndex((a1 => a1> at))

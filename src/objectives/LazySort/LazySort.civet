@@ -110,6 +110,8 @@ export class LazySortEntry<T> extends Array
   toArray(): WithValue<T>[]
     return #source.atomic_chunk_arr if #source.is_atomic
     #source.chunks!.map(.entry().toArray()).flat()
+  at(at: number)
+    at < 0 ? @positive_at(#source# - at) : @positive_at(at)
   positive_at(at: number): WithValue<T>?
     return #source.atomic_chunk_arr[at] if #source.is_atomic!
     chunk_index := #source.chunk_thresholds!.findIndex (> at)

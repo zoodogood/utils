@@ -90,4 +90,13 @@ describe("LazySortEntry.splice", () => {
       199, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
     ])
   });
+
+  test("mediana", () => {
+    const iterable = [
+      5, 1, 3, 4, 2, 17, 11, 10, 9, 15, 14, 16, 13, 12, 7, 8, 6, 199,
+    ];
+    const source = LazySort.ofNumbers(iterable);
+    const [mediana] = source.entry().at(Math.floor(iterable.length / 2))!;
+    expect(mediana).toBe(10);
+  })
 });

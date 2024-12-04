@@ -1,6 +1,9 @@
-export * from "./TextTableBuilder.js";
+export * from "./binary_search.js";
 export * from "./BracketsParser.js";
 export { CliParser } from "./CliParser.js";
+export * from "./createDefaultPreventable.js";
+export * from "./normalize.js";
+export * from "./TextTableBuilder.js";
 
 interface IEndingOptions {
   unite?: (quantity: number, word: string) => string;

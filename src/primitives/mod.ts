@@ -46,3 +46,12 @@ export function arrayEmpty<T>(array: Array<T>) {
 	array.splice(0, array.length);
 	return array;
 }
+
+export function arraySpliceItem<T>(array: T[], searchElement: T) {
+	const index = array.indexOf(searchElement);
+	if (index === -1) {
+		return false;
+	}
+	array.splice(index, 1);
+	return true;
+}

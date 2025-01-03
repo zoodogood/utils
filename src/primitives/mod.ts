@@ -32,4 +32,12 @@ function ending(
   return input;
 }
 
-export { ending };
+export function sortMutByResolve<T>(
+	array: T[],
+	resolve: ($: T) => number,
+	{ reverse }: { reverse?: boolean } = {},
+) {
+	return reverse
+		? array.sort((a, b) => resolve(a) - resolve(b))
+		: array.sort((a, b) => resolve(b) - resolve(a));
+}

@@ -3,6 +3,7 @@ export * from "./BracketsParser.js";
 export { CliParser } from "./CliParser.js";
 export * from "./createDefaultPreventable.js";
 export * from "./normalize.js";
+export * from "./symbols.js";
 export * from "./TextTableBuilder.js";
 
 interface IEndingOptions {

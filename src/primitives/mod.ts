@@ -7,29 +7,30 @@ export * from "./symbols.js";
 export * from "./TextTableBuilder.js";
 
 interface IEndingOptions {
-  unite?: (quantity: number, word: string) => string;
+	unite?: (quantity: number, word: string) => string;
 }
-function ending(
-  quantity = 0,
-  base: string,
-  multiple: string,
-  alone: string,
-  double: string,
-  options: IEndingOptions = {},
+export function ending(
+	quantity: number,
+	base: string,
+	multiple: string,
+	alone: string,
+	double: string,
+	options: IEndingOptions = {},
 ) {
-  if (isNaN(quantity)) return NaN;
+	if (Number.isNaN(+quantity)) {
+		return Number.NaN;
+	}
 
-  const target = quantity % 100 < 20 ? quantity % 20 : quantity % 10;
+	const target = quantity % 100 < 20 ? quantity % 20 : quantity % 10;
 
-  const end =
-    target >= 5 || target === 0 ? multiple : target > 1 ? double : alone;
+	const end =
+		target >= 5 || target === 0 ? multiple : target > 1 ? double : alone;
+	const word = base + end;
 
-  const word = base + end;
+	options.unite ||= (quantity, word) => `${quantity} ${word}`;
 
-  options.unite ||= (quantity, word) => `${quantity} ${word}`;
-
-  const input = options.unite(quantity, word);
-  return input;
+	const input = options.unite(quantity, word);
+	return input;
 }
 
 export function sortMutByResolve<T>(

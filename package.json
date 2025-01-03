@@ -1,70 +1,71 @@
 {
-  "name": "@zoodogood/utils",
-  "type": "module",
-  "version": "4.2.1-change.3358",
-  "description": "",
-  "main": "lib/index.js",
-  "homepage": "https://zoodogood.github.io/utils",
-  "packageManager": "pnpm@9.0.0",
-  "types": "lib/index.d.ts",
-  "scripts": {
-    "test": "vitest --run",
-    "docs-build": "cd ./docs && retype build  --output ./public",
-    "docs-watch": "cd ./docs && retype watch",
-    "prepack": "pnpm build && pnpm test && pnpm docs-build",
-    "build": "tsc",
-    "tsc": "tsc",
-    "vitest": "vitest"
-  },
-  "typings": "lib/index",
-  "exports": {
-    ".": "./lib/index.js",
-    "./primitives": "./lib/primitives/mod.js",
-    "./objectives": "./lib/objectives/mod.js",
-    "./discordjs": "./lib/discordjs/mod.js",
-    "./nodejs": "./lib/nodejs/mod.js",
-    "./CliParser": "./lib/primitives/CliParser.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zoodogood/utils"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
+	"name": "@zoodogood/utils",
+	"type": "module",
+	"version": "5.0.0-change.3945",
+	"description": "",
+	"main": "lib/index.js",
+	"homepage": "https://zoodogood.github.io/utils",
+	"types": "lib/index.d.ts",
+	"scripts": {
+		"test": "vitest --run",
+		"docs-build": "cd ./docs && retype build  --output ./public",
+		"docs-watch": "cd ./docs && retype watch",
+		"prepack": "pnpm build && pnpm test && pnpm docs-build",
+		"build": "tsc",
+		"tsc": "tsc",
+		"vitest": "vitest"
+	},
+	"typings": "lib/index",
+	"exports": {
+		".": "./lib/index.js",
+		"./primitives": "./lib/primitives/mod.js",
+		"./objectives": "./lib/objectives/mod.js",
+		"./discordjs": "./lib/discordjs/mod.js",
+		"./nodejs": "./lib/nodejs/mod.js",
+		"./CliParser": "./lib/primitives/CliParser.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zoodogood/utils"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-    "prettier": "^3.3.3",
-    "retypeapp-linux-x64": "^3.5.0",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
-  },
-  "peerDependencies": {
-    "discord.js": ">=14.x.x"
-  },
-  "files": [
-    "lib"
-  ],
-  "typesVersions": {
-    ">=4.2": {
-      ".": [
-        "lib/index.d.ts"
-      ],
-      "primitives": [
-        "lib/primitives/mod.d.ts"
-      ],
-      "objectives": [
-        "lib/objectives/mod.d.ts"
-      ],
-      "discordjs": [
-        "lib/discordjs/mod.d.ts"
-      ],
-      "nodejs": [
-        "lib/nodejs/mod.d.ts"
-      ],
-      "CliParser": [
-        "lib/primitives/CliParser.d.ts"
-      ]
-    }
-  }
+		"@types/node": "^22.10.2",
+		"@vitest/ui": "^2.1.8",
+		"discord-api-types": "^0.37.114",
+		"retypeapp-linux-x64": "^3.6.0",
+		"typescript": "^5.7.2",
+		"vitest": "^2.1.8"
+	},
+	"peerDependencies": {
+		"discord.js": ">=14.x.x"
+	},
+	"files": [
+		"lib"
+	],
+	"typesVersions": {
+		">=4.2": {
+			".": [
+				"lib/index.d.ts"
+			],
+			"primitives": [
+				"lib/primitives/mod.d.ts"
+			],
+			"objectives": [
+				"lib/objectives/mod.d.ts"
+			],
+			"discordjs": [
+				"lib/discordjs/mod.d.ts"
+			],
+			"nodejs": [
+				"lib/nodejs/mod.d.ts"
+			],
+			"CliParser": [
+				"lib/primitives/CliParser.d.ts"
+			]
+		}
+	}
 }

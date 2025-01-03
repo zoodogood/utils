@@ -1,21 +1,22 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "target": "es2018",
-    "module": "NodeNext",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+	"compilerOptions": {
+		"declaration": true,
+		"target": "es2024",
+		"module": "NodeNext",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
 
-    /* Type Checking */
-    "strict": true,
-    /* Completeness */
-    "skipLibCheck": true,
-    "lib": ["ES2023", "DOM"],
-    "outDir": "lib",
-    "baseUrl": "src",
-    "allowJs": true,
-    "moduleResolution": "NodeNext"
-  },
-  "exclude": ["**/*.test.ts"],
-  "include": ["src/**/*.ts", "src/**/*.js"]
+		/* Type Checking */
+		"strict": true,
+		/* Completeness */
+		"skipLibCheck": true,
+		"lib": ["ES2024", "DOM"],
+		"outDir": "lib",
+		"baseUrl": "src",
+		"allowJs": true,
+		"moduleResolution": "NodeNext",
+		"declarationMap": true
+	},
+	"exclude": ["**/*.test.ts"],
+	"include": ["src/**/*.ts", "src/**/*.js"]
 }

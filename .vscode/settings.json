@@ -1,4 +1,9 @@
 {
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	// i using custom themes for different workspaces
+	"workbench.colorTheme": "Vercel (Dark)",
+	"javascript.preferences.importModuleSpecifier": "relative",
+	"typescript.preferences.importModuleSpecifier": "relative",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "always"
 	},
@@ -11,4 +16,11 @@
 	"[json]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
+	"search.exclude": {
+		"**/lib": true
+	},
+	"files.exclude": {
+		"docs/public": true,
+		"lib": true
+	}
 }

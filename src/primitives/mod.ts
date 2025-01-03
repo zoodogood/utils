@@ -41,3 +41,8 @@ export function sortMutByResolve<T>(
 		? array.sort((a, b) => resolve(a) - resolve(b))
 		: array.sort((a, b) => resolve(b) - resolve(a));
 }
+
+export function arrayEmpty<T>(array: Array<T>) {
+	array.splice(0, array.length);
+	return array;
+}

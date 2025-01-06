@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import { Message } from "discord.js";
 import { EventEmitter } from "node:events";
 import { get_chain_array } from "./get_chain_array.js";
 import { chain_map } from "./map.js";
@@ -8,10 +8,16 @@ export async function onMessageDelete(message: Message) {
 	const messages =
 		chain_map.has(message.id) &&
 		(await get_chain_array(message.id, message.client));
-	if (!messages) return;
-	for (const message of messages) {
+
+	if (!chain_map.has(message.id)) {
+		return;
+	}
+
+	for (const message of messages as Awaited<
+		ReturnType<typeof get_chain_array>
+	>) {
 		chain_map.delete(message.id);
-		message.delete();
+		message instanceof Message && message.delete();
 	}
 }
 

@@ -194,6 +194,7 @@ export function move_partial_data_to_chain(
 		// components, footer, reactions, files окажутся только в конце
 		// color скопируется как есть
 		// если в оригинальном сообщении есть description или content — во втором сообщении им на смену прийдут визуально пустые значения
+		const is_started_as_empty = isEmptyEmbed(from);
 		to.color = from.color;
 		to.maySplitMessage = from.maySplitMessage;
 		to.image = from.image;
@@ -210,5 +211,6 @@ export function move_partial_data_to_chain(
 		from.files = undefined;
 		from.description && (to.description = "ㅤ");
 		from.content && (to.content = "ㅤ");
+		!is_started_as_empty && isEmptyEmbed(from) && (from.description = "ㅤ");
 	}
 }

@@ -17,9 +17,20 @@ import { move_partial_data_to_chain } from "./chain/move_partial_data_to_chain.j
 import { codeOfEmoji } from "./helpers.js";
 import { justComponents } from "./message_components.js";
 import { diagnosticLimits } from "./message_content_limits.js";
-import type { MaySplitConfiguration } from "./mod.js";
-function sendableOf(
-	target: User | SendableChannels | { channel: SendableChannels },
+import {
+	onMessageDelete as ChainLifecycleOnMessageDelete,
+	type MaySplitConfiguration,
+} from "./mod.js";
+
+function sendableOf<
+	T extends
+		| User
+		| SendableChannels
+		| Message
+		| ({} & { channel: SendableChannels })
+		| ({} & { send: (payload: MessageCreateOptions) => Promise<Message> }),
+>(
+	target: T,
 ): {
 	send: (payload: MessageCreateOptions) => Promise<Message>;
 } {
@@ -30,7 +41,10 @@ function sendableOf(
 		return target;
 	}
 	if ("channel" in target) {
-		return target.channel;
+		return target.channel as Exclude<
+			typeof target.channel,
+			PartialGroupDMChannel
+		>;
 	}
 	throw new Error("Invalid target");
 }
@@ -45,7 +59,7 @@ export interface AdvancedPayload {
 	edit?: boolean;
 	author?: { name: string; iconURL?: string };
 	thumbnail?: string;
-	color?: string;
+	color?: ColorResolvable;
 	description?: string;
 	fields?: { name: string; value: string; inline?: boolean }[];
 	image?: string;
@@ -60,23 +74,23 @@ export interface AdvancedPayload {
 	files?: AttachmentBuilder[];
 }
 
-export function isEmptyEmbed(embed: EmbedBuilder["data"]) {
-	const DEFAULT_PROPERTIES = {
-		title: undefined,
-		author: undefined,
-		thumbnail: undefined,
-		description: undefined,
-		fields: undefined,
-		image: undefined,
-		footer: undefined,
-		timestamp: undefined,
-		video: undefined,
-	};
+export function isEmptyEmbed(
+	embed: { [key in keyof EmbedBuilder["data"]]: unknown },
+) {
+	const EMBED_PROPERTIES = [
+		"title",
+		"author",
+		"thumbnail",
+		"description",
+		"fields",
+		"image",
+		"footer",
+		"timestamp",
+		"video",
+	];
 	// in isEmptyEmbed context is a good compare
-	const isEveryPropertyDefault = Object.keys(DEFAULT_PROPERTIES).every(
-		(key) =>
-			String(embed[key as keyof EmbedBuilder["data"]]) ===
-			String(DEFAULT_PROPERTIES[key as keyof typeof DEFAULT_PROPERTIES]),
+	const isEveryPropertyDefault = EMBED_PROPERTIES.every(
+		(key) => Boolean(embed[key as keyof typeof embed]) === false,
 	);
 
 	return isEveryPropertyDefault;
@@ -92,7 +106,7 @@ export function createMessage(payload: AdvancedPayload) {
 			}
 			move_partial_data_to_chain(payload, maySplitMessage, diagnostic);
 		})();
-	let {
+	const {
 		content,
 		title,
 		url,
@@ -110,25 +124,27 @@ export function createMessage(payload: AdvancedPayload) {
 		components,
 		files,
 		reference,
-	} = payload;
-	const message: MessageCreateOptions = {};
-
-	thumbnail &&= { url: thumbnail };
-	image &&= { url: image };
-	video &&= { url: video };
-
-	color = resolveColor(color ?? "Random");
+	} = _payload;
+	const message: MessageCreateOptions = {
+		// @ts-expect-error
+		components: components ? justComponents(components) : null,
+		content,
+		ephemeral,
+		fetchReply,
+		files,
+		reply: reference ? { messageReference: reference } : undefined,
+	};
 
 	const embed = new EmbedBuilder({
 		title,
 		url,
 		author,
-		thumbnail,
+		thumbnail: thumbnail ? { url: thumbnail } : undefined,
 		description,
-		color,
+		color: resolveColor(color ?? "Random"),
 		fields,
-		image,
-		video,
+		image: image ? { url: image } : undefined,
+		video: video ? { url: video } : undefined,
 		footer,
 		timestamp,
 	});

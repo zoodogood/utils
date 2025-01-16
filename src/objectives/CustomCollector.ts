@@ -19,7 +19,7 @@ class CustomCollector {
 	constructor({ target, event, filter, time = 0 }: ICustomCollectorOptions) {
 		if ("on" in target === false) {
 			throw new Error(
-				"Target must be similar to EventEmitter.prototype — target haven't method 'on'"
+				"Target must be similar to EventEmitter.prototype — target haven't method 'on'",
 			);
 		}
 

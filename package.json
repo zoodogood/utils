@@ -1,7 +1,7 @@
 {
 	"name": "@zoodogood/utils",
 	"type": "module",
-	"version": "5.0.0-change.3945",
+	"version": "5.0.0-change.4177",
 	"description": "",
 	"main": "lib/index.js",
 	"homepage": "https://zoodogood.github.io/utils",
@@ -33,12 +33,12 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-		"@types/node": "^22.10.2",
-		"@vitest/ui": "^2.1.8",
-		"discord-api-types": "^0.37.114",
+		"@types/node": "^22.13.1",
+		"@vitest/ui": "^3.0.5",
+		"discord-api-types": "^0.37.119",
 		"retypeapp-linux-x64": "^3.6.0",
-		"typescript": "^5.7.2",
-		"vitest": "^2.1.8"
+		"typescript": "^5.7.3",
+		"vitest": "^3.0.5"
 	},
 	"peerDependencies": {
 		"discord.js": ">=14.x.x"
@@ -67,5 +67,10 @@
 				"lib/primitives/CliParser.d.ts"
 			]
 		}
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
 	}
 }

@@ -5,12 +5,14 @@ import {
 	ModalBuilder,
 	type ModalSubmitInteraction,
 	type RepliableInteraction,
+	type SendableChannels,
 	type TextInputComponent,
 	type TextInputComponentData,
 	TextInputStyle,
 } from "discord.js";
-import { assert } from "node:assert";
+import assert from "node:assert";
 import { justComponents } from "./message_components.js";
+import { justSendMessage } from "./message_lifecycle.js";
 
 export function createModal({
 	title,
@@ -21,8 +23,11 @@ export function createModal({
 	customId: string;
 	components: Parameters<typeof justComponents>[0];
 }): APIModalInteractionResponseCallbackData {
-	components = justComponents(components);
-	return new ModalBuilder({ title, customId, components }).toJSON();
+	return new ModalBuilder({
+		title,
+		customId,
+		components: justComponents(components),
+	}).toJSON();
 }
 
 export async function justModalQuestion({
@@ -68,7 +73,8 @@ export async function justModalQuestion({
 	});
 
 	thanks &&
-		response?.msg({
+		response &&
+		justSendMessage(response as { channel: SendableChannels }, {
 			content: thanks !== true ? thanks : "Спасибо!",
 			ephemeral: true,
 		});

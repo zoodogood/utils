@@ -1,6 +1,6 @@
-import { spawn } from "child_process";
-import type { ChildProcessWithoutNullStreams } from "child_process";
-import EventsEmitter from "events";
+import type { ChildProcessWithoutNullStreams } from "node:child_process";
+import { spawn } from "node:child_process";
+import EventsEmitter from "node:events";
 
 interface IContext {
 	exitter: { resolve: any; reject: any };

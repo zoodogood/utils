@@ -47,43 +47,45 @@ export function justSelectMenuComponent({
 	};
 }
 
-type ItemOfActionRow = { type: ComponentType } & { [key: string]: any };
-type ActionRowSource =
-	| ItemOfActionRow
-	| ItemOfActionRow[]
-	| ItemOfActionRow[][]
+type ItemOfActionRow<T> = { type: ComponentType } & { [key: string]: any };
+type ActionRowSource<T> =
+	| ItemOfActionRow<T>
+	| ItemOfActionRow<T>[]
+	| ItemOfActionRow<T>[][]
 	| ActionRow<any>
 	| ActionRow<any>[];
 
-type SimpleActionRow = {
+type SimpleActionRow<T> = {
 	type: ComponentType.ActionRow;
-	components: ItemOfActionRow[];
+	components: ItemOfActionRow<T>[];
 }[];
 
 // MARK: Components
-export function justComponents(state: ActionRowSource): SimpleActionRow {
+export function justComponents<T>(
+	state: ActionRowSource<T>,
+): SimpleActionRow<T> {
 	switch (true) {
-		// isEmptyArray ↴
+		// isEmptyArray ↴ ➞ return []
 		case Array.isArray(state) && state.length === 0:
 			return [];
-		// isSingleActionRow ↴
+		// isSingleActionRow ↴ ➞ ActionRowArray ➞ return SimpleActionRow
 		case isSingleActionRow(state):
 			state = [state as ActionRow<any>];
-		// fallthrough
-		// isActionRowArray ↴
+		// fallthrough ¯\_(ツ)_/¯
+		// isActionRowArray ↴ ➞ return SimpleActionRow
 		case Array.isArray(state) && isSingleActionRow(state[0]):
-			return state as SimpleActionRow;
-		// isSingleComponent ↴
+			return state as SimpleActionRow<T>;
+		// isSingleComponent ↴ ➞ ComponentsFlat ➞ ComponentsMatrix ➞ return ActionRowArray
 		case isSingleComponent(state):
-			state = [state as ItemOfActionRow];
-		// fallthrough
+			state = [state as ItemOfActionRow<T>];
+		// fallthrough ¯\_(ツ)_/¯
 		// isComponentsFlat ↴
 		case isComponentsFlat(state):
-			state = [state as ItemOfActionRow[]];
-		// fallthrough
+			state = [state as ItemOfActionRow<T>[]];
+		// fallthrough ¯\_(ツ)_/¯
 		// isComponentsMatrix ↴
 		case Array.isArray(state) && isComponentsFlat(state[0]):
-			return (state as ItemOfActionRow[][]).map((row) => ({
+			return (state as ItemOfActionRow<T>[][]).map((row) => ({
 				type: ComponentType.ActionRow,
 				components: row,
 			}));
@@ -91,14 +93,16 @@ export function justComponents(state: ActionRowSource): SimpleActionRow {
 			throw new TypeError("Unknown case");
 	}
 
-	function isSingleActionRow(component: any) {
+	function isSingleActionRow(component: unknown) {
+		// @ts-expect-error
 		return component.type === ComponentType.ActionRow;
 	}
 
-	function isSingleComponent(component: any) {
+	function isSingleComponent(component: unknown) {
+		// @ts-expect-error
 		return "type" in component;
 	}
-	function isComponentsFlat(component: any) {
+	function isComponentsFlat(component: unknown) {
 		return Array.isArray(component) && isSingleComponent(component[0]);
 	}
 }

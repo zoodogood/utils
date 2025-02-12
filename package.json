@@ -1,7 +1,7 @@
 {
 	"name": "@zoodogood/utils",
 	"type": "module",
-	"version": "5.0.0-change.4177",
+	"version": "5.1.0-change.4228",
 	"description": "",
 	"main": "lib/index.js",
 	"homepage": "https://zoodogood.github.io/utils",

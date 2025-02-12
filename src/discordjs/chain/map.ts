@@ -15,19 +15,22 @@ class Cache extends Map<string, string[]> {
 					index < Math.floor(size * /* strong */ 0.5);
 					index++
 				) {
-					this.delete(keys.next().value);
+					this.delete(keys.next().value!);
 				}
 			},
 			60 * 1000 * 30,
 		);
 	}
 	update(parent: Message, child: Message, channelId: string) {
-		if (!this.has(parent.id)) {
-			this.set(parent.id, [channelId, parent.id]);
+		if (this.has(parent.id)) {
+			return;
 		}
-		const cell = this.get(parent.id)!;
-		cell.indexOf(child.id) === -1 && cell.push(child.id);
-		this.set(child.id, cell);
+		if (!this.has(child.id)) {
+			this.set(child.id, [channelId, child.id]);
+		}
+		const cell = this.get(child.id)!;
+		cell.indexOf(parent.id) === -1 && cell.push(parent.id);
+		this.set(parent.id, cell);
 		return cell;
 	}
 }

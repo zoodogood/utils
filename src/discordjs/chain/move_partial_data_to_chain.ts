@@ -1,11 +1,17 @@
 // declare state in file://./readme.md
 
+import type { APIEmbed } from "discord.js";
 import { DEFAULT } from "../../primitives/symbols.js";
+import { main_embed_of } from "../main_embed_of.js";
 import {
 	DiscordContentLimites,
 	type diagnosticLimits,
 } from "../message_content_limits.js";
-import type { AdvancedPayload } from "../message_lifecycle.js";
+import {
+	type AdvancedPayload,
+	type createMessage,
+	isEmptyEmbed,
+} from "../message_lifecycle.js";
 import type { MaySplitConfiguration } from "./configuration.js";
 
 function tryMultipleMap<T>(callback: (iteration: number) => T, limit = 10) {
@@ -23,19 +29,15 @@ function tryMultipleMap<T>(callback: (iteration: number) => T, limit = 10) {
 }
 
 export function move_partial_data_to_chain(
-	original: AdvancedPayload,
+	mut_original: AdvancedPayload,
 	splitConfigutation: MaySplitConfiguration,
 	limitsDiagnostic: ReturnType<typeof diagnosticLimits>,
 ) {
-	if (!limitsDiagnostic.isExceeding && !original.chain_child) {
-		return;
-	}
-
-	const chain_child = {};
-	Object.assign(original, { chain_child });
-	static_fields(original, chain_child);
+	const chain_child: AdvancedPayload = {};
+	mut_original._chain_child = chain_child;
+	move_static_down(mut_original, chain_child);
 	if (!limitsDiagnostic.isExceeding) {
-		// Просто вернуть визуально пустые значения для рассматриваемых полей
+		// Вернуть визуально пустые значения для рассматриваемых полей
 		return void 0;
 	}
 	const exceeding = Object.entries(limitsDiagnostic.exceeding).filter(
@@ -48,7 +50,7 @@ export function move_partial_data_to_chain(
 			case "content":
 			case "description":
 				return (() => {
-					const chunks = (original[key] as string)
+					const chunks = (mut_original[key] as string)
 						.split(separateBy)
 						.map((chunk) => ({
 							chunk,
@@ -60,14 +62,21 @@ export function move_partial_data_to_chain(
 								return markers.at(-1)!.groups!.lang || DEFAULT;
 							})(),
 						}));
+					chunks.forEach(($) => {
+						if ($.chunk.length > DiscordContentLimites[key]) {
+							throw new Error(
+								"As a result of splitting large text, spliceBy did not find any potential separation points (https://github.com/zoodogood/1119/issues/8)",
+							);
+						}
+					});
 					return [key, chunks];
 				})();
 
 			case "fields_count":
-				return ["fields", original.fields];
+				return ["fields", mut_original.fields];
 
 			default:
-				return [key, original[key as keyof AdvancedPayload]];
+				return [key, mut_original[key as keyof AdvancedPayload]];
 		}
 	});
 
@@ -79,12 +88,13 @@ export function move_partial_data_to_chain(
 					DiscordContentLimites[key as keyof typeof DiscordContentLimites],
 			),
 		) + 1;
+
 	const [for_original, for_child] = tryMultipleMap((iteration) => {
 		return resolve(predicated_chain_length + iteration);
 	});
 	Object.assign(chain_child, for_child);
-	Object.assign(original, for_original, {
-		chain_child,
+	Object.assign(mut_original, for_original, {
+		_chain_child: chain_child,
 	});
 	return void 0;
 
@@ -105,7 +115,7 @@ export function move_partial_data_to_chain(
 							key,
 							(() => {
 								const average =
-									DiscordContentLimites[key] /
+									(mut_original[key] as string).length /
 									Math.ceil(predicated_chain_length);
 
 								const chunks_to_keep = [] as string[];
@@ -117,12 +127,7 @@ export function move_partial_data_to_chain(
 								}[];
 								const CLOSE_CODEBLOCK = "\n```";
 								const close_codeblock_length = CLOSE_CODEBLOCK.length;
-								if (pull[0].chunk.length > DiscordContentLimites[key]) {
-									pull[0].chunk = pull[0].chunk.slice(
-										0,
-										DiscordContentLimites[key] - close_codeblock_length,
-									);
-								}
+
 								while (pull.length) {
 									const { chunk, codeblock_lang } = pull[0]!;
 									if (codeblock_lang) {
@@ -190,9 +195,9 @@ export function move_partial_data_to_chain(
 			);
 	}
 
-	function static_fields(from: AdvancedPayload, to: AdvancedPayload) {
-		// components, footer, reactions, files окажутся только в конце
-		// color скопируется как есть
+	function move_static_down(from: AdvancedPayload, to: AdvancedPayload) {
+		// components, footer, reactions, files: окажутся в последнем сообщении
+		// color: скопируется
 		// если в оригинальном сообщении есть description или content — во втором сообщении им на смену прийдут визуально пустые значения
 		const is_started_as_empty = isEmptyEmbed(from);
 		to.color = from.color;
@@ -209,8 +214,28 @@ export function move_partial_data_to_chain(
 		from.reactions = undefined;
 		to.files = from.files;
 		from.files = undefined;
-		from.description && (to.description = "ㅤ");
-		from.content && (to.content = "ㅤ");
-		!is_started_as_empty && isEmptyEmbed(from) && (from.description = "ㅤ");
+		from.description && (to.description = "-# (пусто)");
+		from.content && (to.content = "-# (пусто)");
+		!is_started_as_empty &&
+			isEmptyEmbed(from) &&
+			(from.description = "-# (пусто)");
 	}
+}
+
+// Решает прецендент когда целью становится сообщение в цепочке у которого есть потомки, и это выясняется только в момент отправки
+// Хотя по хорошему данные сообщения должны быть собраны до отправки, этого невозможно сделать не целевого айди, а оно при редактировании не подразумевается
+export function _rob_already_prepared(
+	mut_message_data: ReturnType<typeof createMessage>,
+	mut_payload: AdvancedPayload,
+) {
+	const embed = main_embed_of(mut_message_data) as APIEmbed | undefined;
+	if (embed) {
+		embed.footer = undefined;
+		embed.image = undefined;
+		embed.timestamp = undefined;
+		embed.video = undefined;
+	}
+	mut_message_data.files = undefined;
+	mut_message_data.components = undefined;
+	mut_payload.reactions = undefined;
 }

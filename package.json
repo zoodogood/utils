@@ -1,7 +1,7 @@
 {
 	"name": "@zoodogood/utils",
 	"type": "module",
-	"version": "5.1.0-change.4228",
+	"version": "5.1.0-change.4229",
 	"description": "",
 	"main": "lib/index.js",
 	"homepage": "https://zoodogood.github.io/utils",
@@ -11,7 +11,7 @@
 		"docs-build": "cd ./docs && retype build  --output ./public",
 		"docs-watch": "cd ./docs && retype watch",
 		"prepack": "pnpm build && pnpm test && pnpm docs-build",
-		"build": "tsc",
+		"build": "tsc --noResolve",
 		"tsc": "tsc",
 		"vitest": "vitest"
 	},

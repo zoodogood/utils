@@ -1,9 +1,9 @@
 import type { AdvancedPayload } from "./mod.js";
 
 export const DiscordContentLimites = {
-	content: 2048,
+	content: 2000,
 	description: 4096,
-	field_count: 20,
+	field_count: 25,
 };
 
 export function diagnosticLimits(

@@ -11,7 +11,6 @@ import {
 	resolveColor,
 } from "discord.js";
 
-import assert from "node:assert";
 import { chain_map } from "./chain/map.js";
 import {
 	_rob_already_prepared,
@@ -99,6 +98,9 @@ export function isEmptyEmbed(
 }
 
 export function createMessage(mut_payload: AdvancedPayload) {
+	if (mut_payload.ephemeral && mut_payload.maySplitMessage) {
+		throw new Error("Don't use ephemeral option with message spliting");
+	}
 	const { maySplitMessage } = mut_payload;
 	maySplitMessage &&
 		(() => {
@@ -220,7 +222,6 @@ export async function sendMessage<InGuild extends boolean>(
 	}
 
 	if (mut_payload._chain_child) {
-		assert(!mut_payload.ephemeral);
 		mut_payload._chain_child ||= {};
 		mut_payload._chain_child.reference = message.id;
 		let createdNow = false;

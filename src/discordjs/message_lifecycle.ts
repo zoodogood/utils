@@ -233,7 +233,6 @@ export async function sendMessage<InGuild extends boolean>(
 				if (!chain) {
 					return;
 				}
-				const channel = sendableOf(target);
 				const index = chain.indexOf(message.id);
 				if (index === 0) {
 					return;
@@ -243,7 +242,7 @@ export async function sendMessage<InGuild extends boolean>(
 					return;
 				}
 
-				return await (channel as SendableChannels).messages.fetch(
+				return await (sendableOf(target) as SendableChannels).messages.fetch(
 					child_message_id,
 				);
 			})()) ||

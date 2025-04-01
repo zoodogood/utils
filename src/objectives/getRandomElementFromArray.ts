@@ -1,22 +1,26 @@
 import assert from "node:assert";
 import { binary_search } from "../primitives/binary_search.js";
-import { create_default_preventable } from "../primitives/createDefaultPreventable.js";
 import { BusyNumeric, size_of_area } from "./BusyNumeric.js";
 import { getRandomNumberInRange } from "./getRandomNumberInRange.js";
 
+export const _WEIGHT_AUTO = 1_000_001;
 interface IParams<T> {
-	associatedWeights?: number[];
+	associatedWeights?: number[] | typeof _WEIGHT_AUTO;
 	filter?: (item: T) => boolean;
 }
 
 interface IPickContext<T> {
-	busy_preventable: ReturnType<typeof create_default_preventable> & {
-		require_insert(): void;
-	};
 	item: T;
 	pick: (context: IPickContext<T>) => boolean;
 	threshold: number;
 	point: number;
+	index_of_item: number;
+}
+
+interface ILotteryContext {
+	index_of_item: number;
+	point: number;
+	remove_current_from_pull(): void;
 }
 
 export class RandomizerContext<T> {
@@ -29,17 +33,25 @@ export class RandomizerContext<T> {
 		const range = thresholds?.at(-1) ?? array.length - 1;
 		this.hotel = new BusyNumeric(range);
 	}
+
+	/* Add to your code
+	if (associatedWeights === AUTO) {
+			// @ts-expect-error User known about AUTO keyword
+			associatedWeights = array.map(($) => $._weight);
+	}
+	associatedWeights?.length && assert(associatedWeights.at(-1)! < Number.MAX_SAFE_INTEGER)
+	*/
 	static from<T>({
 		array,
 		associatedWeights,
 	}: {
 		array: T[];
-		associatedWeights?: IParams<T>["associatedWeights"];
+		associatedWeights?: number[];
 	}) {
 		const thresholds = associatedWeights && thresholdsOf(associatedWeights);
 		return new RandomizerContext<T>(array, thresholds);
 	}
-	pickRandom(pick: IPickContext<T>["pick"] = () => true) {
+	pickRandom(pick: IPickContext<T>["pick"] = () => true): T | undefined {
 		const { hotel, thresholds, array } = this;
 		while (true) {
 			const segments_count = hotel.segments_count();
@@ -71,37 +83,76 @@ export class RandomizerContext<T> {
 				}
 			})();
 
-			let _require_insert = false;
 			const index = thresholds
 				? pickInThresholds(thresholds, position)!
 				: position;
 			const element = array[index];
 			const pickContext = {
-				busy_preventable: {
-					...create_default_preventable(),
-					require_insert() {
-						_require_insert = true;
-					},
-				},
 				item: element,
+				index_of_item: index,
 				pick,
 				threshold: index,
 				point: position,
 			} as IPickContext<T>;
 			const picked = pick!(pickContext);
-			if (
-				_require_insert ||
-				(!picked && !pickContext.busy_preventable.default_prevented())
-			) {
-				thresholds
-					? hotel.insert_area(thresholds[index - 1] + 1 || 0, thresholds[index])
-					: hotel.bifurcate(index);
-			}
 			if (picked) {
 				return element;
 			}
+			thresholds
+				? hotel.insert_area(thresholds[index - 1] + 1 || 0, thresholds[index])
+				: hotel.bifurcate(index);
 		}
 		return undefined;
+	}
+
+	playLottery(): ILotteryContext | undefined {
+		const { hotel, thresholds } = this;
+		while (true) {
+			const segments_count = hotel.segments_count();
+			if (!segments_count) {
+				break;
+			}
+			const target_of_free = getRandomNumberInRange({
+				max: hotel.free_area - 1,
+			});
+			const position = (() => {
+				let segment = 0;
+				let distance = target_of_free;
+				let position = 0;
+				while (true) {
+					const free_area =
+						(hotel.busy_areas[segment]?.[0] ?? hotel.range + 1) -
+						(hotel.busy_areas[segment - 1]?.[1] ?? -1) -
+						1;
+					distance -= free_area;
+					position += free_area;
+					if (distance < 0) {
+						return position + distance;
+					}
+					position += size_of_area(
+						hotel.busy_areas[segment] || [0, hotel.range + 1],
+					);
+					segment++;
+				}
+			})();
+
+			const index = thresholds
+				? pickInThresholds(thresholds, position)!
+				: position;
+			const lotteryContext = {
+				index_of_item: index,
+				point: position,
+				remove_current_from_pull() {
+					thresholds
+						? hotel.insert_area(
+								thresholds[index - 1] + 1 || 0,
+								thresholds[index],
+							)
+						: hotel.bifurcate(index);
+				},
+			} as ILotteryContext;
+			return lotteryContext;
+		}
 	}
 }
 
@@ -119,16 +170,14 @@ export function pickInThresholds(thresholds: number[], value: number): number {
 	});
 }
 
-export function thresholdsOf(
-	weights: NonNullable<IParams<unknown>["associatedWeights"]>,
-) {
+export function thresholdsOf(weights: NonNullable<number[]>) {
 	assert(weights.length > 0, "Invalid array length");
 	let previousLimit = 0;
 	return weights.map((weight) => (previousLimit += weight)) as number[];
 }
 
 export function getRandomElementIndexInWeights(
-	weights: NonNullable<IParams<unknown>["associatedWeights"]>,
+	weights: NonNullable<number[]>,
 ): number | never {
 	const thresholds = thresholdsOf(weights);
 
@@ -156,13 +205,86 @@ export function getRandomElementFromArray<T>(
 	array: T[],
 	{ associatedWeights, filter = () => true }: IParams<T> = {},
 ) {
+	assert(array.length, "Invalid array length");
+	if (associatedWeights === _WEIGHT_AUTO) {
+		// @ts-expect-error User know about AUTO keysymbol
+		associatedWeights = array.map(($) => $._weight);
+	}
+	associatedWeights?.length &&
+		assert(associatedWeights.at(-1)! < Number.MAX_SAFE_INTEGER);
+
 	assert(
 		!associatedWeights || associatedWeights.length === array.length,
 		"Incorrectly passed argument associatedWeights: The length of the associatedWeights must exactly match the length of the weights array",
 	);
 
+	if (array.length === 1) {
+		return array[0];
+	}
+	// light strategy
+	if (!filter) {
+		if (associatedWeights) {
+			return array[getRandomElementIndexInWeights(associatedWeights)];
+		}
+		return array[Math.floor(Math.random() * array.length)];
+	}
+
 	return RandomizerContext.from<T>({
 		array,
 		associatedWeights,
 	}).pickRandom(({ item }) => filter(item));
+}
+
+export function getRandomElementsFromArray<T>(
+	array: T[],
+	amount = 1,
+	{ associatedWeights, filter = () => true }: IParams<T> = {},
+) {
+	assert(array.length);
+	assert(amount <= array.length);
+	assert(
+		amount > 1,
+		`Current amount: ${amount}, use getRandomElementFromArray instead of getRandomElement**s**FromArray if amount is 1`,
+	);
+	if (associatedWeights === _WEIGHT_AUTO) {
+		// @ts-expect-error User know about AUTO keysymbol
+		associatedWeights = array.map(($) => $._weight);
+	}
+	associatedWeights?.length &&
+		assert(associatedWeights.at(-1)! < Number.MAX_SAFE_INTEGER);
+
+	assert(
+		!associatedWeights || associatedWeights.length === array.length,
+		"Incorrectly passed argument associatedWeights: The length of the associatedWeights must exactly match the length of the weights array",
+	);
+	if (amount === array.length) {
+		return Array.from(array);
+	}
+	// light strategy
+	if (!filter && !associatedWeights) {
+		const _array = Array.from(array);
+		return Array.from(
+			{ length: amount },
+			() => _array.splice(Math.floor(Math.random() * _array.length), 1)[0],
+		);
+	}
+	const random_ctx = RandomizerContext.from<T>({
+		array,
+		associatedWeights,
+	});
+	return Array.from({ length: amount }, (_, i) => {
+		while (true) {
+			const lottery_ctx = random_ctx.playLottery();
+			if (!lottery_ctx) {
+				// BEFORE PULL TO-DO вероятно неграммотное сообщение об ошибке
+				throw new Error("Not enought items was pass filter");
+			}
+			lottery_ctx.remove_current_from_pull();
+			const item = array[lottery_ctx.index_of_item];
+			if (!filter(item)) {
+				continue;
+			}
+			return item;
+		}
+	});
 }

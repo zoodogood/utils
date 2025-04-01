@@ -17,8 +17,8 @@
 
 import assert from "node:assert";
 import {
-  binary_search,
-  BinarySearchCompareSpec
+  BinarySearchCompareSpec,
+  binary_search
 } from "../primitives/binary_search.js";
 
 /**
@@ -67,6 +67,7 @@ export class BusyNumeric {
   }
   constructor(range: number) {
     assert(range > 0, "Range must be positive");
+    assert(range <= Number.MAX_SAFE_INTEGER, "range <= Number.MAX_SAFE_INTEGER");
     this.range = range;
     this.free_area = this.range + /* includes position 0 */ 1;
   }
@@ -170,7 +171,7 @@ export class BusyNumeric {
 
       assert(
         !(target[0] <= start && target[1] >= end),
-        "Assertion error: [start, end] in range",
+        "Assertion error: range [start, end] already in busy area",
       );
       
       

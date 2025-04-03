@@ -21,7 +21,8 @@
 		"rules": {
 			"recommended": true,
 			"style": {
-				"noNonNullAssertion": "off"
+				"noNonNullAssertion": "off",
+				"noParameterAssign": "off"
 			},
 			"suspicious": {
 				"noAssignInExpressions": "off"

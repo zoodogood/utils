@@ -10,24 +10,24 @@
     <meta name="generator" content="Retype 3.6.0">
 
     <!-- Primary Meta Tags -->
-    <title>DotNotatedInterface</title>
-    <meta name="title" content="DotNotatedInterface">
-    <meta name="description" content="Unstable">
+    <title>randomElementFromArray</title>
+    <meta name="title" content="randomElementFromArray">
+    <meta name="description" content="function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)T: T;">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://zoodogood.github.io/utils/public/objectives/dotnotationinterface/">
+    <link rel="canonical" href="https://zoodogood.github.io/utils/public/objectives/randomelementfromarray/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/dotnotationinterface/">
-    <meta property="og:title" content="DotNotatedInterface">
-    <meta property="og:description" content="Unstable">
+    <meta property="og:url" content="https://zoodogood.github.io/utils/public/objectives/randomelementfromarray/">
+    <meta property="og:title" content="randomElementFromArray">
+    <meta property="og:description" content="function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)T: T;">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/dotnotationinterface/">
-    <meta property="twitter:title" content="DotNotatedInterface">
-    <meta property="twitter:description" content="Unstable">
+    <meta property="twitter:url" content="https://zoodogood.github.io/utils/public/objectives/randomelementfromarray/">
+    <meta property="twitter:title" content="randomElementFromArray">
+    <meta property="twitter:description" content="function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)T: T;">
 
     <script data-cfasync="false">(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -171,141 +171,135 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="docs-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="dotnotatedinterface" class="break-words">
+<doc-anchor-target id="randomelementfromarray" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#dotnotatedinterface">#</doc-anchor-trigger>
-        <span>DotNotatedInterface</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#randomelementfromarray">#</doc-anchor-trigger>
+        <span>randomElementFromArray</span>
     </h1>
 </doc-anchor-target>
-<div class="flex mb-6">
-    <div class="shrink-0 w-1 rounded-tl rounded-bl bg-yellow-500"></div>
-    <div class="flex w-full py-4 border border-l-0 border-gray-300 rounded-tr rounded-br doc-alert bg-white dark:bg-dark-700 dark:border-dark-700" role="alert">
-        <div class="flex items-center ml-4 h-7">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mb-px text-yellow-500" width="22" height="22" viewBox="0 0 24 24" role="presentation">
-                <g fill="currentColor"><g>
-                    <path d="M22.48 15.59L14.01 1.45A2.968 2.968 0 0012.16.09c-.78-.19-1.58-.07-2.27.35-.41.25-.76.6-1.01 1.01v.01L.4 15.6c-.83 1.43-.33 3.27 1.1 4.1.45.26.95.4 1.48.4h16.95c.8-.01 1.55-.33 2.11-.9.56-.57.87-1.33.86-2.13a3.04 3.04 0 00-.42-1.48zm-1.87 2.21c-.19.19-.44.3-.69.3H2.99c-.17 0-.34-.05-.49-.13a.992.992 0 01-.37-1.35L10.6 2.48c.08-.14.2-.25.34-.33a.992.992 0 011.37.33l8.46 14.13c.09.15.13.32.13.49 0 .26-.1.51-.29.7z"></path>
-                    <path d="M11.45 12.1c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .56.45 1 1 1zM11.46 14.1c-.56 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"></path>
-                </g></g>
-            </svg>
-        </div>
-        <div class="pr-5 ml-3 w-full">
-            <h5>Warning</h5>
-<p>Unstable</p>
-        </div>
-    </div>
-</div>
-<doc-tabs>
-<doc-tab v-cloak id="easy-example">
-<template #title>Easy example</template>
+<p><code v-pre>function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)&lt;T&gt;: T;</code></p>
+<p><strong>Description:</strong><br />
+Returns a random element of the array with the ability to determine the probability of each element relative to the others</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const target = {a: {b: {c: {d: {e: {f: 15}}}}}};
-const increment = (currentValue) =&gt; currentValue + 1;
-new DotNotatedInterface(target).setItem(&quot;a.b.c.d.e.f&quot;, increment); // 16</code></pre>
-</doc-codeblock></div>
-</doc-tab>
-<doc-tab v-cloak id="real-example">
-<template #title>Real example</template>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-javascript"><code v-pre class="language-javascript">const audit = {};
-const auditInterface = new Util.DotNotatedInterface(audit);
-
-auditInterface.setItem(&quot;actions&quot;, curse.values.counter);
-
-for (const entry of curse.values.audit) {
-	const { value, source, executor, resource } = entry;
-	const box = auditInterface.setItem(
-		`resources.${source}`,
-		(prev) =&gt; prev || [],
-	);
-
-	const exists = box.find(
-		(splited) =&gt;
-		splited.executor.id === executor.id &amp;&amp;
-		Math.sign(splited.value) === Math.sign(value) &amp;&amp;
-		splited.resource === resource,
-	);
-	if (exists) {
-		exists.value += value;
-	} else {
-		box.push({
-			resource,
-			executor,
-			value,
-		});
-	}
-	box.sortBy(&quot;resource&quot;);
-}
-const document = new Util.yaml.Document(audit);</code></pre>
-</doc-codeblock></div>
-</doc-tab>
-</doc-tabs>
-<doc-tabs>
-<doc-tab v-cloak id="constructor">
-<template #title>Constructor</template>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">new DotNotatedInterface(target);</code></pre>
-</doc-codeblock></div>
-</doc-tab>
-<doc-tab v-cloak id="methods">
-<template #title>Methods</template>
-<doc-anchor-target id="methods">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#methods">#</doc-anchor-trigger>
-        <span>Methods</span>
-    </h2>
-</doc-anchor-target>
-<doc-anchor-target id="getitemtkey-string-options-imethodsoptions---t--null">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#getitemtkey-string-options-imethodsoptions---t--null">#</doc-anchor-trigger>
-        <span><code v-pre>getItem&lt;T&gt;(key: string, options: IMethodsOptions = {}): T | null</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Resolve key (path) in target; Return item or default value</p>
-<doc-anchor-target id="setitemtkey-string-value-any--callablefunction-options-imethodsoptions---t">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#setitemtkey-string-value-any--callablefunction-options-imethodsoptions---t">#</doc-anchor-trigger>
-        <span><code v-pre>setItem&lt;T&gt;(key: string, value: any | CallableFunction, options: IMethodsOptions = {}): T()</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Resolve key; Set or update item value</p>
-<doc-anchor-target id="hasitemkey-string-options-imethodsoptions---boolean">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#hasitemkey-string-options-imethodsoptions---boolean">#</doc-anchor-trigger>
-        <span><code v-pre>hasItem(key: string, options: IMethodsOptions = {}): boolean</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Resolve key; Check item;</p>
-<doc-anchor-target id="removeitemkey-string-options-imethodsoptions---boolean">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#removeitemkey-string-options-imethodsoptions---boolean">#</doc-anchor-trigger>
-        <span><code v-pre>removeItem(key: string, options: IMethodsOptions = {}): boolean</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Resolve key; Remove item</p>
-<doc-anchor-target id="getparentandlastsegmentbynotatedkeykey-string--needfillifparentnotexists--false---parent-object--null-lastsegment-string-">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#getparentandlastsegmentbynotatedkeykey-string--needfillifparentnotexists--false---parent-object--null-lastsegment-string-">#</doc-anchor-trigger>
-        <span><code v-pre>getParentAndlastSegmentByNotatedKey(key: string, { needFillIfParentNotExists = false }): { parent: object | null; lastSegment: string }</code></span>
-    </h3>
-</doc-anchor-target>
-<p>Resolve key to segments, returns target partial with last segment key</p>
-</doc-tab>
-<doc-tab v-cloak id="interfaces">
-<template #title>Interfaces</template>
-<doc-anchor-target id="interfaces">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#interfaces">#</doc-anchor-trigger>
-        <span>Interfaces</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-typescript"><code v-pre class="language-typescript">interface IMethodsOptions {
-  defaultValue?: any; // for get value
-  allowSetFunctions?: boolean; // for set value: if true just set function,
+<pre class="language-typescript"><code v-pre class="language-typescript">type TArray = T[];
+interface IParams {
+   filter: (item: T) =&gt; boolean;
+   associatedWeights: number[]; // There must be a weight for each element of the array
 }</code></pre>
 </doc-codeblock></div>
-</doc-tab>
-</doc-tabs>
+<doc-anchor-target id="example">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#example">#</doc-anchor-trigger>
+        <span>Example</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">const array = [artifact1, artifact2];
+const associatedWeights = [30_000, Number.MAX_SAFE_INTEGER];
+
+const artifact = getRandomElementFromArray(array, {associatedWeights});
+artifact // Is always artifact2
+array // [artifact1] — artifact2 is sliced</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="real-example">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example">#</doc-anchor-trigger>
+        <span>Real example</span>
+    </h3>
+</doc-anchor-target>
+<p><em><strong>There are many events happening and we need to generate them according to the instantly changing context, with different probabilities for each one.</strong></em><br />
+The confusing &quot;event&quot; has been replaced by &quot;artifact&quot;.</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">interface IArtifactItem&lt;M = {}&gt; {
+    id: ArtifactEnum;
+    metadata?: IArtifactMetadata&lt;M&gt;;
+}
+
+interface IArtifactMetadata&lt;M&gt; {
+    weight: number;
+    canRepeat: boolean;
+    ...M
+}
+
+
+const pull = [...ArtifactItemsCollection.values()]
+    .map(item =&gt; ArtifactsCollection.get(item.id).fillItemWithMetadata(item, context))
+    .filter(({id}) =&gt; ArtifactsCollection.get(id).isAvailableIn(item, context));
+
+context.setPullData(pull, associatedWeights);
+
+const associatedWeights = pull.map(item =&gt; item.metadata.weights);
+for (let i = 0; i &lt; context.userReceiveArtifactCount; i++){
+    // Use typescript generic* for metadata
+    const item = Util.getRandomElementFromArray&lt;IArtifactItem&gt;(pull, {associatedWeights});
+    if (!item){
+      continue;
+    }
+
+    if (!item.metadata.canRepeat){
+        const index = pull.indexOf(event);
+        if (~index){
+            pull.splice(index, 1);
+            associatedWeights.splice(index, 1);
+        } 
+    }
+
+    const artifact = ArtifactsCollection.get(item.id);
+
+    try {
+        artifact.onReceived(item, context);
+    }
+    catch(error){
+        ErrorHandler.write(error, {source: Errors.UserArtifactReceive, data: {itemId: item.id}});
+    }
+
+
+    context.user.artifacts.push(item);
+}
+
+
+</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="getrandomelementindexinweights">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#getrandomelementindexinweights">#</doc-anchor-trigger>
+        <span>getRandomElementIndexInWeights</span>
+    </h2>
+</doc-anchor-target>
+<p><code v-pre>function getRandomElementIndexInWeights(weights: TWeights): number[]</code>;</p>
+<p>Params:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">type TWeights = NonNullable&lt;IParams[&quot;associatedWeights]&gt;</code></pre>
+</doc-codeblock></div>
+<p><strong>Description:</strong><br />
+Returns the numeric index of the random element. The probability depends directly on the value of the element.</p>
+<doc-anchor-target id="example-1">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#example-1">#</doc-anchor-trigger>
+        <span>Example</span>
+    </h3>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">const tickets = [1, 5, 15, 50];
+const index = getRandomElementIndexInWeights(tickets);
+
+// index === 0: P = 1  / 71
+// index === 1: P = 5  / 71
+// index === 2: P = 15 / 71
+// index === 3: P = 50 / 71</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="real-example-1">
+    <h4>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#real-example-1">#</doc-anchor-trigger>
+        <span>Real example</span>
+    </h4>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-typescript"><code v-pre class="language-typescript">// from getRandomElementFromArray source
+const index = associatedWeights
+    ? getRandomElementIndexInWeights(associatedWeights)
+    : getRandomNumberInRange({ max: array.length });</code></pre>
+</doc-codeblock></div>
 
                                 
                                 <!-- Required only on API pages -->
@@ -315,20 +309,20 @@ const document = new Util.yaml.Document(audit);</code></pre>
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/customcollector/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/omit/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Custom​Collector</span>
+                                                <span class="block mt-1">omit</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/extendedenum/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../objectives/randomnumberinrange/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Extended enumerations</span>
+                                                <span class="block mt-1">random​Number​In​Range</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -372,6 +366,6 @@ const document = new Util.yaml.Document(audit);</code></pre>
 
     <div id="docs-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "DotNotatedInterface", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "randomElementFromArray", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
 </body>
 </html>

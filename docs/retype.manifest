@@ -1,6 +1,6 @@
 {
   "version": "3.6.0",
-  "created": "2025-02-14T16:34:13Z",
+  "created": "2025-04-07T09:28:05Z",
   "files": [
     {
       "path": ".nojekyll"
@@ -45,13 +45,21 @@
       "path": "objectives/extendedenum/index.html"
     },
     {
-      "path": "objectives/getrandomelementfromarray/index.html"
+      "path": "objectives/getrandomelementfromarray/index.html",
+      "old": true
     },
     {
-      "path": "objectives/getrandomnumberinrange/index.html"
+      "path": "objectives/getrandomnumberinrange/index.html",
+      "old": true
     },
     {
       "path": "objectives/omit/index.html"
+    },
+    {
+      "path": "objectives/randomelementfromarray/index.html"
+    },
+    {
+      "path": "objectives/randomnumberinrange/index.html"
     },
     {
       "path": "objectives/rangetoarray/index.html"

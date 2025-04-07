@@ -2,16 +2,16 @@ import { expect, test } from "vitest";
 import {
 	RandomizerContext,
 	_WEIGHT_AUTO,
-	getRandomElementFromArray,
-	getRandomElementsFromArray,
-	thresholdsOf
-} from "../../src/objectives/getRandomElementFromArray";
+	randomElementFromArray,
+	randomElementsFromArray,
+	thresholdsOf,
+} from "../../src/objectives/randomElementFromArray";
 import { normalize_to_max_coefficient } from "../../src/primitives/normalize";
-test("getRandomElementFromArray", () => {
+test("randomElementFromArray", () => {
 	const array = [0, 1];
 	const associatedWeights = [1, 1];
 
-	const output = getRandomElementFromArray(array, {
+	const output = randomElementFromArray(array, {
 		associatedWeights,
 		filter: (item: number) => item === 1,
 	});
@@ -22,7 +22,7 @@ test("Every element included", () => {
 	const array = [0, 1, 2];
 	const associatedWeights = [1, 1, 1];
 	const pull = [] as number[];
-	getRandomElementFromArray(array, {
+	randomElementFromArray(array, {
 		associatedWeights,
 		filter: (item: number) => {
 			pull.push(item);
@@ -37,7 +37,7 @@ test("Every element included", () => {
 test("Without weights", () => {
 	const array = [0, 1, 2];
 	const pull = [] as number[];
-	getRandomElementFromArray(array, {
+	randomElementFromArray(array, {
 		filter: (item: number) => {
 			pull.push(item);
 			return false;
@@ -51,7 +51,7 @@ test("Without weights", () => {
 test("Use normalize to max coefficient", () => {
 	const array = [1, 1, 1, 1];
 	const associatedWeights = normalize_to_max_coefficient([0.5, 25, 30, 1]);
-	const result = getRandomElementFromArray(array, {
+	const result = randomElementFromArray(array, {
 		associatedWeights,
 	});
 	expect(result).toBe(1);
@@ -61,7 +61,7 @@ test("Float weights", () => {
 	const array = [0, 1, 2, 3];
 	const associatedWeights = normalize_to_max_coefficient([0.25, 25, 30, 1]);
 	const pull = [] as number[];
-	getRandomElementFromArray(array, {
+	randomElementFromArray(array, {
 		associatedWeights,
 		filter: (item: number) => {
 			pull.push(item);
@@ -77,7 +77,7 @@ test("Null weight", () => {
 	const array = [0, 1, 2, 3, 4];
 	const associatedWeights = normalize_to_max_coefficient([0.25, 25, 30, 1, 0]);
 	const pull = [] as number[];
-	getRandomElementFromArray(array, {
+	randomElementFromArray(array, {
 		associatedWeights,
 		filter: (item: number) => {
 			pull.push(item);
@@ -100,7 +100,7 @@ test("Max safe integer weight", () => {
 		Number.MAX_SAFE_INTEGER,
 	]);
 	const pull = [] as number[];
-	getRandomElementFromArray(array, {
+	randomElementFromArray(array, {
 		associatedWeights,
 		filter: (item: number) => {
 			pull.push(item);
@@ -116,7 +116,7 @@ test("Empty", () => {
 	const associatedWeights = normalize_to_max_coefficient([]);
 
 	expect(() =>
-		getRandomElementFromArray(array, {
+		randomElementFromArray(array, {
 			associatedWeights,
 		}),
 	).toThrow("Invalid array length");
@@ -125,13 +125,15 @@ test("Empty", () => {
 test("Repeats system", () => {
 	const ONCE_VALUE = Number.MAX_SAFE_INTEGER;
 	const REPEATED_VALUE = 2;
-	
+
 	const items = [ONCE_VALUE, REPEATED_VALUE];
 	const associatedWeights = normalize_to_max_coefficient(items);
-	
-	
+
 	const _returned = [] as number[];
-	const randomizer = new RandomizerContext(items, thresholdsOf(associatedWeights));
+	const randomizer = new RandomizerContext(
+		items,
+		thresholdsOf(associatedWeights),
+	);
 	for (let i = 0; i < 10; i++) {
 		const lottery_ctx = randomizer.playLottery()!;
 		const item = items[lottery_ctx.index_of_item];
@@ -141,8 +143,7 @@ test("Repeats system", () => {
 		}
 		_returned.push(item);
 	}
-		
-	
+
 	expect(_returned.filter((item) => item === ONCE_VALUE).length).toBe(1);
 	expect(_returned.filter((item) => item === REPEATED_VALUE).length).toBe(9);
 });
@@ -156,7 +157,7 @@ test("Auto keysymbol", () => {
 		},
 	];
 	expect(
-		getRandomElementFromArray(items, { associatedWeights: _WEIGHT_AUTO })!.value,
+		randomElementFromArray(items, { associatedWeights: _WEIGHT_AUTO })!.value,
 	).toBe(1);
 });
 
@@ -171,10 +172,11 @@ test("Never pick ends with undefined", () => {
 
 test("Amount system", () => {
 	const array = [1, 2, 3, 4, 5, 6, 7, 8];
-	expect(getRandomElementsFromArray(array, 3)).toHaveLength(3);
+	expect(randomElementsFromArray(array, 3)).toHaveLength(3);
 	expect(array).toHaveLength(8);
 
-	expect((getRandomElementsFromArray(array, 3, {
+	expect(
+		randomElementsFromArray(array, 3, {
 			associatedWeights: normalize_to_max_coefficient([
 				Number.MAX_SAFE_INTEGER,
 				Number.MAX_SAFE_INTEGER,
@@ -185,5 +187,6 @@ test("Amount system", () => {
 				1,
 				1,
 			]),
-		})).toSorted()).toStrictEqual([1, 2, 3])
+		}).toSorted(),
+	).toStrictEqual([1, 2, 3]);
 });

@@ -1,4 +1,4 @@
-import { getRandomNumberInRange } from "./getRandomNumberInRange.js";
+import { randomNumberInRange } from "./randomNumberInRange.js";
 
 interface IGlitchTextOptions {
 	step?: number;
@@ -41,7 +41,7 @@ class GlitchText {
 				word.push( String.fromCharCode(~~(Math.random() * 50)) );
 	
 			word.forEach((_, index, array) =>
-				array[index] = String.fromCharCode( getRandomNumberInRange({min: MIN, max: MAX}) ));
+				array[index] = String.fromCharCode( randomNumberInRange({min: MIN, max: MAX}) ));
 
 			yield word.join("");
 		}

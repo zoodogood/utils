@@ -1,4 +1,4 @@
-# getRandomElementFromArray
+# randomElementFromArray
 `function getRandomElementFromArray(array: TArray, {filter?, associatedWeights?}: IParams)<T>: T;`
 
 **Description:**  

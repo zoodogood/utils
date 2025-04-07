@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { binary_search } from "../primitives/binary_search.js";
 import { BusyNumeric, size_of_area } from "./BusyNumeric.js";
-import { getRandomNumberInRange } from "./getRandomNumberInRange.js";
+import { randomNumberInRange } from "./randomNumberInRange.js";
 
 export const _WEIGHT_AUTO = 1_000_001;
 interface IParams<T> {
@@ -59,7 +59,7 @@ export class RandomizerContext<T> {
 			if (!segments_count) {
 				break;
 			}
-			const target_of_free = getRandomNumberInRange({
+			const target_of_free = randomNumberInRange({
 				max: hotel.free_area - 1,
 			});
 			const position = (() => {
@@ -112,7 +112,7 @@ export class RandomizerContext<T> {
 			if (!segments_count) {
 				break;
 			}
-			const target_of_free = getRandomNumberInRange({
+			const target_of_free = randomNumberInRange({
 				max: hotel.free_area - 1,
 			});
 			const position = (() => {
@@ -176,7 +176,7 @@ export function thresholdsOf(weights: NonNullable<number[]>) {
 	return weights.map((weight) => (previousLimit += weight)) as number[];
 }
 
-export function getRandomElementIndexInWeights(
+export function randomElementIndexInWeights(
 	weights: NonNullable<number[]>,
 ): number | never {
 	const thresholds = thresholdsOf(weights);
@@ -201,7 +201,7 @@ export function getRandomElementIndexInWeights(
 
   Повторяем 
   */
-export function getRandomElementFromArray<T>(
+export function randomElementFromArray<T>(
 	array: T[],
 	{ associatedWeights, filter = () => true }: IParams<T> = {},
 ) {
@@ -224,7 +224,7 @@ export function getRandomElementFromArray<T>(
 	// light strategy
 	if (!filter) {
 		if (associatedWeights) {
-			return array[getRandomElementIndexInWeights(associatedWeights)];
+			return array[randomElementIndexInWeights(associatedWeights)];
 		}
 		return array[Math.floor(Math.random() * array.length)];
 	}
@@ -235,7 +235,7 @@ export function getRandomElementFromArray<T>(
 	}).pickRandom(({ item }) => filter(item));
 }
 
-export function getRandomElementsFromArray<T>(
+export function randomElementsFromArray<T>(
 	array: T[],
 	amount = 1,
 	{ associatedWeights, filter = () => true }: IParams<T> = {},
@@ -244,7 +244,7 @@ export function getRandomElementsFromArray<T>(
 	assert(amount <= array.length);
 	assert(
 		amount > 1,
-		`Current amount: ${amount}, use getRandomElementFromArray instead of getRandomElement**s**FromArray if amount is 1`,
+		`Current amount: ${amount}, use randomElementFromArray instead of randomElement**s**FromArray if amount is 1`,
 	);
 	if (associatedWeights === _WEIGHT_AUTO) {
 		// @ts-expect-error User know about AUTO keysymbol

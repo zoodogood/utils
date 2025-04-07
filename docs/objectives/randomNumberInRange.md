@@ -1,4 +1,4 @@
-# getRandomNumberInRange
+# randomNumberInRange
 function getRandomNumberInRange({min?, max, needRound?}: IParams): number;
 
 **Description:**  

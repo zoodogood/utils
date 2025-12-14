@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"includes": ["./**", "!!docs/public", "!!**/*.build.*", "!!dist"]
 	},
 	"formatter": {
 		"enabled": true,

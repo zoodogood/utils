@@ -34,7 +34,8 @@
 	},
 	"javascript": {
 		"formatter": {
-			"quoteStyle": "double"
+			"semicolons": "asNeeded",
+			"quoteStyle": "single"
 		}
 	}
 }

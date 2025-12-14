@@ -3,9 +3,8 @@
 	"type": "module",
 	"version": "7.0.0-change.4513",
 	"description": "",
-	"main": "lib/index.js",
+	"main": "dist/index.js",
 	"homepage": "https://zoodogood.github.io/utils",
-	"types": "lib/index.d.ts",
 	"scripts": {
 		"test": "vitest --run",
 		"docs-build": "cd ./docs && retype build  --output ./public",
@@ -15,14 +14,28 @@
 		"tsc": "tsc",
 		"vitest": "vitest"
 	},
-	"typings": "lib/index",
 	"exports": {
-		".": "./lib/index.js",
-		"./primitives": "./lib/primitives/mod.js",
-		"./objectives": "./lib/objectives/mod.js",
-		"./discordjs": "./lib/discordjs/mod.js",
-		"./nodejs": "./lib/nodejs/mod.js",
-		"./CliParser": "./lib/primitives/CliParser.js"
+		".": "./dist/index.js",
+		"./primitives": {
+			"types": "./dist/primitives/mod.d.ts",
+			"default": "./dist/primitives/mod.js"
+		},
+		"./objectives": {
+			"types": "./dist/objectives/mod.d.ts",
+			"default": "./dist/objectives/mod.js"
+		},
+		"./discordjs": {
+			"types": "./dist/discordjs/mod.d.ts",
+			"default": "./dist/discordjs/mod.js"
+		},
+		"./nodejs": {
+			"types": "./dist/nodejs/mod.d.ts",
+			"default": "./dist/nodejs/mod.js"
+		},
+		"./CliParser": {
+			"types": "./dist/primitives/CliParser.js",
+			"default": "./dist/primitives/CliParser.js"
+		},
 	},
 	"repository": {
 		"type": "git",
@@ -44,30 +57,8 @@
 		"discord.js": ">=14.x.x"
 	},
 	"files": [
-		"lib"
+		"dist"
 	],
-	"typesVersions": {
-		">=4.2": {
-			".": [
-				"lib/index.d.ts"
-			],
-			"primitives": [
-				"lib/primitives/mod.d.ts"
-			],
-			"objectives": [
-				"lib/objectives/mod.d.ts"
-			],
-			"discordjs": [
-				"lib/discordjs/mod.d.ts"
-			],
-			"nodejs": [
-				"lib/nodejs/mod.d.ts"
-			],
-			"CliParser": [
-				"lib/primitives/CliParser.d.ts"
-			]
-		}
-	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild"

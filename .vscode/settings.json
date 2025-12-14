@@ -5,6 +5,7 @@
 	"javascript.preferences.importModuleSpecifier": "relative",
 	"typescript.preferences.importModuleSpecifier": "relative",
 	"editor.codeActionsOnSave": {
+		"source.fixAll.biome": "always",
 		"source.organizeImports": "never",
 		"source.organizeImports.biome": "always"
 	},
@@ -18,10 +19,10 @@
 		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"search.exclude": {
-		"**/lib": true
+		"**/dist": true
 	},
 	"files.exclude": {
 		"docs/public": true,
-		"lib": true
+		"dist": true
 	}
 }

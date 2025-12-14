@@ -1,7 +1,7 @@
 interface IGetRandomValueOptions {
-	min?: number;
-	max: number;
-	needRound?: boolean;
+	min?: number
+	max: number
+	needRound?: boolean
 }
 
 function randomNumberInRange({
@@ -9,12 +9,12 @@ function randomNumberInRange({
 	max,
 	needRound = true,
 }: IGetRandomValueOptions) {
-	let value = Math.random() * (max - min + Number(needRound)) + min;
+	let value = Math.random() * (max - min + Number(needRound)) + min
 
 	if (needRound) {
-		value = Math.floor(value);
+		value = Math.floor(value)
 	}
-	return value;
+	return value
 }
 
-export { randomNumberInRange };
+export { randomNumberInRange }

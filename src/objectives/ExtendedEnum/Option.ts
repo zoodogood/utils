@@ -1,16 +1,16 @@
-import { BaseExtendedEnum, BaseExtendedEnumPartial } from "./main.js";
+import { BaseExtendedEnum, BaseExtendedEnumPartial } from './main.js'
 
 class Some<T> extends BaseExtendedEnumPartial<T> {
-  static value = 1;
+	static value = 1
 }
 
 class None<T> extends BaseExtendedEnumPartial<T> {
-  static value = 0;
+	static value = 0
 }
 
 export class Option extends BaseExtendedEnum {
-  static Some = Some;
+	static Some = Some
 
-  static None = None;
+	static None = None
 }
-export type TOption<T = unknown, E = unknown> = Some<T> | None<E>;
+export type TOption<T = unknown, E = unknown> = Some<T> | None<E>

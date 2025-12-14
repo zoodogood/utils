@@ -1,1 +1,1 @@
-export { default as getChildProcessUtils } from './getChildProcessUtils.js';
+export { default as getChildProcessUtils } from './getChildProcessUtils.js'

@@ -11,8 +11,7 @@
 		/* Completeness */
 		"skipLibCheck": true,
 		"lib": ["esnext", "DOM"],
-		"outDir": "lib",
-		"baseUrl": "src",
+		"outDir": "dist",
 		"allowJs": true,
 		"moduleResolution": "NodeNext",
 		"declarationMap": true

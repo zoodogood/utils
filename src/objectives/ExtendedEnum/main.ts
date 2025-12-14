@@ -1,64 +1,68 @@
-import { deepEqual, checkProperiesExistsOrEqual } from "../equal.js";
+import { checkProperiesExistsOrEqual, deepEqual } from '../equal.js'
 
 export class BaseExtendedEnumPartial<T = undefined> {
-  static value = 1;
-  static from(data: object) {
-    return Object.assign(Object.create(this.prototype), data);
-  }
+	static value = 1
+	static from(data: object) {
+		return Object.assign(Object.create(BaseExtendedEnumPartial.prototype), data)
+	}
 
-  #props?: T;
+	#props?: T
 
-  get props(): T | undefined {
-    return this.#props;
-  }
+	get props(): T | undefined {
+		return this.#props
+	}
 
-  set props(props: T) {
-    this.#props = props;
-  }
+	set props(props: T) {
+		this.#props = props
+	}
 
-  constructor(props: T) {
-    this.props = props;
-  }
+	constructor(props: T) {
+		this.props = props
+	}
 
-  includes(props: T) {
-    return props !== null && typeof props === "object"
-      ? checkProperiesExistsOrEqual(
-          props,
-          this.props as { [key: string]: unknown },
-        )
-      : this.props === props;
-  }
+	includes(props: T) {
+		return props !== null && typeof props === 'object'
+			? checkProperiesExistsOrEqual(
+					props,
+					this.props as { [key: string]: unknown },
+				)
+			: this.props === props
+	}
 
-  some(props: T) {
-    return deepEqual(this.props, props);
-  }
+	some(props: T) {
+		return deepEqual(this.props, props)
+	}
 
-  is(constructor: typeof BaseExtendedEnumPartial) {
-    return this instanceof constructor;
-  }
+	is(_constructor: typeof BaseExtendedEnumPartial) {
+		return this instanceof _constructor
+	}
 
-  toBoolean() {
-    const constructor = this.constructor as typeof BaseExtendedEnumPartial;
-    return Boolean(constructor.value);
-  }
+	toBoolean() {
+		const _constructor = this.constructor as typeof BaseExtendedEnumPartial
+		return Boolean(_constructor.value)
+	}
 
-  unwrap() {
-    return this.expect();
-  }
+	unwrap() {
+		return this.expect()
+	}
 
-  expect(message?: string) {
-    if (!this.toBoolean()) {
-      throw new Error(message);
-    }
-    return this.props;
-  }
+	expect(message?: string) {
+		if (!this.toBoolean()) {
+			throw new Error(message)
+		}
+		return this.props
+	}
 }
 
+/**
+ * @deprecated
+ */
+// biome-ignore lint/complexity/noStaticOnlyClass: is naive brand
 export class BaseExtendedEnum {
-  static is(
-    instance: BaseExtendedEnumPartial<unknown>,
-    constructor: typeof BaseExtendedEnumPartial,
-  ) {
-    return instance instanceof constructor;
-  }
+	static is(
+		instance: BaseExtendedEnumPartial<unknown>,
+		_constructor: typeof BaseExtendedEnumPartial,
+	) {
+		return instance instanceof _constructor
+	}
 }

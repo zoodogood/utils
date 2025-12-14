@@ -1,10 +1,10 @@
-import type { APIEmbed } from "discord-api-types/v10";
 import type {
 	Embed,
 	JSONEncodable,
 	Message,
 	MessageCreateOptions,
-} from "discord.js";
+} from 'discord.js'
+import type { APIEmbed } from 'discord-api-types/v10'
 
 export function main_embed_of(
 	message: Message | MessageCreateOptions,
@@ -12,5 +12,5 @@ export function main_embed_of(
 	return message.embeds?.[0] as Exclude<
 		Embed | APIEmbed | undefined,
 		JSONEncodable<APIEmbed>
-	>;
+	>
 }

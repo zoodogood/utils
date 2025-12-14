@@ -5,26 +5,27 @@ import {
 	EmbedBuilder,
 	Message,
 	type MessageCreateOptions,
+	type MessageReaction,
 	type PartialGroupDMChannel,
+	resolveColor,
 	type SendableChannels,
 	User,
-	resolveColor,
-} from "discord.js";
+} from 'discord.js'
 
-import { chain_map } from "./chain/map.js";
+import { chain_map } from './chain/map.js'
 import {
 	_rob_already_prepared,
 	move_partial_data_to_chain,
-} from "./chain/move_partial_data_to_chain.js";
-import { codeOfEmoji } from "./helpers.js";
-import { justComponents } from "./message_components.js";
-import { diagnosticLimits } from "./message_content_limits.js";
+} from './chain/move_partial_data_to_chain.js'
+import { codeOfEmoji } from './helpers.js'
+import { justComponents } from './message_components.js'
+import { diagnosticLimits } from './message_content_limits.js'
 import {
-	onMessageDelete as ChainLifecycleOnMessageDelete,
-	type MaySplitConfiguration,
 	_chain_child,
 	_chain_parent,
-} from "./mod.js";
+	onMessageDelete as ChainLifecycleOnMessageDelete,
+	type MaySplitConfiguration,
+} from './mod.js'
 
 function sendableOf<
 	T extends
@@ -36,81 +37,81 @@ function sendableOf<
 >(
 	target: T,
 ): {
-	send: (payload: MessageCreateOptions) => Promise<Message>;
+	send: (payload: MessageCreateOptions) => Promise<Message>
 } {
 	if (target instanceof User || target.isSendable?.()) {
-		return target;
+		return target
 	}
-	if ("channel" in target) {
+	if ('channel' in target) {
 		return target.channel as Exclude<
 			typeof target.channel,
 			PartialGroupDMChannel
-		>;
+		>
 	}
-	throw new Error("Invalid target");
+	throw new Error('Invalid target')
 }
 
 export interface AdvancedPayload {
-	content?: string;
-	reference?: string;
-	ephemeral?: boolean;
-	fetchReply?: boolean;
-	title?: string;
-	url?: string;
-	edit?: boolean;
-	author?: { name: string; iconURL?: string };
-	thumbnail?: string;
-	color?: ColorResolvable;
-	description?: string;
-	fields?: { name: string; value: string; inline?: boolean }[];
-	image?: string;
-	video?: string;
-	footer?: { text: string; iconURL?: string };
-	timestamp?: string;
-	delete?: number;
-	reactions?: string[];
-	maySplitMessage?: MaySplitConfiguration;
-	_chain_child?: AdvancedPayload;
-	components?: ReturnType<typeof justComponents>;
-	files?: AttachmentBuilder[];
+	content?: string
+	reference?: string
+	ephemeral?: boolean
+	fetchReply?: boolean
+	title?: string
+	url?: string
+	edit?: boolean
+	author?: { name: string; iconURL?: string }
+	thumbnail?: string
+	color?: ColorResolvable
+	description?: string
+	fields?: { name: string; value: string; inline?: boolean }[]
+	image?: string
+	video?: string
+	footer?: { text: string; iconURL?: string }
+	timestamp?: string
+	delete?: number
+	reactions?: string[]
+	maySplitMessage?: MaySplitConfiguration
+	_chain_child?: AdvancedPayload
+	components?: ReturnType<typeof justComponents>
+	files?: AttachmentBuilder[]
 }
 
 export function isEmptyEmbed(
-	embed: { [key in keyof EmbedBuilder["data"]]: unknown },
+	embed: { [key in keyof EmbedBuilder['data']]: unknown },
 ) {
 	const EMBED_PROPERTIES = [
-		"title",
-		"author",
-		"thumbnail",
-		"description",
-		"fields",
-		"image",
-		"footer",
-		"timestamp",
-		"video",
-	];
+		'title',
+		'author',
+		'thumbnail',
+		'description',
+		'fields',
+		'image',
+		'footer',
+		'timestamp',
+		'video',
+	]
 	// in isEmptyEmbed context is a good compare
 	const isEveryPropertyDefault = EMBED_PROPERTIES.every(
 		(key) => Boolean(embed[key as keyof typeof embed]) === false,
-	);
+	)
 
-	return isEveryPropertyDefault;
+	return isEveryPropertyDefault
 }
 
 export function createMessage(mut_payload: AdvancedPayload) {
 	if (mut_payload.ephemeral && mut_payload.maySplitMessage) {
-		throw new Error("Don't use ephemeral option with message spliting");
+		throw new Error("Don't use ephemeral option with message spliting")
 	}
-	const { maySplitMessage } = mut_payload;
+	const { maySplitMessage } = mut_payload
 	maySplitMessage &&
 		(() => {
-			const diagnostic = diagnosticLimits(mut_payload, maySplitMessage.fields);
+			const diagnostic = diagnosticLimits(mut_payload, maySplitMessage.fields)
 			if (!diagnostic.isExceeding && !mut_payload._chain_child) {
-				return;
+				return
 			}
 
-			move_partial_data_to_chain(mut_payload, maySplitMessage, diagnostic);
-		})();
+			move_partial_data_to_chain(mut_payload, maySplitMessage, diagnostic)
+		})()
 	const {
 		content,
 		title,
@@ -129,7 +130,7 @@ export function createMessage(mut_payload: AdvancedPayload) {
 		components,
 		files,
 		reference,
-	} = mut_payload;
+	} = mut_payload
 	const message: MessageCreateOptions = {
 		// @ts-expect-error
 		components: components ? justComponents(components) : null,
@@ -138,7 +139,7 @@ export function createMessage(mut_payload: AdvancedPayload) {
 		fetchReply,
 		files,
 		reply: reference ? { messageReference: reference } : undefined,
-	};
+	}
 
 	const embed = new EmbedBuilder({
 		title,
@@ -146,19 +147,19 @@ export function createMessage(mut_payload: AdvancedPayload) {
 		author,
 		thumbnail: thumbnail ? { url: thumbnail } : undefined,
 		description,
-		color: resolveColor(color ?? "Random"),
+		color: resolveColor(color ?? 'Random'),
 		fields,
 		image: image ? { url: image } : undefined,
 		video: video ? { url: video } : undefined,
 		footer,
 		timestamp,
-	});
+	})
 
 	if (!isEmptyEmbed(embed.data)) {
-		message.embeds = [embed];
+		message.embeds = [embed]
 	}
 
-	return message;
+	return message
 }
 
 /**
@@ -170,8 +171,8 @@ export async function justSendMessage<InGuild extends boolean>(
 	target: Parameters<typeof sendableOf>[0],
 	payload: AdvancedPayload,
 ) {
-	const _payload = { ...payload };
-	return sendMessage<InGuild>(target, createMessage(_payload), _payload);
+	const _payload = { ...payload }
+	return sendMessage<InGuild>(target, createMessage(_payload), _payload)
 }
 
 export async function sendMessage<InGuild extends boolean>(
@@ -179,7 +180,7 @@ export async function sendMessage<InGuild extends boolean>(
 	message_data: ReturnType<typeof createMessage>,
 	mut_payload: AdvancedPayload,
 ): Promise<Message<InGuild>> {
-	const { maySplitMessage } = mut_payload;
+	const { maySplitMessage } = mut_payload
 	maySplitMessage &&
 		mut_payload.edit &&
 		!mut_payload._chain_child &&
@@ -187,21 +188,21 @@ export async function sendMessage<InGuild extends boolean>(
 			const message =
 				target instanceof Message
 					? target
-					: "message" in target && (target.message as Message);
+					: 'message' in target && (target.message as Message)
 			if (!message) {
-				return;
+				return
 			}
-			const chain = chain_map.get(message.id)?.slice(1);
+			const chain = chain_map.get(message.id)?.slice(1)
 
 			const is_chain_last_item =
-				chain && chain.indexOf(message.id) === chain.length - 1;
+				chain && chain.indexOf(message.id) === chain.length - 1
 			if (!chain || is_chain_last_item) {
-				return;
+				return
 			}
-			const diagnostic = diagnosticLimits(mut_payload, maySplitMessage.fields);
-			move_partial_data_to_chain(mut_payload, maySplitMessage, diagnostic);
-			_rob_already_prepared(message_data, mut_payload);
-		})();
+			const diagnostic = diagnosticLimits(mut_payload, maySplitMessage.fields)
+			move_partial_data_to_chain(mut_payload, maySplitMessage, diagnostic)
+			_rob_already_prepared(message_data, mut_payload)
+		})()
 
 	const message: Message<InGuild> =
 		target instanceof BaseInteraction
@@ -212,57 +213,57 @@ export async function sendMessage<InGuild extends boolean>(
 					: target.reply(message_data))
 			: await (mut_payload.edit
 					? target.edit(message_data)
-					: target.send(message_data));
+					: target.send(message_data))
 
 	if (mut_payload.delete) {
 		setTimeout(() => {
-			ChainLifecycleOnMessageDelete(message);
-			message.delete();
-		}, mut_payload.delete);
+			ChainLifecycleOnMessageDelete(message)
+			message.delete()
+		}, mut_payload.delete)
 	}
 
 	if (mut_payload._chain_child) {
-		mut_payload._chain_child ||= {};
-		mut_payload._chain_child.reference = message.id;
-		let createdNow = false;
+		mut_payload._chain_child ||= {}
+		mut_payload._chain_child.reference = message.id
+		let createdNow = false
 
 		const child_message: Message<InGuild> =
 			message[_chain_child] ||
 			(await (async () => {
-				const chain = chain_map.get(message.id)?.slice(1);
+				const chain = chain_map.get(message.id)?.slice(1)
 				if (!chain) {
-					return;
+					return
 				}
-				const index = chain.indexOf(message.id);
+				const index = chain.indexOf(message.id)
 				if (index === 0) {
-					return;
+					return
 				}
-				const child_message_id = chain[index + 1];
+				const child_message_id = chain[index + 1]
 				if (!child_message_id) {
-					return;
+					return
 				}
 
 				return await (sendableOf(target) as SendableChannels).messages.fetch(
 					child_message_id,
-				);
+				)
 			})()) ||
 			(await (async () => {
 				const child_message = await justSendMessage(
 					sendableOf(target),
 					mut_payload._chain_child!,
-				);
-				createdNow = true;
-				child_message[_chain_parent] = mut_payload;
-				message[_chain_child] = child_message;
-				return child_message;
-			})());
+				)
+				createdNow = true
+				child_message[_chain_parent] = mut_payload
+				message[_chain_child] = child_message
+				return child_message
+			})())
 		if (!createdNow) {
 			await justSendMessage<InGuild>(
 				child_message,
 				Object.assign({}, mut_payload._chain_child, { edit: true }),
-			);
+			)
 		}
-		chain_map.update(message, child_message, message.channelId);
+		chain_map.update(message, child_message, message.channelId)
 	}
 
 	if (mut_payload.reactions) {
@@ -271,11 +272,14 @@ export async function sendMessage<InGuild extends boolean>(
 			.filter(
 				(react) =>
 					!message.reactions?.cache.some(
-						(compared) => codeOfEmoji(compared.emoji) === react,
+						(compared: MessageReaction) =>
+							codeOfEmoji(compared.emoji) === react,
 					),
 			)
-			.forEach((react) => message.react(react));
+			.forEach((react) => {
+				message.react(react)
+			})
 	}
 
-	return message;
+	return message
 }

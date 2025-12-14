@@ -41,8 +41,8 @@ export class LazySort<T>
 
   @ofNumbers(numbers: number[])
     new @ numbers.map [&, &]
-  @ofArrayMapValue<T>(array: T[], valueOf: (T: T, index: number, arr: T[]) => T)
-    new @ array.map ($, i, arr) => [$, valueOf($, i, arr)] as WithValue<T>
+  @ofArrayMapValue<T>(array: T[], itemOf: (T: T, index: number, arr: T[]) => T)
+    new @ array.map ($, i, arr) => [$, itemOf($, i, arr)] as WithValue<T>
   
   
   @(@iterable: WithValue<T>[], {@revert = false, @chunks_count = GOOD_CHUNKS_COUNT, @emulate = ArrayEmulateStrategy.Partial}: Configuration = {})

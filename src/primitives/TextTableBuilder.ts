@@ -1,522 +1,517 @@
 interface ITextTableGeneratorContext {
-  content: string;
-  metadata: IContextMetadata;
-  currentRow: number;
+	content: string
+	metadata: IContextMetadata
+	currentRow: number
 }
 
 interface IContextMetadata {
-  columns?: { largestLength: number }[];
-  tableWidth?: number;
-  separatorsIndexesInRow?: number[];
+	columns?: { largestLength: number }[]
+	tableWidth?: number
+	separatorsIndexesInRow?: number[]
 }
 
 function getRowType(row: TTableRow): SpecialRowTypeEnum {
-  if ("type" in row === false) {
-    return SpecialRowTypeEnum.Default;
-  }
-  return (row as Exclude<TTableRow, ITableCell[]>).type;
+	if ('type' in row === false) {
+		return SpecialRowTypeEnum.Default
+	}
+	return (row as Exclude<TTableRow, ITableCell[]>).type
 }
 
 function isCell(target: any) {
-  if (!target){
-    return false;
-  }
-  return "value" in target && "options" in target;
+	if (!target) {
+		return false
+	}
+	return 'value' in target && 'options' in target
 }
 
 function emptyCell() {
-  return {
-    value: "",
-    options: DEFAULT_CELL_OPTIONS,
-  } as ITableCell;
+	return {
+		value: '',
+		options: DEFAULT_CELL_OPTIONS,
+	} as ITableCell
 }
 
 function addPaddingByCellAlign(
-  original: string,
-  totalForAdd: number,
-  align: CellAlignEnum
+	original: string,
+	totalForAdd: number,
+	align: CellAlignEnum,
 ) {
-  const addidableGapLeft =
-    align === CellAlignEnum.Right
-      ? totalForAdd
-      : align === CellAlignEnum.Center
-      ? Math.floor(totalForAdd / 2)
-      : 0;
+	const addidableGapLeft =
+		align === CellAlignEnum.Right
+			? totalForAdd
+			: align === CellAlignEnum.Center
+				? Math.floor(totalForAdd / 2)
+				: 0
 
-  const addidableGapRight =
-    align === CellAlignEnum.Left
-      ? totalForAdd
-      : align === CellAlignEnum.Center
-      ? Math.ceil(totalForAdd / 2)
-      : 0;
+	const addidableGapRight =
+		align === CellAlignEnum.Left
+			? totalForAdd
+			: align === CellAlignEnum.Center
+				? Math.ceil(totalForAdd / 2)
+				: 0
 
-  return `${" ".repeat(addidableGapLeft)}${original}${" ".repeat(
-    addidableGapRight
-  )}`;
+	return `${' '.repeat(addidableGapLeft)}${original}${' '.repeat(
+		addidableGapRight,
+	)}`
 }
 
 function changeContentSetCellMinWidth(cell: ITableCell, minWidth: number) {
-  const currentMin = calculateCellMinWidth(cell);
-  if (minWidth <= currentMin) {
-    return cell;
-  }
+	const currentMin = calculateCellMinWidth(cell)
+	if (minWidth <= currentMin) {
+		return cell
+	}
 
-  const {
-    value,
-    options: { align },
-  } = cell;
-  const lack = minWidth - currentMin;
-  cell.value = addPaddingByCellAlign(value, lack, align);
-  return cell;
+	const {
+		value,
+		options: { align },
+	} = cell
+	const lack = minWidth - currentMin
+	cell.value = addPaddingByCellAlign(value, lack, align)
+	return cell
 }
 
 function changeContentSetCellMaxWidth(cell: ITableCell, maxWidth: number) {
-  const current = calculateCellMinWidth(cell);
-  if (maxWidth >= current) {
-    return cell;
-  }
+	const current = calculateCellMinWidth(cell)
+	if (maxWidth >= current) {
+		return cell
+	}
 
-  let overage = current - maxWidth;
+	let overage = current - maxWidth
 
-  const gapDirection =
-    cell.options.align === CellAlignEnum.Left ? "gapRight" : "gapLeft";
-  if (cell.options[gapDirection] > 1) {
-    cell.options[gapDirection]--;
-    overage--;
-    if (overage === 0) {
-      return;
-    }
-  }
+	const gapDirection =
+		cell.options.align === CellAlignEnum.Left ? 'gapRight' : 'gapLeft'
+	if (cell.options[gapDirection] > 1) {
+		cell.options[gapDirection]--
+		overage--
+		if (overage === 0) {
+			return
+		}
+	}
 
-  const suffix = "..";
-  const sliced = cell.value.slice(0, -(overage + suffix.length));
-  cell.value = sliced + suffix;
-  return cell;
+	const suffix = '..'
+	const sliced = cell.value.slice(0, -(overage + suffix.length))
+	cell.value = sliced + suffix
+	return cell
 }
 
 function calculateCellMinWidth(cell: ITableCell) {
-  const { gapLeft, gapRight } = cell.options;
-  return cell.value.length + gapLeft + gapRight;
+	const { gapLeft, gapRight } = cell.options
+	return cell.value.length + gapLeft + gapRight
 }
 
 class TextTableGenerator {
-  private data: TTableRow[] = [];
-  private options: ITableOptions;
-  private context: ITextTableGeneratorContext = {
-    content: "",
-    metadata: {},
-    currentRow: 0,
-  };
+	private data: TTableRow[] = []
+	private options: ITableOptions
+	private context: ITextTableGeneratorContext = {
+		content: '',
+		metadata: {},
+		currentRow: 0,
+	}
 
-  constructor(rows: TextTableGenerator["data"], options: ITableOptions) {
-    this.data = rows;
-    this.options = options;
+	constructor(rows: TextTableGenerator['data'], options: ITableOptions) {
+		this.data = rows
+		this.options = options
 
-    this.parseMetadata();
-  }
+		this.parseMetadata()
+	}
 
-  generateTextContent() {
-    const context = this.context;
+	generateTextContent() {
+		const context = this.context
 
-    if (this.options.borderTop !== null) {
-      context.content += this.drawBlockBorder(BorderDirectionEnum.BorderTop);
-      context.content += "\n";
-    }
+		if (this.options.borderTop !== null) {
+			context.content += this.drawBlockBorder(BorderDirectionEnum.BorderTop)
+			context.content += '\n'
+		}
 
-    for (const row of this.data) {
-      context.currentRow = this.data.indexOf(row);
-      context.content += this.drawRow(row);
-      context.content += "\n";
-    }
+		for (const row of this.data) {
+			context.currentRow = this.data.indexOf(row)
+			context.content += this.drawRow(row)
+			context.content += '\n'
+		}
 
-    if (this.options.borderBottom !== null) {
-      context.content += this.drawBlockBorder(BorderDirectionEnum.BorderBottom);
-    }
+		if (this.options.borderBottom !== null) {
+			context.content += this.drawBlockBorder(BorderDirectionEnum.BorderBottom)
+		}
 
-    return context.content;
-  }
+		return context.content
+	}
 
-  getColumns() {
-    const columns = [];
-    const rows = this.data;
-    const largestCellsCount = Math.max(
-      ...rows
-        .filter((row) => getRowType(row) === SpecialRowTypeEnum.Default)
-        .map((row) => (row as ITableCell[]).length)
-    );
+	getColumns() {
+		const columns = []
+		const rows = this.data
+		const largestCellsCount = Math.max(
+			...rows
+				.filter((row) => getRowType(row) === SpecialRowTypeEnum.Default)
+				.map((row) => (row as ITableCell[]).length),
+		)
 
-    for (let index = 0; index < largestCellsCount; index++) {
-      const column = rows.map((row) =>
-        getRowType(row) === SpecialRowTypeEnum.Default
-          ? (row as ITableCell[]).at(index) ?? null
-          : { row }
-      );
+		for (let index = 0; index < largestCellsCount; index++) {
+			const column = rows.map((row) =>
+				getRowType(row) === SpecialRowTypeEnum.Default
+					? ((row as ITableCell[]).at(index) ?? null)
+					: { row },
+			)
 
-      columns.push(column);
-    }
+			columns.push(column)
+		}
 
-    return columns;
-  }
+		return columns
+	}
 
-  parseMetadata() {
-    const metadata = this.context.metadata;
+	parseMetadata() {
+		const metadata = this.context.metadata
 
-    const columns = this.getColumns();
-    const columnsMetadata = columns.map((column) => ({
-      largestLength: Math.max(
-        ...column.map((element) =>
-          isCell(element) ? calculateCellMinWidth(element as ITableCell) : 0
-        )
-      ),
-    }));
+		const columns = this.getColumns()
+		const columnsMetadata = columns.map((column) => ({
+			largestLength: Math.max(
+				...column.map((element) =>
+					isCell(element) ? calculateCellMinWidth(element as ITableCell) : 0,
+				),
+			),
+		}))
 
-    metadata.columns = columnsMetadata;
+		metadata.columns = columnsMetadata
 
-    metadata.tableWidth = this.calculateTableWidth();
+		metadata.tableWidth = this.calculateTableWidth()
 
-    metadata.separatorsIndexesInRow = (() => {
-      const indexes: number[] = [];
-      let current = 0;
-      if (!!this.options.borderLeft) {
-        indexes.push(current);
-      }
-      for (const { largestLength } of columnsMetadata) {
-        current += largestLength + 1;
-        indexes.push(current);
-      }
+		metadata.separatorsIndexesInRow = (() => {
+			const indexes: number[] = []
+			let current = 0
+			if (this.options.borderLeft) {
+				indexes.push(current)
+			}
+			for (const { largestLength } of columnsMetadata) {
+				current += largestLength + 1
+				indexes.push(current)
+			}
 
-      if (!this.options.borderRight) {
-        indexes.pop();
-      }
+			if (!this.options.borderRight) {
+				indexes.pop()
+			}
 
-      return indexes;
-    })();
-  }
+			return indexes
+		})()
+	}
 
-  drawRow(row: TTableRow) {
-    let content = "";
-    const context = this.context;
-    const { columns } = context.metadata;
-    const columnsCount = columns!.length;
+	drawRow(row: TTableRow) {
+		let content = ''
+		const context = this.context
+		const { columns } = context.metadata
+		const columnsCount = columns!.length
 
-    if (getRowType(row) === SpecialRowTypeEnum.Default) {
-      row = row as ITableCell[];
-      content += this.options.borderLeft?.(context, context.currentRow) ?? "";
-      
+		if (getRowType(row) === SpecialRowTypeEnum.Default) {
+			row = row as ITableCell[]
+			content += this.options.borderLeft?.(context, context.currentRow) ?? ''
 
-      for (let cellIndex = 0; cellIndex < columnsCount; cellIndex++)  {
-        const cell = row.at(+cellIndex)! ?? emptyCell();
+			for (let cellIndex = 0; cellIndex < columnsCount; cellIndex++) {
+				const cell = row.at(+cellIndex)! ?? emptyCell()
 
-        const expectedWidth = columns!.at(+cellIndex)!.largestLength;
-        
-        content += this.drawCell(cell, expectedWidth);
+				const expectedWidth = columns!.at(+cellIndex)!.largestLength
 
-        if (+cellIndex !== columnsCount - 1) {
-          content += !cell.options.removeNextSeparator
-            ? this.options.separator
-            : " ";
-        }
-      }
+				content += this.drawCell(cell, expectedWidth)
 
-      content += this.options.borderRight?.(context, context.currentRow) ?? "";
-      return content;
-    }
+				if (+cellIndex !== columnsCount - 1) {
+					content += !cell.options.removeNextSeparator
+						? this.options.separator
+						: ' '
+				}
+			}
 
-    if (getRowType(row) === SpecialRowTypeEnum.Display) {
-      row = row as ITableSpecialDisplayRow;
-      content += this.drawLine(row.display);
-    }
+			content += this.options.borderRight?.(context, context.currentRow) ?? ''
+			return content
+		}
 
-    return content;
-  }
+		if (getRowType(row) === SpecialRowTypeEnum.Display) {
+			row = row as ITableSpecialDisplayRow
+			content += this.drawLine(row.display)
+		}
 
-  drawCell(cell: ITableCell, expectedWidth: number) {
-    const { gapLeft, gapRight, align } = cell.options;
-    const { value } = cell;
+		return content
+	}
 
-    const minContentLength = calculateCellMinWidth(cell);
-    const lack = expectedWidth - minContentLength;
+	drawCell(cell: ITableCell, expectedWidth: number) {
+		const { gapLeft, gapRight, align } = cell.options
+		const { value } = cell
 
-    const contentWithPadding = addPaddingByCellAlign(value, lack, align);
+		const minContentLength = calculateCellMinWidth(cell)
+		const lack = expectedWidth - minContentLength
 
-    return `${" ".repeat(gapLeft)}${contentWithPadding}${" ".repeat(gapRight)}`;
-  }
+		const contentWithPadding = addPaddingByCellAlign(value, lack, align)
 
-  drawLine(setSymbol: TCellSetSymbolCallback) {
-    let content = "";
-    const context = this.context;
-    const length = this.calculateTableWidth();
+		return `${' '.repeat(gapLeft)}${contentWithPadding}${' '.repeat(gapRight)}`
+	}
 
-    for (const index of [...new Array(length)].map((_, index) => index)) {
-      const symbol = setSymbol!(context, +index);
-      content += symbol;
-    }
+	drawLine(setSymbol: TCellSetSymbolCallback) {
+		let content = ''
+		const context = this.context
+		const length = this.calculateTableWidth()
 
-    return content;
-  }
+		for (const index of [...new Array(length)].map((_, index) => index)) {
+			const symbol = setSymbol!(context, +index)
+			content += symbol
+		}
 
-  drawBlockBorder(
-    borderDirection: Exclude<
-      BorderDirectionEnum,
-      BorderDirectionEnum.BorderLeft | BorderDirectionEnum.BorderRight
-    >
-  ) {
-    const callback =
-      borderDirection === BorderDirectionEnum.BorderTop
-        ? this.options.borderTop
-        : this.options.borderBottom;
+		return content
+	}
 
-    return this.drawLine(callback!);
-  }
+	drawBlockBorder(
+		borderDirection: Exclude<
+			BorderDirectionEnum,
+			BorderDirectionEnum.BorderLeft | BorderDirectionEnum.BorderRight
+		>,
+	) {
+		const callback =
+			borderDirection === BorderDirectionEnum.BorderTop
+				? this.options.borderTop
+				: this.options.borderBottom
 
-  calculateTableWidth() {
-    const { columns } = this.context.metadata;
-    if (!columns) {
-      throw new Error(
-        "No columns field; Tip: Use <this>.parseMetadata() previous"
-      );
-    }
+		return this.drawLine(callback!)
+	}
 
-    const cells = columns.reduce(
-      (acc, current) => current.largestLength + acc,
-      0
-    );
-    const separators = columns.length - 1;
-    const borders = +!!this.options.borderLeft + +!!this.options.borderRight;
-    return cells + separators + borders;
-  }
+	calculateTableWidth() {
+		const { columns } = this.context.metadata
+		if (!columns) {
+			throw new Error(
+				'No columns field; Tip: Use <this>.parseMetadata() previous',
+			)
+		}
+
+		const cells = columns.reduce(
+			(acc, current) => current.largestLength + acc,
+			0,
+		)
+		const separators = columns.length - 1
+		const borders = +!!this.options.borderLeft + +!!this.options.borderRight
+		return cells + separators + borders
+	}
 }
 
 enum CellAlignEnum {
-  Left,
-  Right,
-  Center,
+	Left,
+	Right,
+	Center,
 }
 
 interface ICellOptions {
-  gapLeft: number;
-  gapRight: number;
-  align: CellAlignEnum;
-  removeNextSeparator?: boolean;
+	gapLeft: number
+	gapRight: number
+	align: CellAlignEnum
+	removeNextSeparator?: boolean
 }
 
 interface ITableCell {
-  value: string;
-  options: ICellOptions;
+	value: string
+	options: ICellOptions
 }
 
 const DEFAULT_CELL_OPTIONS: ICellOptions = {
-  gapLeft: 2,
-  gapRight: 2,
-  align: CellAlignEnum.Left,
-};
+	gapLeft: 2,
+	gapRight: 2,
+	align: CellAlignEnum.Left,
+}
 
 type TCellSetSymbolCallback = (
-  context: ITextTableGeneratorContext,
-  index: number
-) => string;
+	context: ITextTableGeneratorContext,
+	index: number,
+) => string
 
 interface ICellBuilderOptions {
-  minWidth?: number;
-  maxWidth?: number;
+	minWidth?: number
+	maxWidth?: number
 }
 
 interface ITableOptions {
-  borderLeft: null | TCellSetSymbolCallback;
-  borderRight: null | TCellSetSymbolCallback;
-  borderTop: null | TCellSetSymbolCallback;
-  borderBottom: null | TCellSetSymbolCallback;
-  separator: string;
+	borderLeft: null | TCellSetSymbolCallback
+	borderRight: null | TCellSetSymbolCallback
+	borderTop: null | TCellSetSymbolCallback
+	borderBottom: null | TCellSetSymbolCallback
+	separator: string
 }
 
 enum BorderDirectionEnum {
-  BorderLeft,
-  BorderRight,
-  BorderTop,
-  BorderBottom,
+	BorderLeft,
+	BorderRight,
+	BorderTop,
+	BorderBottom,
 }
 
 const DEFAULT_TABLE_OPTIONS = {
-  borderLeft: null,
-  borderRight: null,
-  borderTop: null,
-  borderBottom: null,
-  separator: "|",
-};
+	borderLeft: null,
+	borderRight: null,
+	borderTop: null,
+	borderBottom: null,
+	separator: '|',
+}
 
 enum SpecialRowTypeEnum {
-  Default,
-  Display,
+	Default,
+	Display,
 }
 
 interface ITableSpecialDisplayRow {
-  type: SpecialRowTypeEnum.Display;
-  display: TCellSetSymbolCallback;
+	type: SpecialRowTypeEnum.Display
+	display: TCellSetSymbolCallback
 }
 
-type TTableRow = ITableCell[] | ITableSpecialDisplayRow;
+type TTableRow = ITableCell[] | ITableSpecialDisplayRow
 
 class TextTableBuilder {
-  public rows: TTableRow[] = [];
+	public rows: TTableRow[] = []
 
-  protected options: ITableOptions = { ...DEFAULT_TABLE_OPTIONS };
+	protected options: ITableOptions = { ...DEFAULT_TABLE_OPTIONS }
 
-  setBorderOptions(
-    callback: TCellSetSymbolCallback = () => "|",
-    directions: BorderDirectionEnum[] = [
-      BorderDirectionEnum.BorderLeft,
-      BorderDirectionEnum.BorderRight,
-    ]
-  ) {
-    for (const direction of directions) {
-      switch (direction) {
-        case BorderDirectionEnum.BorderLeft:
-          this.options.borderLeft = callback;
-          break;
-        case BorderDirectionEnum.BorderRight:
-          this.options.borderRight = callback;
-          break;
-        case BorderDirectionEnum.BorderTop:
-          this.options.borderTop = callback;
-          break;
-        case BorderDirectionEnum.BorderBottom:
-          this.options.borderBottom = callback;
-          break;
-      }
-    }
+	setBorderOptions(
+		callback: TCellSetSymbolCallback = () => '|',
+		directions: BorderDirectionEnum[] = [
+			BorderDirectionEnum.BorderLeft,
+			BorderDirectionEnum.BorderRight,
+		],
+	) {
+		for (const direction of directions) {
+			switch (direction) {
+				case BorderDirectionEnum.BorderLeft:
+					this.options.borderLeft = callback
+					break
+				case BorderDirectionEnum.BorderRight:
+					this.options.borderRight = callback
+					break
+				case BorderDirectionEnum.BorderTop:
+					this.options.borderTop = callback
+					break
+				case BorderDirectionEnum.BorderBottom:
+					this.options.borderBottom = callback
+					break
+			}
+		}
 
-    return this;
-  }
+		return this
+	}
 
-  addRowWithElements(
-    elements: ITableCell["value"][],
-    optionsForEveryElement?: Partial<ICellOptions>,
-    useOnAddingOptions?: ICellBuilderOptions
-  ) {
-    const row: ITableCell[] = [];
-    for (const value of elements) {
-      this.pushCellToArray(
-        row,
-        value,
-        optionsForEveryElement,
-        useOnAddingOptions
-      );
-    }
+	addRowWithElements(
+		elements: ITableCell['value'][],
+		optionsForEveryElement?: Partial<ICellOptions>,
+		useOnAddingOptions?: ICellBuilderOptions,
+	) {
+		const row: ITableCell[] = []
+		for (const value of elements) {
+			this.pushCellToArray(
+				row,
+				value,
+				optionsForEveryElement,
+				useOnAddingOptions,
+			)
+		}
 
-    this.pushRowToTable(row);
-    return this;
-  }
+		this.pushRowToTable(row)
+		return this
+	}
 
-  addMultilineRowWithElements(
-    elements: ITableCell["value"][],
-    optionsForEveryElement?: Partial<ICellOptions>,
-    useOnAddingOptions?: ICellBuilderOptions
-  ) {
-    const separatedElements: string[][] = elements.map((value) =>
-      value.split("\n")
-    );
-    const largestHeight = Math.max(
-      ...separatedElements.map((sub) => sub.length)
-    );
-    for (let index = 0; index < largestHeight; index++) {
-      this.addRowWithElements(
-        separatedElements.map((sub) => sub.at(index) ?? ""),
-        optionsForEveryElement,
-        useOnAddingOptions
-      );
-    }
-    return this;
-  }
+	addMultilineRowWithElements(
+		elements: ITableCell['value'][],
+		optionsForEveryElement?: Partial<ICellOptions>,
+		useOnAddingOptions?: ICellBuilderOptions,
+	) {
+		const separatedElements: string[][] = elements.map((value) =>
+			value.split('\n'),
+		)
+		const largestHeight = Math.max(
+			...separatedElements.map((sub) => sub.length),
+		)
+		for (let index = 0; index < largestHeight; index++) {
+			this.addRowWithElements(
+				separatedElements.map((sub) => sub.at(index) ?? ''),
+				optionsForEveryElement,
+				useOnAddingOptions,
+			)
+		}
+		return this
+	}
 
-  addEmptyRow() {
-    this.pushRowToTable([]);
-    return this;
-  }
+	addEmptyRow() {
+		this.pushRowToTable([])
+		return this
+	}
 
-  addRowSeparator(setSymbol: TCellSetSymbolCallback = () => "-") {
-    const row = {
-      display: setSymbol,
-      type: SpecialRowTypeEnum.Display,
-    } as ITableSpecialDisplayRow;
-    this.pushRowToTable(row);
-    return this;
-  }
+	addRowSeparator(setSymbol: TCellSetSymbolCallback = () => '-') {
+		const row = {
+			display: setSymbol,
+			type: SpecialRowTypeEnum.Display,
+		} as ITableSpecialDisplayRow
+		this.pushRowToTable(row)
+		return this
+	}
 
-  addCellAtRow(
-    rowIndex: number,
-    cellValue: ITableCell["value"],
-    cellOptions: ICellOptions,
-    useOnAddingOptions: ICellBuilderOptions
-  ) {
-    const row = this.rows.at(rowIndex);
-    if (!row) {
-      throw new RangeError();
-    }
+	addCellAtRow(
+		rowIndex: number,
+		cellValue: ITableCell['value'],
+		cellOptions: ICellOptions,
+		useOnAddingOptions: ICellBuilderOptions,
+	) {
+		const row = this.rows.at(rowIndex)
+		if (!row) {
+			throw new RangeError()
+		}
 
-    if (getRowType(row) !== SpecialRowTypeEnum.Default) {
-      throw new Error("Is not default row: without cells");
-    }
+		if (getRowType(row) !== SpecialRowTypeEnum.Default) {
+			throw new Error('Is not default row: without cells')
+		}
 
-    this.pushCellToArray<ITableCell>(
-      row as ITableCell[],
-      cellValue,
-      cellOptions,
-      useOnAddingOptions
-    );
-    return this;
-  }
+		this.pushCellToArray<ITableCell>(
+			row as ITableCell[],
+			cellValue,
+			cellOptions,
+			useOnAddingOptions,
+		)
+		return this
+	}
 
-  private pushCellToArray<T = ITableCell>(
-    array: (T | ITableCell)[],
-    cellValue: ITableCell["value"],
-    cellOptions: Partial<ICellOptions> = {},
-    pushOptions?: ICellBuilderOptions
-  ) {
-    const options = Object.assign({}, DEFAULT_CELL_OPTIONS, cellOptions);
-    const cell = { value: cellValue, options };
+	private pushCellToArray<T = ITableCell>(
+		array: (T | ITableCell)[],
+		cellValue: ITableCell['value'],
+		cellOptions: Partial<ICellOptions> = {},
+		pushOptions?: ICellBuilderOptions,
+	) {
+		const options = Object.assign({}, DEFAULT_CELL_OPTIONS, cellOptions)
+		const cell = { value: cellValue, options }
 
-    const { minWidth, maxWidth } = pushOptions ?? {};
+		const { minWidth, maxWidth } = pushOptions ?? {}
 
-    minWidth && changeContentSetCellMinWidth(cell, minWidth);
-    maxWidth && changeContentSetCellMaxWidth(cell, maxWidth);
+		minWidth && changeContentSetCellMinWidth(cell, minWidth)
+		maxWidth && changeContentSetCellMaxWidth(cell, maxWidth)
 
-    array.push(cell);
-    return this;
-  }
+		array.push(cell)
+		return this
+	}
 
-  private pushRowToTable(row: TTableRow) {
-    this.rows.push(row);
-    return this;
-  }
+	private pushRowToTable(row: TTableRow) {
+		this.rows.push(row)
+		return this
+	}
 
-  generateTextContent() {
-    return new TextTableGenerator(
-      this.rows,
-      this.options
-    ).generateTextContent();
-  }
-  
-  addRowWithUnwrappedCells(cells: ITableCell[], useOnAddingOptions?: ICellBuilderOptions){
-    const row: ITableCell[] = [];
-    for (const cell of cells) {
-      this.pushCellToArray(row, cell.value, cell.options, useOnAddingOptions);
-    }
-    this.pushRowToTable(row);
-    return this;
-  }
+	generateTextContent() {
+		return new TextTableGenerator(this.rows, this.options).generateTextContent()
+	}
+
+	addRowWithUnwrappedCells(
+		cells: ITableCell[],
+		useOnAddingOptions?: ICellBuilderOptions,
+	) {
+		const row: ITableCell[] = []
+		for (const cell of cells) {
+			this.pushCellToArray(row, cell.value, cell.options, useOnAddingOptions)
+		}
+		this.pushRowToTable(row)
+		return this
+	}
 }
 
-export { TextTableBuilder };
-export { SpecialRowTypeEnum, CellAlignEnum, BorderDirectionEnum };
+export { TextTableBuilder }
+export { SpecialRowTypeEnum, CellAlignEnum, BorderDirectionEnum }
 export type {
-  ICellOptions,
-  IContextMetadata,
-  ITableCell,
-  ITableOptions,
-  ITextTableGeneratorContext,
-  TTableRow,
-};
-
-
-
-  
+	ICellOptions,
+	IContextMetadata,
+	ITableCell,
+	ITableOptions,
+	ITextTableGeneratorContext,
+	TTableRow,
+}

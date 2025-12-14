@@ -1,1 +1,1 @@
-export const DEFAULT = Symbol("default");
+export const DEFAULT = Symbol('default')

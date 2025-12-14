@@ -6,7 +6,7 @@
 ```js
 const target = {a: {b: {c: {d: {e: {f: 15}}}}}};
 const increment = (currentValue) => currentValue + 1;
-new DotNotatedInterface(target).setItem("a.b.c.d.e.f", increment); // 16
+new DotNotatedInterface(target).updateItem("a.b.c.d.e.f", increment); // 16
 ```
 +++ Real example
 ```js
@@ -17,7 +17,7 @@ auditInterface.setItem("actions", curse.values.counter);
 
 for (const entry of curse.values.audit) {
 	const { value, source, executor, resource } = entry;
-	const box = auditInterface.setItem(
+	const box = auditInterface.updateItem(
 		`resources.${source}`,
 		(prev) => prev || [],
 	);
@@ -53,8 +53,11 @@ new DotNotatedInterface(target);
 ### `getItem<T>(key: string, options: IMethodsOptions = {}): T | null`
 Resolve key (path) in target; Return item or default value
 
-### `setItem<T>(key: string, value: any | CallableFunction, options: IMethodsOptions = {}): T()`
-Resolve key; Set or update item value
+### `setItem<T>(key: string, value: T): T()`
+Resolve key; Set item value
+
+### `setItem<T>(key: string, updateFn: CallableFunction): T()`
+Resolve key; Update item value
 
 ### `hasItem(key: string, options: IMethodsOptions = {}): boolean`
 Resolve key; Check item;
@@ -64,15 +67,4 @@ Resolve key; Remove item
 
 ### `getParentAndlastSegmentByNotatedKey(key: string, { needFillIfParentNotExists = false }): { parent: object | null; lastSegment: string }`
 Resolve key to segments, returns target partial with last segment key
-
-
-+++ Interfaces
-## Interfaces
-```ts
-interface IMethodsOptions {
-  defaultValue?: any; // for get value
-  allowSetFunctions?: boolean; // for set value: if true just set function,
-}
-```
-+++
 

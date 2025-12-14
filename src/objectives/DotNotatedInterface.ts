@@ -1,8 +1,6 @@
-interface IMethodsOptions<DefaultValue = unknown> {
-	defaultValue?: DefaultValue // for get value
-	allowSetFunctions?: boolean // for set value: if true just set function,
-}
-
+/**
+ * @description Prefer sagold/json-pointer that it
+ */
 export class DotNotatedInterface {
 	declare target: Record<string, unknown>
 
@@ -24,11 +22,7 @@ export class DotNotatedInterface {
 		return parent[lastSegment] as T
 	}
 	
-	setItem<T>(key: string, value: T, options: IMethodsOptions = {}): T {
-		if (typeof value === "function" && !options.allowSetFunctions) {
-      value = value(this.getItem(key, options));
-    }
-
+	setItem<T>(key: string, value: T): T {
 		const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
 			key,
 			{ needFillIfParentNotExists: true },
@@ -36,6 +30,16 @@ export class DotNotatedInterface {
 
 		// @ts-expect-error
 		return (parent[lastSegment] = value)
+	}
+
+	updateItem<T>(key: string, updateFn: (prev: T) => T): T {
+		const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
+			key,
+			{ needFillIfParentNotExists: true },
+		)
+
+		// @ts-expect-error
+		return (parent[lastSegment] = updateFn(parent[lastSegment]))
 	}
 
 	hasItem(key: string): boolean {

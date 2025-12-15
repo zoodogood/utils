@@ -1,8 +1,3 @@
-interface IMethodsOptions<DefaultValue = unknown> {
-	defaultValue?: DefaultValue // for get value
-	allowSetFunctions?: boolean // for set value: if true just set function,
-}
-
 export class DotNotatedInterface {
 	declare target: Record<string, unknown>
 
@@ -10,20 +5,23 @@ export class DotNotatedInterface {
 		this.target = target
 	}
 
-	getItem<T>(key: string, options: IMethodsOptions = {}): T | null {
+	getItem<T>(
+		key: string,
+		{ defaultValue }: { defaultValue?: T } = {},
+	): T | null {
 		const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
 			key,
 			{ needFillIfParentNotExists: false },
 		)
 
 		if (!parent || lastSegment in parent === false) {
-			return (options.defaultValue as T | undefined) || null
+			return (defaultValue as T | undefined) || null
 		}
 
 		// @ts-expect-error
 		return parent[lastSegment] as T
 	}
-	
+
 	setItem<T>(key: string, value: T): T {
 		const { parent, lastSegment } = this.getParentAndlastSegmentByNotatedKey(
 			key,

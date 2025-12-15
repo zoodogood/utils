@@ -22,7 +22,7 @@
 			"recommended": true,
 			"style": {
 				"noNonNullAssertion": "off",
-				"noParameterAssign": "off"
+				"noParameterAssign": "info"
 			},
 			"suspicious": {
 				"noAssignInExpressions": "off"

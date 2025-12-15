@@ -36,6 +36,10 @@
 			"types": "./dist/primitives/CliParser.js",
 			"default": "./dist/primitives/CliParser.js"
 		},
+		"./type-helpers": {
+			"types": "./dist/type-helpers/index.js",
+			"default": "./dist/type-helpers/"
+		}
 	},
 	"repository": {
 		"type": "git",

@@ -1,7 +1,7 @@
 export class Accumulator<State, T> {
 	#state: State
 	constructor(
-		public reduceFn: (acc: State, v: T) => State,
+		private reduceFn: (acc: State, v: T) => State,
 		initial: State,
 	) {
 		this.#state = initial

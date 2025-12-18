@@ -1,7 +1,7 @@
 {
 	"name": "@zoodogood/utils",
 	"type": "module",
-	"version": "8.0.1-change.5399",
+	"version": "8.0.1-change.5401",
 	"description": "",
 	"main": "dist/index.js",
 	"homepage": "https://zoodogood.github.io/utils",
@@ -49,14 +49,14 @@
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"@biomejs/biome": "^2.3.8",
-		"@types/node": "^25.0.1",
-		"@vitest/ui": "^4.0.15",
+		"@biomejs/biome": "^2.3.10",
+		"@types/node": "^25.0.3",
+		"@vitest/ui": "^4.0.16",
 		"discord-api-types": "^0.38.37",
 		"retypeapp-linux-x64": "^3.11.0",
-		"tsdown": "^0.17.3",
+		"tsdown": "^0.18.1",
 		"typescript": "^5.9.3",
-		"vitest": "^4.0.15"
+		"vitest": "^4.0.16"
 	},
 	"peerDependencies": {
 		"discord.js": ">=14.x.x"

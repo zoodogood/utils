@@ -2,8 +2,7 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	// i using custom themes for different workspaces
 	"workbench.colorTheme": "Vercel (Dark)",
-	"javascript.preferences.importModuleSpecifier": "relative",
-	"typescript.preferences.importModuleSpecifier": "relative",
+	"js/ts.preferences.importModuleSpecifier": "relative",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "always",
 		"source.organizeImports": "never",

@@ -1,0 +1,35 @@
+{
+	"name": "aggrpattern",
+	"type": "module",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsdown"
+	},
+	"repository": {
+		"directory": "packages/aggrpattern",
+		"url": "https://github.com/zoodogood/utils",
+		"type": "git"
+	},
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": {
+			"default": "./dist/index.mjs",
+			"types": "./dist/index.d.mts"
+		}
+	},
+	"keywords": [],
+	"author": "zoodogood",
+	"license": "ISC",
+	"packageManager": "pnpm@10.25.0",
+	"dependencies": {
+		"@zoodogood/utils": "link:../..",
+		"glob": "^13.0.0"
+	},
+	"devDependencies": {
+		"memfs": "^4.51.1"
+	}
+}

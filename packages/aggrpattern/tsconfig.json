@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"target": "esnext",
+		"module": "NodeNext",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+
+		/* Type Checking */
+		"strict": true,
+		/* Completeness */
+		"skipLibCheck": true,
+		"lib": ["esnext"],
+		"moduleResolution": "NodeNext",
+		"declarationMap": true
+	},
+	"exclude": ["**/*.test.ts"],
+	"include": ["src/**/*.ts"]
+}
